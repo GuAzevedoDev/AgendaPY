@@ -1,0 +1,3 @@
+from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos
+
+mostrarServicos()
