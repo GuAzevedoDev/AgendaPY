@@ -1,3 +1,3 @@
-from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos
+from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,selecionarServico
 
-mostrarServicos()
+selecionarServico()
