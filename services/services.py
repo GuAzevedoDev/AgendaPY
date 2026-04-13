@@ -191,37 +191,63 @@ def mostrarServicos():
 
 def selecionarServico():
   servicos = mostrarServicos()
-  entrada = input("Digite o nome do seu servico: ")
-  if entrada in servicos[0]:
-    for servico in servicos[0]:
-      if servico == entrada:
-        return servico
-  else:
-    print("Servico nao encontrado")
+  if not servicos:
     return None
+  entrada = input("Digite o id do servico: ")
+  try: 
+    entrada = int(entrada)
+  except:
+     print("Entrada invalida")
+
+  for servico in servicos:
+    if servico[0] == entrada:
+      return servico
     
+  print("Servico nao encontrado")
 
-
-# def marcarHorario():
-#   conexao = conectar()
-#   cursor = conexao.cursor()
-#   nome = input("Digite o nome do cliente que deseja marcar o horario:")
-#   clienteEncontrado = pesquisarCliente(nome)
-#   idEncontrado = clienteEncontrado[0]
-#   nomeEncontrado = clienteEncontrado[1]
-#   numeroEncontrado = clienteEncontrado[2]
-#   cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,servico_id,horario_id,data)""")
-
+  entrada2 = input("Deseja cadastrar ? (s/n)")
+  if entrada2.lower() == "s":
+    return cadastrarServicos()
+  else:
+    return None
+  
 
 #Agendamentos
+def gerarHorarios():
+   horarios = [
+    "08:00", "08:30",
+    "09:00", "09:30",
+    "10:00", "10:30",
+    "11:00", "11:30",
+    "12:00", "12:30",
+    "13:00", "13:30",
+    "14:00", "14:30",
+    "15:00", "15:30",
+    "16:00", "16:30",
+    "17:00", "17:30",
+    "18:00", "18:30",
+    "19:00", "19:30",
+    "20:00", "20:30",
+    "21:00", "21:30",
+    "22:00", "22:30",
+    "23:00"
+]
+   return horarios
+
+
+def selecionarData():
+   print("Digite a data que ira fazer o agendamento: [XX/XX/XXXX]")
+   entrada = input()
+   return entrada
+
 
 def mostrarAgenda(funcionario_id, data):
     conexao = conectar()
     cursor = conexao.cursor()
     ocupados = []
-    horarios = ["08:00", "09:00", "10:00"]
+    horarios = gerarHorarios()
     cursor.execute("""
-        SELECT horario_id, cliente_id, servico_id
+        SELECT horario, cliente_id, servico_id
         FROM agendamentos
         WHERE funcionario_id = ?
         AND data = ?
@@ -247,12 +273,48 @@ def mostrarAgenda(funcionario_id, data):
 
 
 def selecionarHorario(funcionario_id, data):
+  horarios = gerarHorarios()
   ocupados = mostrarAgenda(funcionario_id,data)
+  
   horarioEscolhido = input("Digite o horario de deseja marcar: ")
+  if horarioEscolhido not in horarios:
+     print("Esse horario nao e valido")
+     return None
   if horarioEscolhido in ocupados:
     print("Esse horario ja esta ocupado")
     return None
   else:
      return horarioEscolhido
   
+
+def marcarHorario(funcionarioLogado):
+
+  #Selecionar data
+  dataEscolhida = selecionarData()
+
+  #Selecionar horario
+  horarioEscolhido = selecionarHorario(funcionarioLogado[0],dataEscolhida)
+
+  if not horarioEscolhido:
+    return
+  
+  #Selecione o nome do cliente
+  nome = input("Digite o nome do cliente: ")
+  clienteEscolhido = pesquisarCliente(nome)
+
+  if not clienteEscolhido:
+    return
+  
+  #Selecione o servico
+  servicoEscolhido = selecionarServico()
+  if not servicoEscolhido:
+    return
+
+  #Passar para o banco
+  conexao = conectar()
+  cursor = conexao.cursor()
+  cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,servico_id,horario,data)VALUES(?,?,?,?,?)""",(clienteEscolhido[0],funcionarioLogado[0],servicoEscolhido[0],horarioEscolhido,dataEscolhida))
+  conexao.commit()
+
+  print("Agendamento realizado com sucesso!")
 

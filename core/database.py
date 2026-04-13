@@ -45,11 +45,6 @@ cursor.executescript("""
             FOREIGN KEY (servico_id) REFERENCES servicos(id) ON DELETE CASCADE
         );
                      
-        -- horarios
-        CREATE TABLE IF NOT EXISTS horarios (
-            id    INTEGER PRIMARY KEY AUTOINCREMENT,
-            hora  TEXT NOT NULL UNIQUE
-        );
 
         -- agendamentos
         CREATE TABLE IF NOT EXISTS agendamentos (
@@ -57,7 +52,7 @@ cursor.executescript("""
             cliente_id      INTEGER NOT NULL,
             funcionario_id  INTEGER NOT NULL,
             servico_id      INTEGER NOT NULL,
-            horario_id      INTEGER NOT NULL,
+            horario         TEXT NOT NULL,
             data            TEXT NOT NULL,
             status          TEXT NOT NULL DEFAULT 'confirmado'
                             CHECK(status IN ('confirmado', 'cancelado', 'concluido')),
@@ -65,14 +60,12 @@ cursor.executescript("""
 
             FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
             FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE,
-            FOREIGN KEY (servico_id) REFERENCES servicos(id),
-            FOREIGN KEY (horario_id) REFERENCES horarios(id)
+            FOREIGN KEY (servico_id) REFERENCES servicos(id)
         );
 
         -- índice para evitar conflito de horário
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sem_conflito
-        ON agendamentos(funcionario_id, data, horario_id)
+        ON agendamentos(funcionario_id, data, horario)
         WHERE status = 'confirmado';
         """)
-
 conexao.commit()

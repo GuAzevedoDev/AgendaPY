@@ -1,3 +1,5 @@
-from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,selecionarServico
+from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,selecionarServico,marcarHorario
 
-selecionarServico()
+cadastrarServicos()
+
+marcarHorario((1,"Mali"))
