@@ -68,4 +68,5 @@ cursor.executescript("""
         ON agendamentos(funcionario_id, data, horario)
         WHERE status = 'confirmado';
         """)
+
 conexao.commit()
