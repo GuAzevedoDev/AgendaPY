@@ -17,7 +17,6 @@ function pegaDadosCliente() {
     alert("Preencha todos os campos");
     return;
   }
-
   fetch("/CadastroClientes", {
     method: "POST",
     headers: {
@@ -40,4 +39,8 @@ function pegaDadosCliente() {
 .catch(err => {
   alert(err.message)
 })
+  nome.value = ""
+  numero.value = ""
+  nome.focus()
 }
+ 

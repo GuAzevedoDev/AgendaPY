@@ -321,6 +321,25 @@ def marcarHorario(funcionarioLogado):
 
 #Funcoes Web
 
+def loginFuncionarioWeb(nome,senha):
+  conexao = conectar()
+  cursor = conexao.cursor()
+  cursor.execute("SELECT id, nome, cargo, senha FROM funcionarios WHERE nome = ?",
+    (nome,))
+  funcionarioEncontrado = cursor.fetchone()
+  if funcionarioEncontrado:
+    if senha == funcionarioEncontrado[3]:
+      # print("Login feito com sucesso!")
+      return funcionarioEncontrado
+    else:
+      # print("Senha incorreta!")
+      return None
+    
+  else:
+    # print("Usuario nao encontrado")
+    return None
+
+
 def marcarHorarioWeb(funcionarioLogado,nome,hora,data):
   #Selecionar data
   dataEscolhida = selecionarData(data)
