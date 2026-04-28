@@ -1,6 +1,6 @@
 
 from core.database import conectar
-
+import hashlib
 
 #Clientes
 
@@ -83,11 +83,13 @@ def cadastrarFuncionarios():
     print(f"Funcionario '{nome}' ja existe, tente outro nome.")
 
   cargo = input("Digite seu cargo [dono] // [profissional]: ")
-  senha = input("Digite sua senha: ")
+  senha = input("Digite sua senha: ").encode('utf-8')
+  hashSenha = hashlib.sha256(senha)
+  senhaHex = hashSenha.hexdigest()
 
   cursor.execute(
       "INSERT INTO funcionarios (nome, cargo, senha) VALUES (?, ?, ?)",
-      (nome, cargo.lower(), senha)
+      (nome, cargo.lower(), senhaHex)
     )
   conexao.commit()
   print(f"Funcionario {nome} adicionado!")
@@ -112,7 +114,7 @@ def loginFuncionario():
   funcionarioEncontrado = cursor.fetchone()
   if funcionarioEncontrado:
     senha = input("Digite sua senha: ")
-
+    print(funcionarioEncontrado)
     if senha == funcionarioEncontrado[3]:
       print("Login feito com sucesso!")
       return funcionarioEncontrado

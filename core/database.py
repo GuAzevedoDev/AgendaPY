@@ -62,7 +62,6 @@ cursor.executescript("""
             FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE,
             FOREIGN KEY (servico_id) REFERENCES servicos(id)
         );
-
         -- índice para evitar conflito de horário
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sem_conflito
         ON agendamentos(funcionario_id, data, horario)
