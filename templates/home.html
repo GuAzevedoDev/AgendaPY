@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{%block titulo%}Home{%endblock%}
+{%block id%}home{%endblock%}
+{%block js_arquivo%}home.js{%endblock%}
+
+{%block conteudo%}
+<main>
+  <h1>Calendario</h1>
+  <div class="calendario">
+    <span onclick="hoje()">Hoje</span>
+    <span onclick="amanha()">Amanha</span>
+    <div class="datas-calendario">
+      <div class="mostraDiaMes">
+        <span class="mostraDia" data-diaCima=""></span>
+        <span class="mostraMes" data-mesCima=""></span>
+        <span class="mostraAno" data-anoCima=""></span>
+      </div>
+      <div class="setas-calendario">
+        <span onclick="somaSubtrai(-1)">esquerda</span>
+        <span onclick="somaSubtrai(+1)">direita</span>
+      </div>
+    </div>
+    <div class="cima-calendario">
+      <span>Dom</span>
+      <span>Seg</span>
+      <span>Ter</span>
+      <span>Qua</span>
+      <span>Qui</span>
+      <span>Sex</span>
+      <span>Sab</span>
+    </div>
+    <div class="dias-calendario">
+
+    </div>
+  </div>
+</main>
+{%endblock%}

@@ -1,0 +1,33 @@
+#home {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cima-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 15px;
+  justify-self: center;
+}
+
+.dias-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.datas-calendario {
+  display: flex;
+  justify-content: space-between;
+}
+
+.setas-calendario {
+  display: flex;
+  gap: 15px;
+}
+
+.dia.ativo{
+  background: var(--cor-p1);
+}

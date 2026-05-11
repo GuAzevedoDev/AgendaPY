@@ -1,5 +1,5 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb
-from flask import Flask, render_template, request, redirect, url_for,jsonify,session
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb
+from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
 from auth import login_required
@@ -10,45 +10,40 @@ app.secret_key = "Gugu.000"
 #Login
 
 #Pagina de login, retorna html
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
-
-#Rota de login, para validacao e salvar sessao
-@app.route("/loginEntrada", methods=["POST"])
-def loginFuncWeb():
-    #Pega os dados do JS
-    dados = request.json
-    usuario = dados["usuario"]
-    senha = dados["senha"].encode('utf-8')
-    hashSenha = hashlib.sha256(senha)
-    senhaHex = hashSenha.hexdigest()
-
-    #validacao de formulario
-    if usuario and senha:
-        funcionario = loginFuncionarioWeb(usuario, senhaHex)
-    else:
-        return jsonify({"mensagem": "Preencha todos os campos"}), 400
+    #Se estiver no metodo get ele so pega a renderiza o html
+    if request.method == "GET":
+        return render_template("login.html")
     
-    if not funcionario:
-        return jsonify({"mensagem": "O funcionario nao existe"}), 400
+    #Se estiver no metodo POST ele pega os dados do usuario 
+    elif request.method == "POST":
+        #Pega dado do form HTML
+        usuario = request.form["nomeUsuario"]
+        #O encode transforma o utf puro pra bytes pois o hash so aceita bytes
+        senha = request.form["senhaUsuario"].encode('utf-8')
+        hashSenha = hashlib.sha256(senha)
+        senhaHex = hashSenha.hexdigest()
+       
+        #validacao de formulario
+        if usuario and senha:
+            funcionario = loginFuncionarioWeb(usuario, senhaHex)
+        else:
+            flash("Preencha todos os campos"), 400
+            return redirect(url_for("login"))
     
-    if senhaHex != funcionario[3]:
-        return jsonify({"mensagem": "Senha incorreta"}), 400
+        if not funcionario:
+            flash("Senha ou Usuario incorretos"), 400
+            return redirect(url_for("login"))
+        
+        # login OK
+        session["funcionario_id"] = funcionario[0]
+
+        #Caso passe por todos os retornos o login esta OK e redireciona
+        #Dentro da url_for(nome da funcao)
+        return redirect(url_for("home"))
     
-    # login OK
-    session["funcionario_id"] = funcionario[0]
 
-    #Caso passe por todos os retornos o login esta OK
-    return jsonify({"mensagem": "Login feito com sucesso", "redirect": "/"}), 200
-
-#Verificar se esta logado
-@app.route("/verificaLogin")
-def verificaLogin():
-    if 'funcionario_id' in session:
-        return jsonify({"logado": True})
-    else:
-        return jsonify({"logado": False})
 
 #Rota de logout
 @app.route("/logout")
@@ -57,35 +52,51 @@ def logoutFunc():
     #Limpa sessao
     session.clear()
     
-    #Mensagem para JS
-    return jsonify({"mensagem": "Logout feito com sucesso"}), 200
+    #Redirecionamento para funcao login
+    return redirect(url_for("login"))
 
 
 #Pagina inicial,retorna html
 @app.route("/")
 @login_required     #Verifica se existe um funcionario logado
 def home():
-    return render_template("index.html")
+    return render_template("home.html")
 
-
-#Cadastrar clientes
-@app.route("/CadastroClientes", methods=["POST"])
+@app.route("/calendario", methods = ['POST'])
 @login_required     #Verifica se existe um funcionario logado
-def cadastroClienteWeb():
-    dados = request.json
-    nome = dados["nome"]
-    numero = dados["telefone"]
-    telefone_limpo = re.sub(r"\D", "", numero)
+def calendario():
+    #Pego os dados do js
+    data = request.json
+    dataSelecionada = data['data']
+    
+    #Pego id do funcionario da sessao
+    funcionario_id = session["funcionario_id"]
 
-    if not re.fullmatch(r"\d{11}", telefone_limpo):
-        return jsonify({"mensagem": "Telefone inválido"}), 400  # ← 400 Bad Request
+    #Chamo a funcao
+    horarios = mostrarAgendaWeb(funcionario_id,dataSelecionada)
+    return jsonify(horarios)
 
-    if nome and telefone_limpo:
-        cadastrarClienteWeb(nome, telefone_limpo)
-    else:
-        return jsonify({"mensagem": "Preencha todos os campos"}), 400
 
-    return jsonify({"mensagem": "Cliente cadastrado com sucesso"}), 200
+
+
+# #Cadastrar clientes
+# @app.route("/CadastroClientes", methods=["POST"])
+# @login_required     #Verifica se existe um funcionario logado
+# def cadastroClienteWeb():
+    # dados = request.json
+    # nome = dados["nome"]
+    # numero = dados["telefone"]
+    # telefone_limpo = re.sub(r"\D", "", numero)
+
+    # if not re.fullmatch(r"\d{11}", telefone_limpo):
+    #     return jsonify({"mensagem": "Telefone inválido"}), 400  # ← 400 Bad Request
+
+    # if nome and telefone_limpo:
+    #     cadastrarClienteWeb(nome, telefone_limpo)
+    # else:
+    #     return jsonify({"mensagem": "Preencha todos os campos"}), 400
+
+    # return jsonify({"mensagem": "Cliente cadastrado com sucesso"}), 200
 
 
 

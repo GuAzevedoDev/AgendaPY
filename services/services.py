@@ -327,7 +327,7 @@ def loginFuncionarioWeb(nome,senha):
   conexao = conectar()
   cursor = conexao.cursor()
   cursor.execute("SELECT id, nome, cargo, senha FROM funcionarios WHERE nome = ?",
-    (nome,))
+    (nome.capitalize(),))
   funcionarioEncontrado = cursor.fetchone()
   if funcionarioEncontrado:
     if senha == funcionarioEncontrado[3]:
@@ -389,13 +389,14 @@ def mostrarAgendaWeb(funcionarioLogado, data):
     conexao = conectar()
     cursor = conexao.cursor()
     ocupados = []
+    tudoHorarios = []
     horarios = gerarHorarios()
     cursor.execute("""
         SELECT horario, cliente_id, servico_id
         FROM agendamentos
         WHERE funcionario_id = ?
         AND data = ?
-    """, (funcionarioLogado[0], data))
+    """, (funcionarioLogado, data))
 
     horariosDia = cursor.fetchall()
 
@@ -406,15 +407,16 @@ def mostrarAgendaWeb(funcionarioLogado, data):
             hora, cliente, servico = agendamento
 
             if horario == hora:
-                #print(f"{horario} ocupado (cliente {cliente}, servico {servico})")
+                print(f"{horario} ocupado (cliente {cliente}, servico {servico})")
+                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico})
                 encontrado = True
-                ocupados.append(hora)
+                ocupados.append(agendamento)
                 break
 
         if not encontrado:
-            #print(f"{horario} livre"
-            mostrarWeb
-    return ocupados
+            tudoHorarios.append({"hora":horario,"status":"Livre"})
+    livres = [h for h in horarios if h not in ocupados]
+    return tudoHorarios
 
 
 def selecionarDataWeb(data):

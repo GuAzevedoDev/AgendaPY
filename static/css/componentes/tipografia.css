@@ -1,0 +1,21 @@
+:root{
+  --titulo: 1.75rem;
+  --sub-titulo: 1.5rem;
+  --texto: 1.375rem;
+  --texto-menor: 1.125rem;
+}
+
+.titulo{
+  font-size: var(--titulo);
+}
+.sub-titulo{
+  font-size: var(--sub-titulo);
+}
+
+
+.texto{
+  font-size: var(--texto);
+}
+.texto-menor{
+  font-size: var(--texto-menor);
+}

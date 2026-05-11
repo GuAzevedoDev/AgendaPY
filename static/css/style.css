@@ -1,32 +1,11 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+/* importacoes global */
+@import './global/global.css';
 
-label {
-  display: block;
-  margin-top: 20px;
-  font-weight: 500;
-  font-size: 1.1rem;
-}
+/* importacoes componentes */
+@import './componentes/cores.css';
+@import './componentes/botoes.css';
 
-input {
-  width: 100%;
-  padding: 5px;
-}
+/* importacoes paginas */
+@import './paginas/login.css';
+@import './paginas/home.css';
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-main {
-  width: 40%;
-}
-
-main h1{
-  text-align: center;
-}

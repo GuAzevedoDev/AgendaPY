@@ -1,22 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="static/css/style.css">
-</head>
-<body>
-  <main>
-    <h1>Login</h1>
-    <form action="">
-      <label for="nome">Usuario</label>
-      <input type="text" id="nome" >
-      <label for="numero">Senha</label>
-      <input type="text" id="numero">
-      <button id="btnEnvio" type="button">Entrar</button>
-    </form>
-  </main>
-  <script src="../static/js/funcionario.js"></script>
-</body>
-</html>
+{% extends 'base.html' %}
+{%block titulo%}Login{%endblock%}
+{%block id%}login{%endblock%}
+{%block js_arquivo%}login.js{%endblock%}
+
+{%block conteudo%}
+
+<main class="main-bg">
+  <div class="main-login">
+    <div class="imagem-main"><img src="{{ url_for('static', filename='imagens/login.png') }}" alt="imagem ilustrativa salao"></div>
+    <div class="direita-main-login">
+      <div class="main-text">
+        <h1 class="cor-p1 titulo">Entrar</h1>
+        <span class="texto-menor cor-p1">Use as credenciais fornecidas pelo seu gestor</span>
+      </div>
+      <form action="/login" method="post">
+        <div class="nome-form-login">
+          <label for="nome" class="texto">Usuario</label>
+          <input type="text" id="nome" name="nomeUsuario" placeholder="Digite seu usuario">
+        </div>
+        <div class="senha-form-login">
+          <label for="senha" class="texto">Senha</label>
+          <div>
+            <input type="password" id="senha" name="senhaUsuario" placeholder="Digite sua senha">
+            <svg width="20" height="8" viewBox="0 0 25 13" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="mostrarSenha()">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M0.681784 0.0896429C1.25287 -0.150799 1.91423 0.109095 2.15899 0.67014L1.12494 1.10551C2.15899 0.67014 2.15915 0.670505 2.15899 0.67014L2.1584 0.668814C2.15809 0.668096 2.15832 0.668615 2.1584 0.668814L2.16281 0.678606C2.16732 0.688576 2.17506 0.705507 2.18609 0.728938C2.20813 0.775822 2.24322 0.848634 2.29158 0.943672C2.3884 1.1339 2.53793 1.41215 2.74204 1.74904C3.15154 2.42491 3.77369 3.32507 4.62122 4.22175C4.82099 4.43304 5.0324 4.64348 5.2557 4.85004C5.26503 4.85844 5.27426 4.86695 5.28337 4.87558C6.95365 6.41217 9.2838 7.73689 12.375 7.73689C13.735 7.73689 14.9381 7.4818 15.9985 7.07177C17.3778 6.53838 18.5338 5.73544 19.48 4.86298C20.5483 3.87783 21.333 2.81865 21.8511 2.00184C22.1092 1.59503 22.2983 1.2527 22.4211 1.01609C22.4824 0.897894 22.5271 0.806459 22.5552 0.746987C22.5694 0.717256 22.5794 0.695549 22.5853 0.682508L22.5909 0.67014C22.8358 0.109405 23.4972 -0.150743 24.0681 0.0896429C24.6392 0.330096 24.9038 0.979835 24.659 1.54088L23.625 1.10551C24.659 1.54088 24.6591 1.54063 24.659 1.54088L24.6565 1.54643L24.6526 1.55551L24.6396 1.58408C24.629 1.60765 24.6139 1.64018 24.5945 1.68101C24.5558 1.76264 24.4996 1.87755 24.4254 2.02034C24.2774 2.30566 24.057 2.70374 23.7607 3.17081C23.3077 3.88496 22.671 4.77069 21.8358 5.66382L22.733 6.54513C23.1723 6.97672 23.1723 7.67655 22.733 8.10814C22.2936 8.53973 21.5813 8.53973 21.1419 8.10814L20.1968 7.17953C19.5619 7.68329 18.8516 8.15831 18.0628 8.56824L18.9429 9.89716C19.2817 10.4088 19.1343 11.0933 18.6135 11.4264C18.0927 11.7592 17.3959 11.6144 17.057 11.1027L15.9483 9.42877C15.1845 9.65888 14.3685 9.8219 13.5 9.89827V11.6052C13.5 12.2156 12.9962 12.7104 12.375 12.7104C11.7537 12.7104 11.25 12.2156 11.25 11.6052V9.89849C10.3785 9.82201 9.56266 9.65866 8.80126 9.42921L7.69291 11.1027C7.35405 11.6144 6.65717 11.7592 6.13639 11.4264C5.61561 11.0933 5.46813 10.4088 5.80699 9.89716L6.68719 8.56813C5.89956 8.15864 5.18901 7.68351 4.55339 7.17931L3.60794 8.10814C3.16861 8.53973 2.45629 8.53973 2.01696 8.10814C1.57761 7.67655 1.57761 6.97672 2.01696 6.54513L2.91408 5.66382C1.96345 4.64724 1.26869 3.63894 0.808639 2.87965C0.573301 2.49123 0.397632 2.16507 0.279113 1.93221C0.219814 1.81569 0.174702 1.72229 0.14346 1.65585C0.127834 1.62262 0.115673 1.59611 0.106932 1.57679L0.096368 1.55327L0.0930042 1.54565L0.0918005 1.54291L0.0913167 1.54181C0.091103 1.54132 0.0909119 1.54088 1.12494 1.10551L0.0913167 1.54181C-0.153435 0.980763 0.110701 0.330096 0.681784 0.0896429Z" fill="#727070" />
+            </svg>
+          </div>
+
+          <!-- Setando variavel global para salvar mensagens do back -->
+          <!-- Lembrando que o nome tem que ser exatamente esse : get_flashed_messages() -->
+          {% set mensagens = get_flashed_messages() %}
+
+          <!-- Verifico se existe algo nas mensagens, caso exista mostro a primeira pro usuario -->
+          {% if mensagens %}
+          <span class="aviso-flash-login texto-menor cor-3">{{ mensagens[0] }}</span>
+          {% endif %}
+        </div>
+
+        <button id="btnEnvio" type="submit">Entrar</button>
+
+        <a href="">Problemas para entrar? Fale com a administração.</a>
+      </form>
+    </div>
+  </div>
+</main>
+
+
+{%endblock%}

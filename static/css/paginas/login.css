@@ -1,0 +1,102 @@
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #fdf8f4;
+}
+
+.main-login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 20px;
+
+  justify-items: center;
+}
+
+.imagem-main {
+  max-width: 80%;
+  justify-self: center;
+  height: 100%;
+}
+
+.imagem-main img {
+  border-radius: 50px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.direita-main-login {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  height: 100%;
+  border-radius: 25px;
+  padding: 50px;
+  background-color: #f5ede4;
+  box-shadow:
+    0 2px 8px rgba(120, 60, 20, 0.08),
+    0 8px 32px rgba(120, 60, 20, 0.12);
+}
+
+.direita-main-login .main-text {
+  margin-bottom: 80px;
+}
+
+.direita-main-login form {
+  display: grid;
+  gap: 50px;
+}
+
+.direita-main-login form label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.direita-main-login form input {
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid var(--cor-3);
+  background: #f5ede4;
+}
+
+.direita-main-login form input:focus {
+  outline: 1px solid var(--cor-p1);
+}
+
+.direita-main-login form button {
+  font-size: var(--texto);
+  margin-top: 20px;
+}
+
+.senha-form-login {
+  position: relative;
+}
+
+.senha-form-login div {
+  position: relative;
+}
+
+.senha-form-login svg {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.aviso-flash-login {
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: max-content;
+}
+
+.direita-main-login form a {
+  color: var(--cor-3);
+  font-size: 1rem;
+}
+
+.direita-main-login form a:hover{
+  color: var(--cor-p1);
+}

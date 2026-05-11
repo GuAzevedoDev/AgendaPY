@@ -1,0 +1,17 @@
+.direita-main-login form button {
+  background: var(--cor-p1);
+  border: none;
+  padding: 12px 10px;
+  border-radius: 10px;
+  color: var(--cor-1);
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--cor-1);
+  transition: 0.3s;
+}
+
+.direita-main-login form button:hover {
+  background: #f5ede4;
+  color: var(--cor-p1);
+  border: 1px solid var(--cor-p1);
+}
