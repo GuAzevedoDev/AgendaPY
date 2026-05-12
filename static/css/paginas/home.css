@@ -1,33 +1,251 @@
 #home {
+  position: relative;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+}
+
+#home header {
+  grid-column: 1;
+}
+
+.header {
+  position: sticky;
+  width: 100px;
+  left: 0;
+  top: 0;
+  bottom: 0;
   height: 100vh;
+  background: var(--cor-p1);
+  padding: 25px;
+  gap: 50px;
+  transition: 0.3s;
+}
+
+.header menu li:nth-child(1) {
+  transition: 0.3s;
+}
+
+.header menu li {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+/* Main */
+
+#home .main-bg {
+  grid-column: 2;
   display: flex;
+  padding: 20px;
+  padding-top: 60px;
+}
+
+#home .main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 auto;
+  gap: 200px;
+}
+
+.main .calendario .mostra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.mostra-data {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mostra-data h2 {
+  font-weight: 600;
+}
+
+.mostraDia {
+  background: var(--cor-p2);
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.setas-calendario {
+  display: flex;
+  gap: 35px;
+}
+
+.setas-calendario span {
+  display: flex;
+  align-items: center;
+}
+
+.setas-calendario span:first-child svg {
+  transform: rotate(180deg);
+}
+
+.setas-calendario svg {
+  stroke: var(--cor-p1);
+  cursor: pointer;
+}
+
+.hojeAmanha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--cor-p2);
+  align-items: center;
+  justify-content: center;
+  justify-content: space-around;
+  height: 30px;
+  border-radius: 50px;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.hojeAmanha .slider {
+  background: var(--cor-p1);
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  border-radius: 50px;
+  z-index: 0;
+  left: 0;
+  transition: left 0.3s ease;
+}
+
+.hojeAmanha span {
+  display: grid;
   align-items: center;
   text-align: center;
+  border-radius: 50px;
+  height: 30px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.hojeAmanha span.ativo-hoje {
+  color: var(--cor-1);
+}
+
+.hojeAmanha span.ativo-amanha {
+  color: var(--cor-1);
+  right: 0;
 }
 
 .cima-calendario {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 15px;
+  gap: 25px;
   justify-self: center;
+  border-bottom: 1px solid var(--cor-3);
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.cima-calendario span {
+  width: 50px;
 }
 
 .dias-calendario {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  gap: 25px;
+  justify-items: center;
 }
 
-.datas-calendario {
+.dia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dia:hover {
+  background: #8f5540;
+  color: var(--cor-1);
+}
+
+.dia.ativo {
+  background: var(--cor-p1);
+  color: var(--cor-1);
+}
+
+.agenda {
+  width: 400px;
+}
+
+.cabecalho-agenda {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  height: 45px;
 }
 
-.setas-calendario {
-  display: flex;
-  gap: 15px;
-}
-
-.dia.ativo{
+.cabecalho-agenda a {
   background: var(--cor-p1);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--cor-1);
+}
+
+.agenda span {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin-bottom: 60px;
+}
+
+.horarioTudo {
+  display: grid;
+  grid-template-columns: 80px auto auto;
+  gap: 50px;
+  margin-bottom: 10px;
+}
+
+.horarioTudo .horario {
+  font-size: 1.25rem;
+  color: var(--cor-p1);
+  font-weight: 600;
+  position: relative;
+}
+
+.horarioTudo .horario::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--cor-p1);
+  border-radius: 50px;
+}
+
+.horarioTudo .status {
+  grid-column: 2/-1;
+}
+
+.horarioTudo button {
+  width: 100%;
+  background: var(--cor-p1);
+  border: none;
+  color: var(--cor-1);
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }

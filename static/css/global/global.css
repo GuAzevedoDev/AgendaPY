@@ -6,6 +6,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+li {
+  list-style: none;
+}
+
 img {
   display: block;
   max-width: 100%;

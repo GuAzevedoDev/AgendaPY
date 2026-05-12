@@ -289,13 +289,13 @@ def selecionarHorario(funcionario_id, data):
      return horarioEscolhido
   
 
-def marcarHorario(funcionarioLogado):
+def marcarHorario(idfuncionarioLogado):
 
   #Selecionar data
   dataEscolhida = selecionarData()
 
   #Selecionar horario
-  horarioEscolhido = selecionarHorario(funcionarioLogado[0],dataEscolhida)
+  horarioEscolhido = selecionarHorario(idfuncionarioLogado,dataEscolhida)
 
   if not horarioEscolhido:
     return
@@ -315,7 +315,7 @@ def marcarHorario(funcionarioLogado):
   #Passar para o banco
   conexao = conectar()
   cursor = conexao.cursor()
-  cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,servico_id,horario,data)VALUES(?,?,?,?,?)""",(clienteEscolhido[0],funcionarioLogado[0],servicoEscolhido[0],horarioEscolhido,dataEscolhida))
+  cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,servico_id,horario,data)VALUES(?,?,?,?,?)""",(clienteEscolhido[0],idfuncionarioLogado,servicoEscolhido[0],horarioEscolhido,dataEscolhida))
   conexao.commit()
 
   print("Agendamento realizado com sucesso!")

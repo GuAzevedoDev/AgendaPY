@@ -6,6 +6,8 @@ let mesCima = document.querySelector(".mostraMes");
 
 let anoCima = document.querySelector(".mostraAno");
 
+let agendaDiv = document.querySelector(".agenda-horarios");
+
 let meses = [
   "Janeiro",
   "Fevereiro",
@@ -110,9 +112,10 @@ function mostraDias(diaX) {
       })
         .then((resposta) => resposta.json()) // converte para JSON
         .then((dados) => {
-          // dados prontos
-          console.log(dados);
+          agendaDiv.innerHTML = "";
+          mostrarAgenda(dados);
         });
+
       //Adiciono apenas no clicado
       dia.classList.add("ativo");
     });
@@ -144,7 +147,7 @@ function hoje() {
   divDias.innerHTML = "";
   mostraDias(datas.diaAtual);
 
-  document.querySelector(".ativo").click()
+  document.querySelector(".ativo").click();
 }
 
 function amanha() {
@@ -154,8 +157,55 @@ function amanha() {
   divDias.innerHTML = "";
   mostraDias(+datas.diaAtual + 1);
 
-  document.querySelector(".ativo").click()
+  document.querySelector(".ativo").click();
 }
 
-hoje()
+function mostrarAgenda(dados) {
+  dados.forEach((dado, i) => {
+    if (dado.status == "Livre") {
+      agenda = {
+        status: dado.status,
+        horario: dado.hora,
+        dia: dado.dia,
+      };
+      agendaDiv.innerHTML += `<div class="horarioTudo">
+      <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
+      <div class="status" data-hora="${agenda.horario}" data-status = "${agenda.status}"><button>+</button></div>
+    </div>`;
+    } else {
+      agenda = {
+        status: dado.status,
+        horario: dado.hora,
+        servico: dado.servico,
+        cliente: dado.cliente,
+        profissional: dado.profissional,
+      };
+      agendaDiv.innerHTML += `<div class="horarioTudo">
+      <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
+      <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
+      <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+    </div>`;
+    }
+  });
+}
 
+
+function hojeEfeito() {
+  const spans = document.querySelectorAll(".hojeAmanha span");
+  const slider = document.querySelector(".hojeAmanha .slider");
+
+  spans[0].classList.add("ativo-hoje");
+  spans[1].classList.remove("ativo-amanha");
+  slider.style.left = "0%";
+}
+
+function amanhaEfeito() {
+  const spans = document.querySelectorAll(".hojeAmanha span");
+  const slider = document.querySelector(".hojeAmanha .slider");
+
+  spans[1].classList.add("ativo-amanha");
+  spans[0].classList.remove("ativo-hoje");
+  slider.style.left = "50%";
+}
+
+hoje();

@@ -4,33 +4,69 @@
 {%block js_arquivo%}home.js{%endblock%}
 
 {%block conteudo%}
-<main>
-  <h1>Calendario</h1>
-  <div class="calendario">
-    <span onclick="hoje()">Hoje</span>
-    <span onclick="amanha()">Amanha</span>
-    <div class="datas-calendario">
-      <div class="mostraDiaMes">
-        <span class="mostraDia" data-diaCima=""></span>
-        <span class="mostraMes" data-mesCima=""></span>
-        <span class="mostraAno" data-anoCima=""></span>
+<header class="header-bg">
+  <div class="header">
+    <menu>
+      <li>
+        <a href="" class="seta">
+          <svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.707153 0.707108L11.7072 11.7071L0.707153 22.7071" stroke="white" stroke-width="2" />
+          </svg>
+        </a>
+      </li>
+      <li><a href=""><img src="{{ url_for('static', filename='./imagens/icons/agenda.svg') }}" alt="Agenda"> </a></li>
+      <li><a href=""><img src="{{ url_for('static', filename='./imagens/icons/clientes.svg') }}" alt="Agenda"> </a></li>
+      <li><a href=""><img src="{{ url_for('static', filename='./imagens/icons/financeiro.svg') }}" alt="Agenda"> </a></li>
+    </menu>
+  </div>
+</header>
+<main class="main-bg">
+  <div class="main">
+    <div class="calendario">
+      <div class="mostra">
+        <div class="mostra-data cor-p1">
+          <h2 class="mostraDia" data-diaCima=""></h2>
+          <h2 class="mostraMes titulo" data-mesCima=""></h2>
+          <h2 class="mostraAno" data-anoCima=""></h2>
+        </div>
+        <div class="setas-calendario">
+          <span onclick="somaSubtrai(-1)"><svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.707153 0.707108L11.7072 11.7071L0.707153 22.7071" stroke-width="2" />
+            </svg></span>
+          <span onclick="somaSubtrai(+1)"><svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.707153 0.707108L11.7072 11.7071L0.707153 22.7071" stroke-width="2" />
+            </svg></span>
+        </div>
       </div>
-      <div class="setas-calendario">
-        <span onclick="somaSubtrai(-1)">esquerda</span>
-        <span onclick="somaSubtrai(+1)">direita</span>
+      <div class="hojeAmanha cor-3">
+        <div class="slider"></div>
+        <span onclick="hoje();hojeEfeito()" class="ativo-hoje" data-dentro="hoje">Hoje</span>
+        <span onclick="amanha();amanhaEfeito()" data-dentro="amanha">Amanhã</span>
       </div>
-    </div>
-    <div class="cima-calendario">
-      <span>Dom</span>
-      <span>Seg</span>
-      <span>Ter</span>
-      <span>Qua</span>
-      <span>Qui</span>
-      <span>Sex</span>
-      <span>Sab</span>
-    </div>
-    <div class="dias-calendario">
+      <div class="cima-calendario cor-3">
+        <span>Dom</span>
+        <span>Seg</span>
+        <span>Ter</span>
+        <span>Qua</span>
+        <span>Qui</span>
+        <span>Sex</span>
+        <span>Sab</span>
+      </div>
+      <div class="dias-calendario">
 
+      </div>
+    </div>
+    <div class="agenda">
+      <div class="cabecalho-agenda">
+        <h2 class="cor-p1">Sua agenda</h2>
+        <a href="">+</a>
+      </div>
+      <span class="cor-3">12 de maio :</span>
+      <div class="agenda-horarios">
+        <div class="horarioTudo">
+
+        </div>
+      </div>
     </div>
   </div>
 </main>
