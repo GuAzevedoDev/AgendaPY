@@ -9,6 +9,7 @@
 }
 
 .header {
+  display: grid;
   position: sticky;
   width: 100px;
   left: 0;
@@ -19,6 +20,7 @@
   padding: 25px;
   gap: 50px;
   transition: 0.3s;
+  justify-items: center;
 }
 
 .header menu li:nth-child(1) {
