@@ -126,6 +126,15 @@ function mostraDias(diaX) {
   });
 }
 
+function ativoProfissional(){
+  let profissionais = document.querySelectorAll(".lista-profissionais li")
+  profissionais.forEach((profissional =>
+
+  ))
+}
+
+ativoProfissional()
+
 function somaSubtrai(sinal) {
   //Se o mes for 12 e o usuario pedir para somar um ano volta para mes 1
   if (sinal === -1 && datas.mes === 1) {
