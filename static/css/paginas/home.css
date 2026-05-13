@@ -1,91 +1,99 @@
 #home {
   position: relative;
   display: grid;
-  grid-template-columns: 100px 1fr;
-}
-
-#home header {
-  grid-column: 1;
-}
-
-.header {
-  display: grid;
-  position: sticky;
-  width: 100px;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  height: 100vh;
-  background: var(--cor-p1);
-  padding: 25px;
-  gap: 50px;
-  transition: 0.3s;
-  justify-items: center;
-}
-
-.header menu li:nth-child(1) {
-  transition: 0.3s;
-}
-
-.header menu li {
-  text-align: center;
-
-  margin-bottom: 30px;
+  grid-template-columns: auto 1fr;
 }
 
 /* Main */
 
 #home .main-bg {
   grid-column: 2;
-  display: flex;
-  padding: 20px;
-  padding-top: 60px;
+  padding: 20px 60px;
+  padding-top: 40px;
 }
 
 #home .main {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: 0 auto;
-  gap: 200px;
+  grid-template-columns: 0.5fr 1fr;
 }
 
-.main .calendario .mostra {
+.header-main {
+  grid-column: 1/-1;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid var(--cor-p2);
+  padding-bottom: 40px;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
+}
+
+.header-main .mostra {
+  display: flex;
+  align-items: center;
 }
 
 .mostra-data {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
+  gap: 5px;
+  margin-right: 100px;
+}
+
+.mostraAno,
+.mostraMes {
+  font-weight: 500;
+}
+
+.mesAno {
+  display: flex;
   gap: 5px;
 }
 
-.mostra-data h2 {
+.mesAno h2 {
+  display: flex;
+}
+
+.mostraDiaSemana {
+  font-size: var(--texto-menor);
   font-weight: 600;
 }
 
 .mostraDia {
-  background: var(--cor-p2);
-  width: 45px;
-  height: 45px;
+  background: #fdf7f4;
+  border: 1px solid var(--cor-p2);
+  width: 70px;
+  height: 70px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 10px;
   font-weight: 600;
+  font-size: var(--titulo);
 }
 
 .setas-calendario {
   display: flex;
-  gap: 35px;
+  gap: 20px;
+  margin-right: 40px;
 }
 
 .setas-calendario span {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: var(--cor-p2) 1px solid;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.setas-calendario span:hover {
+  transform: scale(1.1);
+  border: 1px solid var(--cor-p1);
 }
 
 .setas-calendario span:first-child svg {
@@ -94,61 +102,103 @@
 
 .setas-calendario svg {
   stroke: var(--cor-p1);
-  cursor: pointer;
+  height: 15px;
 }
 
-.hojeAmanha {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--cor-p2);
+.hoje {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  justify-content: space-around;
-  height: 30px;
-  border-radius: 50px;
-  margin-bottom: 60px;
-  position: relative;
+  border-radius: 10px;
+  height: 50px;
+  padding: 5px 40px;
+  border: 1px solid var(--cor-p2);
+  font-weight: 500;
+  color: var(--cor-p1);
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.hojeAmanha .slider {
+.hoje:hover {
+  transform: scale(1.1);
+  border: 1px solid var(--cor-p1);
+}
+
+.button {
   background: var(--cor-p1);
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  border-radius: 50px;
-  z-index: 0;
-  left: 0;
-  transition: left 0.3s ease;
+  color: var(--cor-1);
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.hojeAmanha span {
-  display: grid;
+.main-profissional {
+  grid-column: 1/-1;
+  margin-bottom: 40px;
+}
+
+.main-profissional h2 {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.main-profissional ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-profissional ul li {
+  display: flex;
+  gap: 10px;
+  border: var(--cor-p2) 1px solid;
+  padding: 5px 10px;
+  border-radius: 10px;
   align-items: center;
-  text-align: center;
-  border-radius: 50px;
-  height: 30px;
-  z-index: 1;
+  transition: 0.3s;
   cursor: pointer;
 }
 
-.hojeAmanha span.ativo-hoje {
-  color: var(--cor-1);
+.main-profissional ul li.ativo,
+.main-profissional ul li:hover {
+  border: var(--cor-p1) 1px solid;
 }
 
-.hojeAmanha span.ativo-amanha {
-  color: var(--cor-1);
-  right: 0;
+.main-profissional ul li h3 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.main-profissional ul li span {
+  font-weight: 500;
+  color: var(--cor-3);
+  font-size: 0.8rem;
+}
+
+.main-profissional ul li img {
+  max-width: 45px;
+}
+
+.calendario {
+  grid-column: 1;
+  padding: 20px;
+  border: 1px solid #fee8df;
+  border-radius: 10px;
+}
+
+.calendario > span {
+  padding-left: 5px;
+  font-weight: 500;
+  margin-bottom: 20px;
 }
 
 .cima-calendario {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 25px;
-  justify-self: center;
+  justify-items: center;
   border-bottom: 1px solid var(--cor-3);
   padding-bottom: 25px;
   margin-bottom: 25px;
   text-align: center;
+  width: 100%;
 }
 
 .cima-calendario span {
@@ -182,30 +232,37 @@
   color: var(--cor-1);
 }
 
+.drop-down-filtro {
+  display: flex;
+  border: 1px solid var(--cor-2);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .agenda {
-  width: 400px;
+  margin-left: 40px;
+  border: 1px solid #fee8df;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .cabecalho-agenda {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 60px;
-  height: 45px;
+  margin-bottom: 20px;
 }
 
-.cabecalho-agenda a {
-  background: var(--cor-p1);
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: var(--cor-1);
+.cabecalho-agenda h2 {
+  font-weight: 500;
 }
 
-.agenda span {
+.agenda .agenda-horarios {
+  max-height: 450px;
+  overflow-y: auto;
+}
+.agenda .agenda-horarios span {
   display: flex;
   align-items: center;
   height: 30px;
@@ -250,4 +307,17 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+
+.horarioTudo .servico {
+  color: var(--cor-p1);
+  font-size: var(--texto-menor);
+}
+
+.horarioTudo .cliente {
+  color: var(--cor-p1);
+  font-size: var(--texto-menor);
+  text-align: right;
 }

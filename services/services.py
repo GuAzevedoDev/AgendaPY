@@ -391,11 +391,19 @@ def mostrarAgendaWeb(funcionarioLogado, data):
     ocupados = []
     tudoHorarios = []
     horarios = gerarHorarios()
+    # cursor.execute("""
+    #     SELECT horario, cliente_id, servico_id
+    #     FROM agendamentos
+    #     WHERE funcionario_id = ?
+    #     AND data = ?
+    # """, (funcionarioLogado, data))
     cursor.execute("""
-        SELECT horario, cliente_id, servico_id
-        FROM agendamentos
-        WHERE funcionario_id = ?
-        AND data = ?
+          SELECT horario, clientes.nome, servicos.nome
+          FROM agendamentos
+          INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
+          INNER JOIN servicos ON agendamentos.servico_id = servicos.id
+          WHERE funcionario_id = ?
+          AND data = ?
     """, (funcionarioLogado, data))
 
     horariosDia = cursor.fetchall()
@@ -533,3 +541,10 @@ def cadastrarClienteWeb(nome,numero):
   cursor.execute( "INSERT INTO clientes (nome, telefone) VALUES (?, ?)",
     (nome, numero))
   conexao.commit()
+
+def mostrarFuncionariosWeb():
+  conexao = conectar()
+  cursor = conexao.cursor()
+  cursor.execute("SELECT id, nome, cargo FROM funcionarios")
+  funcionariosEncontrados = cursor.fetchall()
+  return funcionariosEncontrados

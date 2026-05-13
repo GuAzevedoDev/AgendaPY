@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -60,20 +60,20 @@ def logoutFunc():
 @app.route("/")
 @login_required     #Verifica se existe um funcionario logado
 def home():
-    return render_template("home.html")
+    funcionarios = mostrarFuncionariosWeb()
+    return render_template("home.html",funcionarios=funcionarios, funcionario_id=session["funcionario_id"])
 
 @app.route("/calendario", methods = ['POST'])
 @login_required     #Verifica se existe um funcionario logado
 def calendario():
     #Pego os dados do js
-    data = request.json
-    dataSelecionada = data['data']
+    dados = request.json
+    dataSelecionada = dados['data']
+    idFuncionario = dados['idFuncionario']
     
-    #Pego id do funcionario da sessao
-    funcionario_id = session["funcionario_id"]
 
     #Chamo a funcao
-    horarios = mostrarAgendaWeb(funcionario_id,dataSelecionada)
+    horarios = mostrarAgendaWeb(idFuncionario,dataSelecionada)
     return jsonify(horarios)
 
 

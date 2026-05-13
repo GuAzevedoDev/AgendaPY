@@ -1,9 +1,11 @@
 /* importacoes global */
 @import './global/global.css';
+@import './global/header.css';
 
 /* importacoes componentes */
 @import './componentes/cores.css';
 @import './componentes/botoes.css';
+@import './componentes/tipografia.css';
 
 /* importacoes paginas */
 @import './paginas/login.css';

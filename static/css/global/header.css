@@ -1,0 +1,78 @@
+.header-bg {
+  grid-column: 1;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  inset: 0 0 0;
+  height: 100%;
+  background: var(--cor-p1);
+  padding: 30px;
+  gap: 50px;
+  transition: 0.3s;
+  justify-content: space-between;
+}
+
+.header menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header menu li.ativo a,
+.header menu li a:hover {
+  background: var(--cor-1);
+  color: var(--cor-p1);
+}
+
+.header menu li.ativo svg {
+  transition: 0.3s;
+  fill: var(--cor-1);
+  stroke: var(--cor-p1);
+}
+
+.header menu li a {
+  display: grid;
+  grid-template-columns: 23px max-content;
+  gap: 20px;
+  padding: 10px;
+  color: var(--cor-p2);
+  border-radius: 10px;
+}
+
+.header menu li:last-child svg {
+  transition: 0.3s;
+  fill: none;
+  stroke: var(--cor-p2);
+}
+
+.header menu li svg {
+  text-align: center;
+  fill: var(--cor-p2);
+}
+
+.usuario-header {
+  display: flex;
+  border: 1px solid var(--cor-1);
+  border-radius: 10px;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+}
+
+.usuario-header img {
+  max-width: 50px;
+}
+
+.usuario-header div h3{
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.usuario-header div span{
+  font-size: 0.6rem;
+  font-weight: 400;
+}

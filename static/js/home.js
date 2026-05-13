@@ -8,6 +8,8 @@ let anoCima = document.querySelector(".mostraAno");
 
 let agendaDiv = document.querySelector(".agenda-horarios");
 
+let diaAgenda = document.querySelector(".dia-agenda");
+
 let meses = [
   "Janeiro",
   "Fevereiro",
@@ -84,7 +86,6 @@ function mostraDias(diaX) {
     diaCima.textContent = 1;
     diaCima.dataset.diaCima = 1;
   }
-
   //Percorro todos para pegar o clicado
   diasAtivos.forEach((dia) => {
     //Quando chegar no dia atual coloca ele ativo
@@ -108,7 +109,10 @@ function mostraDias(diaX) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: dia.dataset.data }),
+        body: JSON.stringify({
+          data: dia.dataset.data,
+          idFuncionario: idFuncionario,
+        }),
       })
         .then((resposta) => resposta.json()) // converte para JSON
         .then((dados) => {
@@ -147,7 +151,7 @@ function hoje() {
   divDias.innerHTML = "";
   mostraDias(datas.diaAtual);
 
-  document.querySelector(".ativo").click();
+  document.querySelector(".dias-calendario .ativo").click();
 }
 
 function amanha() {
@@ -189,7 +193,6 @@ function mostrarAgenda(dados) {
   });
 }
 
-
 function hojeEfeito() {
   const spans = document.querySelectorAll(".hojeAmanha span");
   const slider = document.querySelector(".hojeAmanha .slider");
@@ -208,4 +211,14 @@ function amanhaEfeito() {
   slider.style.left = "50%";
 }
 
+function funcionarioId() {
+  let funcionarios = document.querySelectorAll(".funcionario");
+  funcionarios.forEach((funcionario) => {
+    funcionario.addEventListener("click", function pegaId() {
+      idFuncionario = funcionario.dataset.id;
+      document.querySelector(".dias-calendario .ativo").click();
+    });
+  });
+}
 hoje();
+funcionarioId();
