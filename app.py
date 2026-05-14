@@ -38,6 +38,8 @@ def login():
         
         # login OK
         session["funcionario_id"] = funcionario[0]
+        session["funcionario_nome"] = funcionario[1]
+        session["funcionario_cargo"] = funcionario[2]
 
         #Caso passe por todos os retornos o login esta OK e redireciona
         #Dentro da url_for(nome da funcao)
@@ -61,7 +63,13 @@ def logoutFunc():
 @login_required     #Verifica se existe um funcionario logado
 def home():
     funcionarios = mostrarFuncionariosWeb()
-    return render_template("home.html",funcionarios=funcionarios, funcionario_id=session["funcionario_id"])
+    sessaoFun = {
+        "funcionario_id": session["funcionario_id"],
+        "funcionario_nome": session["funcionario_nome"],
+        "funcionario_cargo": session["funcionario_cargo"]
+    }
+    return render_template("home.html",funcionarios=funcionarios, sessaoFun = sessaoFun)
+
 
 @app.route("/calendario", methods = ['POST'])
 @login_required     #Verifica se existe um funcionario logado

@@ -126,14 +126,11 @@ function mostraDias(diaX) {
   });
 }
 
-function ativoProfissional(){
-  let profissionais = document.querySelectorAll(".lista-profissionais li")
-  profissionais.forEach((profissional =>
-
-  ))
+function ativoProfissional() {
+  let profissionais = document.querySelectorAll(".funcionario");
+  
 }
 
-ativoProfissional()
 
 function somaSubtrai(sinal) {
   //Se o mes for 12 e o usuario pedir para somar um ano volta para mes 1
@@ -221,13 +218,36 @@ function amanhaEfeito() {
 }
 
 function funcionarioId() {
+  //Pego a lista de funcionarios
   let funcionarios = document.querySelectorAll(".funcionario");
+
+  //Percorro para deixar ativado o funcionario atual
+  funcionarios.forEach((funcionario) => {
+    if (idFuncionario == funcionario.dataset.id) {
+      funcionario.classList.add("ativo");
+    }
+  });
+
+  //Pego o elemento clicado
   funcionarios.forEach((funcionario) => {
     funcionario.addEventListener("click", function pegaId() {
+
+      //Quando clicado removo a classe ativo de todos
+      funcionarios.forEach((funcionario) => {
+        funcionario.classList.remove("ativo");
+      });
+
+      //Atualizo o idFuncionario para o clicado
       idFuncionario = funcionario.dataset.id;
+
+      //Coloco a classe ativo no clicado
+      funcionario.classList.add("ativo");
+
+      //Simulo o click para atualizar
       document.querySelector(".dias-calendario .ativo").click();
     });
   });
 }
+
 hoje();
 funcionarioId();

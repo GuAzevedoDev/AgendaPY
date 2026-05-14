@@ -44,8 +44,8 @@
         <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
       </div>
       <div class="usuario-text cor-1">
-        <h3>Mali Azevedo</h3>
-        <span>Dono</span>
+        <h3>{{sessaoFun.funcionario_nome}}</h3>
+        <span>{{sessaoFun.funcionario_cargo}}</span>
       </div>
     </div>
   </div>
@@ -53,7 +53,6 @@
 
 <main class="main-bg">
   <div class="main">
-
     <div class="header-main">
       <div class="mostra">
         <div class="mostra-data cor-p1">
@@ -95,6 +94,7 @@
         {% endfor %}
       </ul>
     </div>
+
     <div class="calendario">
       <span class="texto-menor cor-2">Maio 2026</span>
       <div class="cima-calendario cor-3">
@@ -134,6 +134,6 @@
 </main>
 
 <script>
-  let idFuncionario = {{ funcionario_id }}
+  let idFuncionario = {{sessaoFun.funcionario_id}}
 </script>
 {%endblock%}
