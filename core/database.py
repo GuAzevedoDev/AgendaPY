@@ -18,6 +18,7 @@ cursor.executescript("""
             id       INTEGER PRIMARY KEY AUTOINCREMENT,
             nome     TEXT NOT NULL UNIQUE,
             cargo    TEXT NOT NULL CHECK(cargo IN ('dono', 'profissional')),
+            funcao   TEXT NOT NULL,
             senha    TEXT NOT NULL
         );
 
@@ -35,6 +36,7 @@ cursor.executescript("""
             duracao_min  INTEGER NOT NULL,
             valor        REAL NOT NULL
         );
+        
                      
         -- servicos e funcionarios
         CREATE TABLE IF NOT EXISTS servicos_funcionarios (
@@ -51,7 +53,6 @@ cursor.executescript("""
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
             cliente_id      INTEGER NOT NULL,
             funcionario_id  INTEGER NOT NULL,
-            servico_id      INTEGER NOT NULL,
             horario         TEXT NOT NULL,
             data            TEXT NOT NULL,
             status          TEXT NOT NULL DEFAULT 'confirmado'
@@ -59,9 +60,19 @@ cursor.executescript("""
             criado_em       TEXT NOT NULL DEFAULT (datetime('now')),
 
             FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
-            FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE,
-            FOREIGN KEY (servico_id) REFERENCES servicos(id)
+            FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE
         );
+                     
+        -- agendamento x servico
+        CREATE TABLE IF NOT EXISTS agendamentos_servicos (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            servicos_id        INTEGER NOT NULL,
+            agendamentos_id  INTEGER NOT NULL,
+            
+            FOREIGN KEY (servicos_id) REFERENCES servicos(id) ON DELETE CASCADE,
+            FOREIGN KEY (agendamentos_id) REFERENCES agendamentos(id) ON DELETE CASCADE
+        );
+                     
         -- índice para evitar conflito de horário
         CREATE UNIQUE INDEX IF NOT EXISTS idx_sem_conflito
         ON agendamentos(funcionario_id, data, horario)

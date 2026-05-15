@@ -40,7 +40,7 @@ def login():
         session["funcionario_id"] = funcionario[0]
         session["funcionario_nome"] = funcionario[1]
         session["funcionario_cargo"] = funcionario[2]
-
+        session["funcionario_funcao"] = funcionario[3]
         #Caso passe por todos os retornos o login esta OK e redireciona
         #Dentro da url_for(nome da funcao)
         return redirect(url_for("home"))
@@ -66,9 +66,12 @@ def home():
     sessaoFun = {
         "funcionario_id": session["funcionario_id"],
         "funcionario_nome": session["funcionario_nome"],
-        "funcionario_cargo": session["funcionario_cargo"]
+        "funcionario_cargo": session["funcionario_cargo"],
+        "funcionario_funcao": session["funcionario_funcao"]
     }
+    print(session["funcionario_cargo"])
     return render_template("home.html",funcionarios=funcionarios, sessaoFun = sessaoFun)
+
 
 
 @app.route("/calendario", methods = ['POST'])

@@ -87,8 +87,8 @@
               <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
             </div>
             <div class="profissionais-texto">
-              <h3>{{ funcionario[1] }}</h3>
-              <span>Cabelereira</span>
+              <h3>{{ funcionario[1]}}</h3>
+              <span>{{funcionario[3]}}</span>
             </div>
           </li>
         {% endfor %}
@@ -96,7 +96,7 @@
     </div>
 
     <div class="calendario">
-      <span class="texto-menor cor-2">Maio 2026</span>
+      <span class="anoCalendario">2026</span>
       <div class="cima-calendario cor-3">
         <span>Dom</span>
         <span>Seg</span>
@@ -114,7 +114,7 @@
       <div class="cabecalho-agenda">
         <div class="cabecalho-agenda-texto">
           <h2 class="cor-2 texto">Agenda da Mali</h2>
-          <span class="cor-3 ">Terca-feira, 12 de Maio</span>
+          <span class="cor-3 dia-semana"></span>
         </div>
         <div class="drop-down-filtro">
           <span>Dia inteiro</span>

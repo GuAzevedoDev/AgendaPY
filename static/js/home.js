@@ -1,10 +1,16 @@
+let mostraDiaSemana = document.querySelector(".mostraDiaSemana");
+
 let divDias = document.querySelector(".dias-calendario");
+
+let diaSemana = document.querySelector(".dia-semana");
 
 let diaCima = document.querySelector(".mostraDia");
 
 let mesCima = document.querySelector(".mostraMes");
 
 let anoCima = document.querySelector(".mostraAno");
+
+let anoCalendario = document.querySelector(".anoCalendario");
 
 let agendaDiv = document.querySelector(".agenda-horarios");
 
@@ -23,6 +29,16 @@ let meses = [
   "Outubro",
   "Novembro",
   "Dezembro",
+];
+
+let diasSemana = [
+  "Domingo",
+  "Segunda-feira",
+  "Terça-feira",
+  "Quarta-feira",
+  "Quinta-feira",
+  "Sexta-feira",
+  "Sábado",
 ];
 
 let diasAtivos = document.querySelectorAll(".dia");
@@ -69,7 +85,7 @@ function mostraDias(diaX) {
 
   anoCima.innerHTML = datas.ano;
   anoCima.dataset.anoCima = datas.ano;
-
+  anoCalendario.innerHTML = `${meses[datas.mes - 1]} ${datas.ano}`
   //Atualizo a lista dos dias dos meses
   diasAtivos = document.querySelectorAll(".dia");
 
@@ -86,6 +102,7 @@ function mostraDias(diaX) {
     diaCima.textContent = 1;
     diaCima.dataset.diaCima = 1;
   }
+  
   //Percorro todos para pegar o clicado
   diasAtivos.forEach((dia) => {
     //Quando chegar no dia atual coloca ele ativo
@@ -102,6 +119,16 @@ function mostraDias(diaX) {
       //Atualizo o dia em cima para o texto do clicado
       diaCima.innerHTML = dia.dataset.dia;
       diaCima.dataset.diaCima = dia.dataset.dia;
+
+      //Me retorna o dia da semana atual
+      let diaSemanaAtual = new Date(
+        datas.ano,
+        datas.mes - 1,
+        dia.dataset.dia,
+      ).getDay();
+
+      mostraDiaSemana.innerHTML = diasSemana[diaSemanaAtual];
+      diaSemana.innerHTML = `${diasSemana[diaSemanaAtual]}, ${dia.dataset.dia} de ${mesCima.dataset.mesCima}`;
 
       //Envio o dia clicado para o back
       fetch("/calendario", {
@@ -126,11 +153,6 @@ function mostraDias(diaX) {
   });
 }
 
-function ativoProfissional() {
-  let profissionais = document.querySelectorAll(".funcionario");
-  
-}
-
 
 function somaSubtrai(sinal) {
   //Se o mes for 12 e o usuario pedir para somar um ano volta para mes 1
@@ -148,6 +170,8 @@ function somaSubtrai(sinal) {
 
   //Mostro o mes atualizado na tela
   mostraDias(datas.diaAtual);
+
+  document.querySelector(".dias-calendario .ativo").click();
 }
 
 function hoje() {
@@ -160,15 +184,6 @@ function hoje() {
   document.querySelector(".dias-calendario .ativo").click();
 }
 
-function amanha() {
-  datas.ano = datas.anoAtual;
-  datas.mes = datas.mesAtual;
-
-  divDias.innerHTML = "";
-  mostraDias(+datas.diaAtual + 1);
-
-  document.querySelector(".ativo").click();
-}
 
 function mostrarAgenda(dados) {
   dados.forEach((dado, i) => {
@@ -199,23 +214,6 @@ function mostrarAgenda(dados) {
   });
 }
 
-function hojeEfeito() {
-  const spans = document.querySelectorAll(".hojeAmanha span");
-  const slider = document.querySelector(".hojeAmanha .slider");
-
-  spans[0].classList.add("ativo-hoje");
-  spans[1].classList.remove("ativo-amanha");
-  slider.style.left = "0%";
-}
-
-function amanhaEfeito() {
-  const spans = document.querySelectorAll(".hojeAmanha span");
-  const slider = document.querySelector(".hojeAmanha .slider");
-
-  spans[1].classList.add("ativo-amanha");
-  spans[0].classList.remove("ativo-hoje");
-  slider.style.left = "50%";
-}
 
 function funcionarioId() {
   //Pego a lista de funcionarios
@@ -231,7 +229,6 @@ function funcionarioId() {
   //Pego o elemento clicado
   funcionarios.forEach((funcionario) => {
     funcionario.addEventListener("click", function pegaId() {
-
       //Quando clicado removo a classe ativo de todos
       funcionarios.forEach((funcionario) => {
         funcionario.classList.remove("ativo");

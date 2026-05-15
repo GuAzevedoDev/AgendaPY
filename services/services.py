@@ -83,13 +83,14 @@ def cadastrarFuncionarios():
     print(f"Funcionario '{nome}' ja existe, tente outro nome.")
 
   cargo = input("Digite seu cargo [dono] // [profissional]: ")
+  funcao = input("Digite sua funcao: ")
   senha = input("Digite sua senha: ").encode('utf-8')
   hashSenha = hashlib.sha256(senha)
   senhaHex = hashSenha.hexdigest()
 
   cursor.execute(
-      "INSERT INTO funcionarios (nome, cargo, senha) VALUES (?, ?, ?)",
-      (nome, cargo.lower(), senhaHex)
+      "INSERT INTO funcionarios (nome, cargo, funcao, senha) VALUES (?, ?, ?, ?)",
+      (nome, cargo.lower(),funcao, senhaHex)
     )
   conexao.commit()
   print(f"Funcionario {nome} adicionado!")
@@ -326,19 +327,17 @@ def marcarHorario(idfuncionarioLogado):
 def loginFuncionarioWeb(nome,senha):
   conexao = conectar()
   cursor = conexao.cursor()
-  cursor.execute("SELECT id, nome, cargo, senha FROM funcionarios WHERE nome = ?",
+  cursor.execute("SELECT id, nome, cargo, funcao, senha FROM funcionarios WHERE nome = ?",
     (nome.capitalize(),))
   funcionarioEncontrado = cursor.fetchone()
   if funcionarioEncontrado:
-    if senha == funcionarioEncontrado[3]:
+    if senha == funcionarioEncontrado[4]:
       # print("Login feito com sucesso!")
       return funcionarioEncontrado
     else:
-      # print("Senha incorreta!")
       return None
     
   else:
-    # print("Usuario nao encontrado")
     return None
 
 
@@ -545,6 +544,6 @@ def cadastrarClienteWeb(nome,numero):
 def mostrarFuncionariosWeb():
   conexao = conectar()
   cursor = conexao.cursor()
-  cursor.execute("SELECT id, nome, cargo FROM funcionarios")
+  cursor.execute("SELECT id, nome, cargo, funcao FROM funcionarios")
   funcionariosEncontrados = cursor.fetchall()
   return funcionariosEncontrados
