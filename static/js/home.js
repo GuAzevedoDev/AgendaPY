@@ -246,5 +246,13 @@ function funcionarioId() {
   });
 }
 
+function abreModal(){
+  document.querySelector('.modal-agendamento').showModal()
+}
+
+function fechaModal(){
+  document.querySelector('.modal-agendamento').close()
+}
+
 hoje();
 funcionarioId();

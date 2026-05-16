@@ -69,7 +69,6 @@ def home():
         "funcionario_cargo": session["funcionario_cargo"],
         "funcionario_funcao": session["funcionario_funcao"]
     }
-    print(session["funcionario_cargo"])
     return render_template("home.html",funcionarios=funcionarios, sessaoFun = sessaoFun)
 
 
@@ -88,6 +87,21 @@ def calendario():
     return jsonify(horarios)
 
 
+
+@app.route('/agendar', methods=["GET", "POST"])
+@login_required     #Verifica se existe um funcionario logado
+def agendar():
+    #Se metodo POST pego os dados
+    if request.method == "POST":
+        #Pegando dados
+        nomeCliente = request.form["nomeCliente"]
+        numeroCliente = request.form["numeroCliente"]
+        nomeServico = request.form["nomeServico"]
+        dataAgendamento = request.form["dataAgendamento"]
+        horaAgendamento = request.form["horaAgendamento"]
+
+        print(nomeCliente)
+    return redirect("/")  
 
 
 # #Cadastrar clientes

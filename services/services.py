@@ -346,7 +346,7 @@ def marcarHorarioWeb(funcionarioLogado,nome,hora,data):
   dataEscolhida = selecionarData(data)
 
   #Selecionar horario
-  horarioEscolhido = selecionarHorarioWeb(funcionarioLogado[0],dataEscolhida,hora)
+  horarioEscolhido = selecionarHorarioWeb(funcionarioLogado,dataEscolhida,hora)
 
   if not horarioEscolhido:
     return
