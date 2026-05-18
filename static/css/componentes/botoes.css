@@ -10,6 +10,10 @@
   transition: 0.3s;
 }
 
+form > .btn {
+  padding: 8px;
+}
+
 .btn:hover {
   background: #f5ede4;
   color: var(--cor-p1);

@@ -85,7 +85,7 @@ function mostraDias(diaX) {
 
   anoCima.innerHTML = datas.ano;
   anoCima.dataset.anoCima = datas.ano;
-  anoCalendario.innerHTML = `${meses[datas.mes - 1]} ${datas.ano}`
+  anoCalendario.innerHTML = `${meses[datas.mes - 1]} ${datas.ano}`;
   //Atualizo a lista dos dias dos meses
   diasAtivos = document.querySelectorAll(".dia");
 
@@ -102,7 +102,7 @@ function mostraDias(diaX) {
     diaCima.textContent = 1;
     diaCima.dataset.diaCima = 1;
   }
-  
+
   //Percorro todos para pegar o clicado
   diasAtivos.forEach((dia) => {
     //Quando chegar no dia atual coloca ele ativo
@@ -153,7 +153,6 @@ function mostraDias(diaX) {
   });
 }
 
-
 function somaSubtrai(sinal) {
   //Se o mes for 12 e o usuario pedir para somar um ano volta para mes 1
   if (sinal === -1 && datas.mes === 1) {
@@ -184,7 +183,6 @@ function hoje() {
   document.querySelector(".dias-calendario .ativo").click();
 }
 
-
 function mostrarAgenda(dados) {
   dados.forEach((dado, i) => {
     if (dado.status == "Livre") {
@@ -213,7 +211,6 @@ function mostrarAgenda(dados) {
     }
   });
 }
-
 
 function funcionarioId() {
   //Pego a lista de funcionarios
@@ -246,12 +243,35 @@ function funcionarioId() {
   });
 }
 
-function abreModal(){
-  document.querySelector('.modal-agendamento').showModal()
+function abreModal() {
+  document.querySelector(".modal-agendamento").showModal();
 }
 
-function fechaModal(){
-  document.querySelector('.modal-agendamento').close()
+function fechaModal() {
+  document.querySelector(".modal-agendamento").close();
+}
+
+function buscarNome() {
+  let inputNome = document.querySelector(".nomeCliente");
+  let inputNumero = document.querySelector(".numeroCliente");
+  let listaNomes = document.querySelector(".lista-nomes");
+
+  inputNome.addEventListener("input", function pegaNome() {
+    fetch("/busca", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeCliente: inputNome.value,
+      }),
+    })
+      .then((resposta) => resposta.json()) // converte para JSON
+      .then((clientes) => {
+        listaNomes.innerHTML = " ";
+        clientes.forEach((cliente) => {
+          listaNomes.innerHTML += `<li class="nome-lista">${cliente}</li>`;
+        });
+      });
+  });
 }
 
 hoje();

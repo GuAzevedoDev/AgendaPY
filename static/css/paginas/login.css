@@ -65,7 +65,7 @@
 }
 
 .direita-main-login form button {
-  font-size: var(--texto);
+  font-size: var(--texto-menor);
   margin-top: 20px;
 }
 

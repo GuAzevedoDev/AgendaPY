@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -101,9 +101,18 @@ def agendar():
         horaAgendamento = request.form["horaAgendamento"]
 
         print(nomeCliente)
+        
     return redirect("/")  
 
 
+@app.route('/busca', methods=["GET", "POST"])
+@login_required   
+def buscarNome():
+    dados = request.json
+    nomeCliente = dados['nomeCliente']
+    if request.method == "POST":
+        nomesEncontrados = buscarWeb(nomeCliente)
+        return  nomesEncontrados
 # #Cadastrar clientes
 # @app.route("/CadastroClientes", methods=["POST"])
 # @login_required     #Verifica se existe um funcionario logado

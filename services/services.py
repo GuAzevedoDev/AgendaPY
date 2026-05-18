@@ -1,6 +1,7 @@
 
 from core.database import conectar
 import hashlib
+from datetime import datetime
 
 #Clientes
 
@@ -343,24 +344,26 @@ def loginFuncionarioWeb(nome,senha):
 
 def marcarHorarioWeb(funcionarioLogado,nome,hora,data):
   #Selecionar data
-  dataEscolhida = selecionarData(data)
+  dataEscolhida = selecionarDataWeb(data)
+  if not dataEscolhida:
+    return "Data inválida"
 
   #Selecionar horario
   horarioEscolhido = selecionarHorarioWeb(funcionarioLogado,dataEscolhida,hora)
 
-  if not horarioEscolhido:
-    return
+  if hora != horarioEscolhido:
+    return horarioEscolhido
   
   #Selecione o nome do cliente
   clienteEscolhido = pesquisarClienteWeb(nome)
 
   if not clienteEscolhido:
-    return
+    return clienteEscolhido
   
   #Selecione o servico
   servicoEscolhido = selecionarServico()
   if not servicoEscolhido:
-    return
+    return servicoEscolhido
 
   #Passar para o banco
   conexao = conectar()
@@ -368,20 +371,26 @@ def marcarHorarioWeb(funcionarioLogado,nome,hora,data):
   cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,servico_id,horario,data)VALUES(?,?,?,?,?)""",(clienteEscolhido[0],funcionarioLogado[0],servicoEscolhido[0],horarioEscolhido,dataEscolhida))
   conexao.commit()
 
-  #print("Agendamento realizado com sucesso!")
+  return("Agendamento realizado com sucesso!")
 
 
 def selecionarHorarioWeb(funcionarioLogado, data, horarioEscolhido):
   horarios = gerarHorarios()
-  ocupados = mostrarAgendaWeb(funcionarioLogado[0],data)
+  tudoHorarios = mostrarAgendaWeb(funcionarioLogado,data)
+  ocupados = []
+
+  for horario in tudoHorarios:
+    if horario['status'] == 'Ocupado':
+      ocupados.append(horario['hora'])
+      print(ocupados)
+
   if horarioEscolhido not in horarios:
-     print("Esse horario nao e valido")
-     return None
+    return "Esse horario não é válido"
+  
   if horarioEscolhido in ocupados:
-    print("Esse horario ja esta ocupado")
-    return None
-  else:
-     return horarioEscolhido
+    return "Esse horario já está ocupado"
+
+  return horarioEscolhido
   
 
 def mostrarAgendaWeb(funcionarioLogado, data):
@@ -390,12 +399,6 @@ def mostrarAgendaWeb(funcionarioLogado, data):
     ocupados = []
     tudoHorarios = []
     horarios = gerarHorarios()
-    # cursor.execute("""
-    #     SELECT horario, cliente_id, servico_id
-    #     FROM agendamentos
-    #     WHERE funcionario_id = ?
-    #     AND data = ?
-    # """, (funcionarioLogado, data))
     cursor.execute("""
           SELECT horario, clientes.nome, servicos.nome
           FROM agendamentos
@@ -427,7 +430,10 @@ def mostrarAgendaWeb(funcionarioLogado, data):
 
 
 def selecionarDataWeb(data):
-  #print("Digite a data que ira fazer o agendamento: [XX/XX/XXXX]")
+  dataAtual = datetime.now()
+  dataUsuario = datetime.strptime(data, "%d/%m/%Y")
+  if dataUsuario < dataAtual:
+    return None
   return data
 
 
@@ -439,30 +445,15 @@ def pesquisarClienteWeb(nome,idProucurado):
     (nomeTotal,))
   clientesEncontrados = cursor.fetchall()
   if len(clientesEncontrados) == 0:
-    #print("Nenhum cliente encontrado\n")
-    entrada = input("Deseja cadastrar ? (s/n)\n")
-    if entrada.lower() == "s":
-      numero = input("Digite o numero do cliente:")
-      cadastrarCliente(nome,numero)
-    else:
-       #print("Voltando para o menu")
-       completar
+    return 'Nenhum cliente encontrado'
 
   if len(clientesEncontrados) == 1:
     return clientesEncontrados[0]
   
   elif len(clientesEncontrados) > 1:
-    #print("Foram encontrados esses clientes:\n")
+    return clientesEncontrados
 
-    for cliente in clientesEncontrados:
-      idCliente,nomeCliente,numero = cliente
-      #print(f"ID:{idCliente} // NOME:{nomeCliente} // NUMERO:{numero}\n")
-    
-    
-    for cliente in clientesEncontrados:
-      if cliente[0] == idProucurado:
-        return cliente
-      
+  
     # print("Nenhum cliente encontrado\n")
     # entrada = input("Deseja cadastrar ? (s/n)\n")
     # if entrada.lower() == "s":
@@ -505,31 +496,28 @@ def mostrarServicosWeb():
   servicosEncontrados = cursor.fetchall()
 
   if not servicosEncontrados:
-    #print("Nenhum servico encontrado")
-    return []
+    return None
 
   for servico in servicosEncontrados:
       idS, nomeS, duracaoS, valorS = servico
 
-      #print(f"ID:{idS} // NOME:{nomeS} // DURACAO:{duracaoS} // VALOR:{valorS}")
+      return(f"ID:{idS} // NOME:{nomeS} // DURACAO:{duracaoS} // VALOR:{valorS}")
 
-      cursor.execute("""
-          SELECT f.nome
-          FROM funcionarios f
-          JOIN servicos_funcionarios sf
-          ON f.id = sf.funcionario_id
-          WHERE sf.servico_id = ?
-      """, (idS,))
+      # cursor.execute("""
+      #     SELECT f.nome
+      #     FROM funcionarios f
+      #     JOIN servicos_funcionarios sf
+      #     ON f.id = sf.funcionario_id
+      #     WHERE sf.servico_id = ?
+      # """, (idS,))
 
-      funcionarios = cursor.fetchall()
+      # funcionarios = cursor.fetchall()
 
-      if funcionarios:
-          nomes = [f[0] for f in funcionarios]
-          #print("Profissionais:", ", ".join(nomes))
-      else:
-          #print("Profissionais: Nenhum")
-          todos
-      #print()
+      # if funcionarios:
+      #     nomes = [f[0] for f in funcionarios]
+      #     return("Profissionais:", ", ".join(nomes))
+      # else:
+      #     return("Profissionais: Nenhum")
 
   return servicosEncontrados
 
@@ -541,9 +529,20 @@ def cadastrarClienteWeb(nome,numero):
     (nome, numero))
   conexao.commit()
 
+
 def mostrarFuncionariosWeb():
   conexao = conectar()
   cursor = conexao.cursor()
   cursor.execute("SELECT id, nome, cargo, funcao FROM funcionarios")
   funcionariosEncontrados = cursor.fetchall()
   return funcionariosEncontrados
+
+
+def buscarWeb(nome):
+  conexao = conectar()
+  cursor = conexao.cursor()
+  nomeTotal = "%" + nome + "%" 
+  cursor.execute("SELECT id, nome, telefone FROM clientes WHERE nome LIKE ?;",
+    (nomeTotal,))
+  clientesEncontrados = cursor.fetchall()
+  return clientesEncontrados

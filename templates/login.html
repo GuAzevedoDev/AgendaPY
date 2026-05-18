@@ -15,11 +15,11 @@
       </div>
       <form action="/login" method="post">
         <div class="nome-form-login">
-          <label for="nome" class="texto">Usuario</label>
+          <label for="nome" class="texto-menor">Usuario</label>
           <input type="text" id="nome" name="nomeUsuario" placeholder="Digite seu usuario">
         </div>
         <div class="senha-form-login">
-          <label for="senha" class="texto">Senha</label>
+          <label for="senha" class="texto-menor">Senha</label>
           <div>
             <input type="password" id="senha" name="senhaUsuario" placeholder="Digite sua senha">
             <svg width="20" height="8" viewBox="0 0 25 13" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="mostrarSenha()">
@@ -37,7 +37,7 @@
           {% endif %}
         </div>
 
-        <button id="btnEnvio btn" type="submit">Entrar</button>
+        <button id="btnEnvio" class="btn" type="submit">Entrar</button>
 
         <a href="">Problemas para entrar? Fale com a administração.</a>
       </form>
