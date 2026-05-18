@@ -113,6 +113,16 @@ def buscarNome():
     if request.method == "POST":
         nomesEncontrados = buscarWeb(nomeCliente)
         return  nomesEncontrados
+
+    print('Chegou aqui')
+    
+
+
+
+
+
+
+
 # #Cadastrar clientes
 # @app.route("/CadastroClientes", methods=["POST"])
 # @login_required     #Verifica se existe um funcionario logado

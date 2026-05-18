@@ -255,7 +255,8 @@ function buscarNome() {
   let inputNome = document.querySelector(".nomeCliente");
   let inputNumero = document.querySelector(".numeroCliente");
   let listaNomes = document.querySelector(".lista-nomes");
-
+  let nomesLista = document.querySelectorAll(".nome-lista")
+  
   inputNome.addEventListener("input", function pegaNome() {
     fetch("/busca", {
       method: "post",
@@ -268,11 +269,21 @@ function buscarNome() {
       .then((clientes) => {
         listaNomes.innerHTML = " ";
         clientes.forEach((cliente) => {
-          listaNomes.innerHTML += `<li class="nome-lista">${cliente}</li>`;
+          listaNomes.innerHTML += `<li class="nome-lista" data-numero="${cliente[2]}">${cliente[1]}</li>`;
+          nomesLista = document.querySelectorAll(".nome-lista")
         });
       });
+      nomesLista.forEach((nomeLista) =>{
+        nomeLista.addEventListener('click',function colocaNumero(){
+          numeroSelecionado = nomeLista.dataset.numero
+          inputNumero.value = numeroSelecionado
+          
+        })
+      }) 
   });
 }
 
+
+buscarNome()
 hoje();
 funcionarioId();
