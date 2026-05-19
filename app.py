@@ -103,7 +103,8 @@ def agendar():
 
     print(nomeCliente,numeroCliente,nomesServicos,dataAgendamento,horaAgendamento)
         
-    return redirect("/")  
+    return redirect(url_for("home"))
+
 
 
 @app.route('/buscaNome', methods=["GET", "POST"])
@@ -114,7 +115,8 @@ def buscarNome():
     if request.method == "POST":
         nomesEncontrados = buscarNomeWeb(nomeCliente)
         return  nomesEncontrados
-    
+
+
 
 @app.route('/buscaServico', methods=["GET", "POST"])
 @login_required   

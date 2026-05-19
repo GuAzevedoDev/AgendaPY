@@ -184,6 +184,7 @@ function hoje() {
 }
 
 function mostrarAgenda(dados) {
+  let dataDiaAtivo = document.querySelector(".dia.ativo").dataset.data
   dados.forEach((dado, i) => {
     if (dado.status == "Livre") {
       agenda = {
@@ -192,8 +193,8 @@ function mostrarAgenda(dados) {
         dia: dado.dia,
       };
       agendaDiv.innerHTML += `<div class="horarioTudo">
-      <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
-      <div class="status" data-hora="${agenda.horario}" data-status = "${agenda.status}"><button>+</button></div>
+      <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">${agenda.horario}</div>
+      <div class="status" ><button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button></div>
     </div>`;
     } else {
       agenda = {
@@ -210,6 +211,21 @@ function mostrarAgenda(dados) {
     </div>`;
     }
   });
+  let botoesAgenda = document.querySelectorAll('.botaoAgenda')
+  botoesAgenda.forEach((botao)=>{
+    botao.addEventListener('click',function pegaData(){
+      let horaAgenda = botao.dataset.hora
+      let dataAgenda = botao.dataset.data
+      let inputHora = document.querySelector(".horaCliente");
+      let inputData = document.querySelector(".dataCliente");
+      abreModal()
+      inputHora.value = horaAgenda
+      inputData.value = dataAgenda
+        
+
+
+    })
+  })
 }
 
 function funcionarioId() {
@@ -394,6 +410,8 @@ function calculaTotal(servicosAtivos){
     });
   valorHtml.innerHTML = `R$${valorTotal}`
 }
+
+
 
 buscarServico();
 buscarNome();
