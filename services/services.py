@@ -538,7 +538,7 @@ def mostrarFuncionariosWeb():
   return funcionariosEncontrados
 
 
-def buscarWeb(nome):
+def buscarNomeWeb(nome):
   conexao = conectar()
   cursor = conexao.cursor()
   nomeTotal = "%" + nome + "%" 
@@ -546,3 +546,13 @@ def buscarWeb(nome):
     (nomeTotal,))
   clientesEncontrados = cursor.fetchall()
   return clientesEncontrados
+
+
+def buscarServicoWeb(servico):
+  conexao = conectar()
+  cursor = conexao.cursor()
+  servicoTotal = "%" + servico + "%" 
+  cursor.execute("SELECT id, nome, duracao_min, valor FROM servicos WHERE nome LIKE ?;",
+    (servicoTotal,))
+  servicosEncontrados = cursor.fetchall()
+  return servicosEncontrados

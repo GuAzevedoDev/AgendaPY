@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -91,32 +91,39 @@ def calendario():
 @app.route('/agendar', methods=["GET", "POST"])
 @login_required     #Verifica se existe um funcionario logado
 def agendar():
-    #Se metodo POST pego os dados
-    if request.method == "POST":
-        #Pegando dados
-        nomeCliente = request.form["nomeCliente"]
-        numeroCliente = request.form["numeroCliente"]
-        nomeServico = request.form["nomeServico"]
-        dataAgendamento = request.form["dataAgendamento"]
-        horaAgendamento = request.form["horaAgendamento"]
+    #Pego do JS
+    dados = request.json
 
-        print(nomeCliente)
+    #Salvo em variaveis
+    nomeCliente = dados["nomeCliente"]
+    numeroCliente = dados["numeroCliente"]
+    nomesServicos = dados["nomesServicos"]
+    dataAgendamento = dados["dataAgendamento"]
+    horaAgendamento = dados["horaAgendamento"]
+
+    print(nomeCliente,numeroCliente,nomesServicos,dataAgendamento,horaAgendamento)
         
     return redirect("/")  
 
 
-@app.route('/busca', methods=["GET", "POST"])
+@app.route('/buscaNome', methods=["GET", "POST"])
 @login_required   
 def buscarNome():
     dados = request.json
     nomeCliente = dados['nomeCliente']
     if request.method == "POST":
-        nomesEncontrados = buscarWeb(nomeCliente)
+        nomesEncontrados = buscarNomeWeb(nomeCliente)
         return  nomesEncontrados
-
-    print('Chegou aqui')
     
 
+@app.route('/buscaServico', methods=["GET", "POST"])
+@login_required   
+def buscarServico():
+    dados = request.json
+    nomeServico = dados['nomeServico']
+    if request.method == "POST":
+        servicosEncontrados = buscarServicoWeb(nomeServico)
+        return servicosEncontrados
 
 
 

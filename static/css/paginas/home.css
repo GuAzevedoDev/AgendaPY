@@ -371,21 +371,22 @@
   grid-column: 1/-1;
 }
 
-.modal-agendamento .main-modal ol li {
+.modal-agendamento .main-modal form > ol > li {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 40px;
+  gap: 0px 40px;
+  position: relative;
 }
 
-.modal-agendamento .main-modal ol li input {
+.modal-agendamento .main-modal form > ol > li input {
   border: 1px solid var(--cor-3);
 }
 
-.modal-agendamento .main-modal ol li:nth-child(2) input {
+.modal-agendamento .main-modal form > ol > li:nth-child(2) input {
   grid-column: 1/-1;
 }
 
-.modal-agendamento .main-modal ol li:not(:first-child) {
+.modal-agendamento .main-modal form > ol > li:not(:first-child) {
   margin-top: 60px;
 }
 
@@ -393,6 +394,7 @@
   grid-column: 1/-1;
   font-weight: 500;
   font-size: var(--texto-menor);
+  margin-bottom: 10px;
 }
 
 .modal-agendamento .footer-modal {
@@ -416,4 +418,71 @@
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.listas-pesquisa {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: grid;
+  width: 100%;
+  z-index: 1;
+  background: var(--cor-p1);
+  border-radius: 5px;
+}
+
+.listas-pesquisa li {
+  width: 100%;
+  transition: 0.2s;
+  padding: 5px;
+  color: var(--cor-1);
+  font-size: 0.9rem;
+}
+
+.listas-pesquisa li:hover {
+  background: var(--cor-p2);
+  color: var(--cor-2);
+}
+
+.servicos-selecionados {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.servicos-selecionados li {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 5px;
+  background: #fdf7f4;
+  border: 1px solid #fee8df;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  justify-self: left;
+  margin-top: 10px;
+}
+
+.servicos-selecionados li > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.servicos-selecionados li > span {
+  font-weight: 500;
+}
+
+.servicos-selecionados li > div > div {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.servicos-selecionados li > div > div svg{
+  transition: 0.3s;
+}
+.servicos-selecionados li > div > div:hover svg {
+  transform: scale(1.1);
 }

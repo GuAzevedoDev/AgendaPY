@@ -144,24 +144,29 @@
     </button>
   </div>
   <div class="main-modal">
-    <form action="/agendar" method="post">
+    <form action="">
       <ol>
         <li>
           <h2>1. Selecionar cliente</h2>
           <input type="text" placeholder="Nome" name="nomeCliente" class="nomeCliente" required>
           <input type="text" placeholder="Numero" id="numero" name="numeroCliente" class="numeroCliente" required>
-          <ul class="lista-nomes">
-            
+          <ul class="lista-nomes listas-pesquisa">
+
           </ul>
         </li>
         <li>
           <h2>2. Selecionar serviços</h2>
-          <input type="text" placeholder="Selecionar serviço" name="nomeServico" required>
+          <input type="text" placeholder="Selecionar serviço" name="nomeServico" class="servicoCliente">
+          <ul class="lista-servicos listas-pesquisa">
+          </ul>
+          <ul class="servicos-selecionados">
+            
+          </ul>
         </li>
         <li>
           <h2>3. Escolher data e horario</h2>
-          <input type="text" placeholder="XX/XX/XXXX" id="data" name="dataAgendamento" required>
-          <input type="text" placeholder="XX:XX" id="hora" name="horaAgendamento" required>
+          <input type="text" placeholder="XX/XX/XXXX" id="data" name="dataAgendamento" class="dataCliente" required>
+          <input type="text" placeholder="XX:XX" id="hora" name="horaAgendamento" class="horaCliente" required>
         </li>
       </ol>
   </div>
@@ -174,9 +179,9 @@
         </svg>
         <span>Valor total</span>
       </div>
-      <span class="cor-p1">R$ 80,00</span>
+      <span class="cor-p1 valor-total"></span>
     </div>
-    <button class="btn">Fazer Agendamento</button>
+    <button type="button" id="btnAgendar" class="btn">Fazer Agendamento</button>
   </div>
   </form>
 </dialog>

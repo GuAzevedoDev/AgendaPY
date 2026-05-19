@@ -1,3 +1,2 @@
 from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,selecionarServico,marcarHorario,mostrarAgendaWeb
 
-cadastrarCliente('Natalia',32131312331)
