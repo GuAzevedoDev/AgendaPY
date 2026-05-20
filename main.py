@@ -1,2 +1,3 @@
-from services.services import cadastrarCliente,pesquisarCliente,mostrarClientes,loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,selecionarServico,marcarHorario,mostrarAgendaWeb
+from services.services import loginFuncionario,mostrarFuncionarios,cadastrarFuncionarios,cadastrarServicos,relacionarServico,mostrarServicos,mostrarAgendaWeb,pesquisarClienteWeb
 
+mostrarAgendaWeb(1,"20/05/2026")

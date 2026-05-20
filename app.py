@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -95,15 +95,16 @@ def agendar():
     dados = request.json
 
     #Salvo em variaveis
+    idFuncionario = dados["idFuncionario"]
     nomeCliente = dados["nomeCliente"]
     numeroCliente = dados["numeroCliente"]
     nomesServicos = dados["nomesServicos"]
     dataAgendamento = dados["dataAgendamento"]
     horaAgendamento = dados["horaAgendamento"]
 
-    print(nomeCliente,numeroCliente,nomesServicos,dataAgendamento,horaAgendamento)
-        
-    return redirect(url_for("home"))
+    
+    mensagemAgendamento = marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
+    return jsonify({"mensagem": mensagemAgendamento})
 
 
 

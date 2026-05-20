@@ -33,8 +33,7 @@ cursor.executescript("""
         CREATE TABLE IF NOT EXISTS servicos (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
             nome         TEXT NOT NULL,
-            duracao_min  INTEGER NOT NULL,
-            valor        REAL NOT NULL
+            duracao_min  INTEGER NOT NULL
         );
         
                      
@@ -55,6 +54,8 @@ cursor.executescript("""
             funcionario_id  INTEGER NOT NULL,
             horario         TEXT NOT NULL,
             data            TEXT NOT NULL,
+            valor_pago      REAL,
+            forma_pagamento TEXT CHECK(forma_pagamento IN ('pix', 'dinheiro', 'débito', 'crédito')),
             status          TEXT NOT NULL DEFAULT 'confirmado'
                             CHECK(status IN ('confirmado', 'cancelado', 'concluido')),
             criado_em       TEXT NOT NULL DEFAULT (datetime('now')),
@@ -68,7 +69,6 @@ cursor.executescript("""
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
             servicos_id        INTEGER NOT NULL,
             agendamentos_id  INTEGER NOT NULL,
-            
             FOREIGN KEY (servicos_id) REFERENCES servicos(id) ON DELETE CASCADE,
             FOREIGN KEY (agendamentos_id) REFERENCES agendamentos(id) ON DELETE CASCADE
         );

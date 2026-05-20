@@ -400,7 +400,6 @@
 .modal-agendamento .footer-modal {
   grid-column: 1/-1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 40px;
 }
 
@@ -474,15 +473,15 @@
   font-weight: 500;
 }
 
-.servicos-selecionados li > div > div {
+.servicos-selecionados li > div {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
-.servicos-selecionados li > div > div svg{
+.servicos-selecionados li > div> svg{
   transition: 0.3s;
 }
-.servicos-selecionados li > div > div:hover svg {
+.servicos-selecionados li > div:hover > svg {
   transform: scale(1.1);
 }

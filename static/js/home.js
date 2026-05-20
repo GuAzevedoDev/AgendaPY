@@ -184,7 +184,7 @@ function hoje() {
 }
 
 function mostrarAgenda(dados) {
-  let dataDiaAtivo = document.querySelector(".dia.ativo").dataset.data
+  let dataDiaAtivo = document.querySelector(".dia.ativo").dataset.data;
   dados.forEach((dado, i) => {
     if (dado.status == "Livre") {
       agenda = {
@@ -211,21 +211,18 @@ function mostrarAgenda(dados) {
     </div>`;
     }
   });
-  let botoesAgenda = document.querySelectorAll('.botaoAgenda')
-  botoesAgenda.forEach((botao)=>{
-    botao.addEventListener('click',function pegaData(){
-      let horaAgenda = botao.dataset.hora
-      let dataAgenda = botao.dataset.data
+  let botoesAgenda = document.querySelectorAll(".botaoAgenda");
+  botoesAgenda.forEach((botao) => {
+    botao.addEventListener("click", function pegaData() {
+      let horaAgenda = botao.dataset.hora;
+      let dataAgenda = botao.dataset.data;
       let inputHora = document.querySelector(".horaCliente");
       let inputData = document.querySelector(".dataCliente");
-      abreModal()
-      inputHora.value = horaAgenda
-      inputData.value = dataAgenda
-        
-
-
-    })
-  })
+      abreModal();
+      inputHora.value = horaAgenda;
+      inputData.value = dataAgenda;
+    });
+  });
 }
 
 function funcionarioId() {
@@ -324,7 +321,7 @@ function buscarServico() {
       .then((servicos) => {
         listaServicos.innerHTML = "";
         servicos.forEach((servico) => {
-          listaServicos.innerHTML += `<li class="servico-lista" data-servico="${servico[1]}" data-servicovalor="${servico[3]}"> ${servico[1]} </li>`;
+          listaServicos.innerHTML += `<li class="servico-lista" data-servico="${servico[1]}"> ${servico[1]} </li>`;
         });
         if (inputServico.value == "") {
           listaServicos.innerHTML = "";
@@ -334,20 +331,21 @@ function buscarServico() {
           servicoLista.addEventListener("click", function colocaServico() {
             servicoSelecionado = servicoLista.dataset.servico;
             valorServicoSelecionado = servicoLista.dataset.servicovalor;
-            listaServicosSelecionados.innerHTML += `<li class="servico-lista-ativo" data-servicoSelecionadoValor="${valorServicoSelecionado}" data-servicoSelecionado="${servicoSelecionado}"> <span>${servicoSelecionado}</span>
-              <div><span>R$${valorServicoSelecionado}</span> <div data-servicoSelecionado="${servicoSelecionado}" class="btn-servicos"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.338429 0.338429C0.789667 -0.11281 1.52129 -0.11281 1.97248 0.338429L5.00708 3.37307L8.04168 0.338459C8.49293 -0.112779 9.22443 -0.112779 9.67568 0.338459C10.1269 0.789698 10.1269 1.52132 9.67568 1.97263L6.64123 5.00708L9.67568 8.04152C10.1269 8.49277 10.1269 9.22443 9.67568 9.67568C9.22443 10.1269 8.49277 10.1269 8.04152 9.67568L5.00708 6.64123L1.97263 9.67568C1.52132 10.1269 0.789698 10.1269 0.338459 9.67568C-0.112779 9.22443 -0.112779 8.49293 0.338459 8.04168L3.37307 5.00708L0.338429 1.97248C-0.11281 1.52129 -0.11281 0.789667 0.338429 0.338429Z" fill="#B8B1AE"/>
-</svg>
-</div></div>
-            </li>`;
+            listaServicosSelecionados.innerHTML += `<li class="servico-lista-ativo" data-servicoSelecionado="${servicoSelecionado}">
+  <span>${servicoSelecionado}</span>
+    <div data-servicoSelecionado="${servicoSelecionado}" class="btn-servicos">
+    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0.338429 0.338429C0.789667 -0.11281 1.52129 -0.11281 1.97248 0.338429L5.00708 3.37307L8.04168 0.338459C8.49293 -0.112779 9.22443 -0.112779 9.67568 0.338459C10.1269 0.789698 10.1269 1.52132 9.67568 1.97263L6.64123 5.00708L9.67568 8.04152C10.1269 8.49277 10.1269 9.22443 9.67568 9.67568C9.22443 10.1269 8.49277 10.1269 8.04152 9.67568L5.00708 6.64123L1.97263 9.67568C1.52132 10.1269 0.789698 10.1269 0.338459 9.67568C-0.112779 9.22443 -0.112779 8.49293 0.338459 8.04168L3.37307 5.00708L0.338429 1.97248C-0.11281 1.52129 -0.11281 0.789667 0.338429 0.338429Z" fill="#B8B1AE" />
+      </svg>
+    </div>
+</li>`;
             listaServicos.innerHTML = "";
             inputServico.value = "";
             let servicosAtivos = document.querySelectorAll(
               ".servico-lista-ativo",
             );
             excluiServico(servicosAtivos);
-            agendar(servicosAtivos)
-            calculaTotal(servicosAtivos)
+            agendar(servicosAtivos);
           });
         });
       });
@@ -372,15 +370,21 @@ function agendar(servicosAtivos) {
   // Botao de envio
   let botaoAgendar = document.querySelector("#btnAgendar");
 
-  //Lista de servicos
-  let nomeDosServicos = [];
   //Inputs
   let inputNome = document.querySelector(".nomeCliente");
   let inputNumero = document.querySelector(".numeroCliente");
   let inputHora = document.querySelector(".horaCliente");
   let inputData = document.querySelector(".dataCliente");
-
+  let form = document.querySelector("#formAgendamento");
   botaoAgendar.addEventListener("click", function agendamento(event) {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity(); // mostra as mensagens de erro do HTML
+      return;
+    }
+    //Lista de servicos, dentro do addEvent para zerar sempre que clicado
+    let nomeDosServicos = [];
+
     //Coloco os nomes dos servicos na lista
     servicosAtivos.forEach((servicoSelecionado) => {
       nomeDosServicos.push(servicoSelecionado.dataset.servicoselecionado);
@@ -391,30 +395,25 @@ function agendar(servicosAtivos) {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        idFuncionario: idFuncionario,
         nomesServicos: nomeDosServicos, //Mudar para lista pegando o nome dos servicos,
         nomeCliente: inputNome.value,
         numeroCliente: inputNumero.value,
         horaAgendamento: inputHora.value,
         dataAgendamento: inputData.value,
       }),
-    });
+    })
+      .then((resposta) => resposta.json()) // converte para JSON
+      .then((dados) => {
+        console.log(dados)
+        if (dados["mensagem"] == true) {
+          window.location.reload();
+        }
+      });
   });
 }
-
-function calculaTotal(servicosAtivos){
-  let valorHtml = document.querySelector('.valor-total')
-  let valorTotal = 0
-  servicosAtivos.forEach((servicoSelecionado) => {
-      valorDosServicos = servicoSelecionado.dataset.servicoselecionadovalor;
-      valorTotal = Number(valorDosServicos) + valorTotal
-    });
-  valorHtml.innerHTML = `R$${valorTotal}`
-}
-
-
 
 buscarServico();
 buscarNome();
 hoje();
 funcionarioId();
-calculaTotal([])
