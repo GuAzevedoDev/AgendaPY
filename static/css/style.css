@@ -6,6 +6,7 @@
 @import './componentes/cores.css';
 @import './componentes/botoes.css';
 @import './componentes/tipografia.css';
+@import './componentes/modal-container.css';
 
 /* importacoes paginas */
 @import './paginas/login.css';

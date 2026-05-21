@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb,atualizarPagoWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -102,6 +102,9 @@ def agendar():
     dataAgendamento = dados["dataAgendamento"]
     horaAgendamento = dados["horaAgendamento"]
 
+    #Validacao do formulario de agendamento
+    if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
+        return jsonify({"mensagem": "Preencha todos os campos"})
     
     mensagemAgendamento = marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
     return jsonify({"mensagem": mensagemAgendamento})
@@ -129,8 +132,25 @@ def buscarServico():
         return servicosEncontrados
 
 
+@app.route('/atualizarPg', methods=["GET", "POST"])
+@login_required   
+def atualizarPg():
+    #Pego do JS
+    dados = request.json
 
+    #Salvo em variaveis
+    idFuncionario = dados["idFuncionario"]
+    valorAgendamento = dados["valorAgendamento"]
+    formaPagamento = dados["formaPagamento"]
+    dataAgendamento = dados["dataAgendamento"]
+    horaAgendamento = dados["horaAgendamento"]
+    #Validacao do formulario de agendamento
+    if not valorAgendamento or not formaPagamento or not dataAgendamento or not horaAgendamento:
+        return jsonify({"mensagem": "Preencha todos os campos"})
+    
 
+    mensagemPagamento = atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
+    return jsonify({"mensagem": mensagemPagamento})
 
 
 # #Cadastrar clientes

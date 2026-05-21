@@ -198,19 +198,32 @@ function mostrarAgenda(dados) {
     </div>`;
     } else {
       agenda = {
+        concluido: dado.status,
+        valorPago: dado.valorPago,
+        formaPagamento: dado.formaPagamento,
         status: dado.status,
         horario: dado.hora,
         servico: dado.servico,
         cliente: dado.cliente,
         profissional: dado.profissional,
       };
-      agendaDiv.innerHTML += `<div class="horarioTudo">
-      <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
-      <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
-      <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
-    </div>`;
+      if (agenda.valorPago && agenda.formaPagamento) {
+        agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status} ativoPag" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}" data-valorPago="${agenda.valorPago}" data-formaPag="${agenda.formaPagamento}" data-nomeCliente="${agenda.cliente}" data-servico="${agenda.servico}">
+        <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
+        <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
+        <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+        </div>`;
+      } else {
+        agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status}" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}">
+        <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
+        <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
+        <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+        </div>`;
+      }
     }
   });
+  let ocupados = document.querySelectorAll(".horarioTudo.Ocupado");
+  atualizarPag(ocupados);
   let botoesAgenda = document.querySelectorAll(".botaoAgenda");
   botoesAgenda.forEach((botao) => {
     botao.addEventListener("click", function pegaData() {
@@ -218,7 +231,7 @@ function mostrarAgenda(dados) {
       let dataAgenda = botao.dataset.data;
       let inputHora = document.querySelector(".horaCliente");
       let inputData = document.querySelector(".dataCliente");
-      abreModal();
+      abreModal("agendamento");
       inputHora.value = horaAgenda;
       inputData.value = dataAgenda;
     });
@@ -256,12 +269,12 @@ function funcionarioId() {
   });
 }
 
-function abreModal() {
-  document.querySelector(".modal-agendamento").showModal();
+function abreModal(nome) {
+  document.querySelector(`.modal-${nome}`).showModal();
 }
 
-function fechaModal() {
-  document.querySelector(".modal-agendamento").close();
+function fechaModal(nome) {
+  document.querySelector(`.modal-${nome}`).close();
 }
 
 function buscarNome() {
@@ -405,10 +418,84 @@ function agendar(servicosAtivos) {
     })
       .then((resposta) => resposta.json()) // converte para JSON
       .then((dados) => {
-        console.log(dados)
+        if (dados["mensagem"] == true) {
+          window.location.reload();
+          document.querySelector(".aviso-modal").innerHTML = dados["mensagem"];
+        }
+      });
+  });
+}
+
+function atualizarPag(ocupados) {
+  let dataPag;
+  let horaPag;
+  let botaoEnviar = document.querySelector("#btnAtualizar");
+
+  //Pego a data e hora do clicado(So olho para os ocupados)
+
+  ocupados.forEach((ocupado) => {
+    ocupado.addEventListener("click", function formaPg() {
+      if (ocupado.classList.contains("ativoPag")) {
+        let informacoes = {
+          data: ocupado.dataset.data,
+          hora: ocupado.dataset.hora,
+          servicos: ocupado.dataset.servico,
+          valorPago: ocupado.dataset.valorpago,
+          formaPagamento: ocupado.dataset.formapag,
+        };
+        abreModal("detalhes");
+        document.querySelector(".data-detalhes").innerHTML = informacoes.data;
+        document.querySelector(".hora-detalhes").innerHTML = informacoes.hora;
+        document.querySelector(".servico-detalhes").innerHTML =
+          informacoes.servicos;
+        document.querySelector(".pagamento-detalhes").innerHTML =
+          informacoes.formaPagamento;
+        document.querySelector(".valor-detalhes").innerHTML =
+          informacoes.valorPago;
+        return;
+      } else {
+        abreModal("valor");
+        dataPag = ocupado.dataset.data;
+        horaPag = ocupado.dataset.hora;
+      }
+    });
+  });
+
+  document.querySelectorAll('input[name="formaPag"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        document.querySelectorAll(".aviso-modal")[1].innerHTML = "";
+      });
+    });
+  //Quando enviar pego todos os valores
+  botaoEnviar.addEventListener("click", function envio() {
+    let inputValor = document.querySelector(".valorAgendamento");
+    let formaPagamento = document.querySelector(
+      'input[name="formaPag"]:checked',
+    );
+    if (!formaPagamento) {
+      document.querySelectorAll(".aviso-modal")[1].innerHTML =
+        "Selecione uma forma de pagamento";
+      return;
+    }
+  
+    //Envio para o JS
+    fetch("/atualizarPg", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idFuncionario: idFuncionario,
+        valorAgendamento: inputValor.value,
+        formaPagamento: formaPagamento.id,
+        dataAgendamento: dataPag,
+        horaAgendamento: horaPag,
+      }),
+    })
+      .then((resposta) => resposta.json()) // converte para JSON
+      .then((dados) => {
         if (dados["mensagem"] == true) {
           window.location.reload();
         }
+        console.log(dados["mensagem"]);
       });
   });
 }

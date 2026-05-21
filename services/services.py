@@ -205,7 +205,7 @@ def marcarHorarioWeb(idFuncionarioLogado,nome,num,hora,data,nomesServicos):
   cursor = conexao.cursor()
   cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,dataEscolhida))
   conexao.commit()
-
+  
   #Pego id do agendamento cadastrado e salvo em uma variavel
   agendamento_id = cursor.lastrowid
 
@@ -214,6 +214,7 @@ def marcarHorarioWeb(idFuncionarioLogado,nome,num,hora,data,nomesServicos):
     cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
 
   conexao.commit()
+  conexao.close()
   return True
 
 
@@ -241,7 +242,7 @@ def mostrarAgendaWeb(funcionarioLogado, data):
     tudoHorarios = []
     horarios = gerarHorarios()
     cursor.execute("""
-          SELECT horario, clientes.nome, servicos.nome
+          SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
           FROM agendamentos
           INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
           INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
@@ -256,11 +257,10 @@ def mostrarAgendaWeb(funcionarioLogado, data):
         encontrado = False
 
         for agendamento in horariosDia:
-            hora, cliente, servico = agendamento
+            hora, cliente, servico, status, valorPago,formaPagamento = agendamento
 
             if horario == hora:
-                print(f"{horario} ocupado (cliente {cliente}, servico {servico})")
-                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico})
+                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
                 encontrado = True
                 ocupados.append(agendamento)
                 break
@@ -268,7 +268,6 @@ def mostrarAgendaWeb(funcionarioLogado, data):
         if not encontrado:
             tudoHorarios.append({"hora":horario,"status":"Livre"})
     livres = [h for h in horarios if h not in ocupados]
-    print(tudoHorarios)
     return tudoHorarios
 
 
@@ -301,7 +300,6 @@ def pesquisarClienteWeb(nome,num):
 def selecionarServicoWeb(nomesServicos):
   servicos = mostrarServicosWeb()
   listaServicos = []
-  print(nomesServicos)
   if not servicos:
     return 
 
@@ -361,3 +359,23 @@ def buscarServicoWeb(servico):
     (servicoTotal,))
   servicosEncontrados = cursor.fetchall()
   return servicosEncontrados
+
+def atualizarPagoWeb(valor,formaPag,funcionarioId,data,hora):
+  conexao = conectar()
+  cursor = conexao.cursor()
+  status = "confirmado"
+  formasDePag = ["pix",'debito','dinheiro','credito']
+  valorFormatado = float(valor)
+  
+  if valorFormatado <= 0:
+    return "Valor inválido"
+  
+  if not formaPag in formasDePag:
+    return "Forma de pagamento inválida"
+  
+  cursor.execute("""UPDATE agendamentos
+                 SET valor_pago = ?,forma_pagamento = ?,status = ?
+                 WHERE funcionario_id = ? AND data = ? AND horario = ?;""",(valorFormatado,formaPag,status,funcionarioId,data,hora))
+  conexao.commit()
+
+  return True

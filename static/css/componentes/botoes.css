@@ -19,3 +19,17 @@ form > .btn {
   color: var(--cor-p1);
   border: 1px solid var(--cor-p1);
 }
+
+
+.modal-container .header-modal button {
+  border: none;
+  outline: none;
+  background: none;
+  height: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.modal-container .header-modal button:hover {
+  transform: scale(1.1);
+}
