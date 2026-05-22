@@ -1,4 +1,4 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb,atualizarPagoWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb,atualizarPagoWeb,excluirHorarioWeb
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
@@ -151,6 +151,30 @@ def atualizarPg():
 
     mensagemPagamento = atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
     return jsonify({"mensagem": mensagemPagamento})
+
+
+@app.route('/excluirHorario', methods=["POST"])
+@login_required   
+def excluirHorario():
+    # Pega os dados enviados pelo JavaScript (fetch)
+    dados = request.json
+    if not dados:
+        return jsonify({"mensagem": "Dados inválidos", "sucesso": False}), 400
+
+    idFuncionario = dados.get("idFuncionario")
+    data = dados.get("dataAgendamento")
+    hora = dados.get("horaAgendamento")
+
+    # Validação necessária para os campos obrigatórios
+    if not idFuncionario or not data or not hora:
+        return jsonify({"mensagem": "Dados incompletos para exclusão", "sucesso": False}), 400
+
+    # Tenta excluir o agendamento no banco
+    sucesso = excluirHorarioWeb(idFuncionario, data, hora)
+    if sucesso:
+        return jsonify({"mensagem": "Horário excluído com sucesso", "sucesso": True})
+    else:
+        return jsonify({"mensagem": "Agendamento não encontrado ou já excluído", "sucesso": False})
 
 
 # #Cadastrar clientes

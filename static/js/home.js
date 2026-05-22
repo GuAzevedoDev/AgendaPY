@@ -194,7 +194,10 @@ function mostrarAgenda(dados) {
       };
       agendaDiv.innerHTML += `<div class="horarioTudo">
       <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">${agenda.horario}</div>
-      <div class="status" ><button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button></div>
+      <div class="status" >
+        <span>Horário livre</span>
+        <button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button>
+      </div>
     </div>`;
     } else {
       agenda = {
@@ -210,20 +213,162 @@ function mostrarAgenda(dados) {
       if (agenda.valorPago && agenda.formaPagamento) {
         agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status} ativoPag" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}" data-valorPago="${agenda.valorPago}" data-formaPag="${agenda.formaPagamento}" data-nomeCliente="${agenda.cliente}" data-servico="${agenda.servico}">
         <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
-        <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
-        <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+          <div class="status">       
+            <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+            <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
+            <div class="detalhes">
+            <svg width="4" height="13" viewBox="0 0 4 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66667 9.91667C2.58717 9.91667 3.33333 10.5509 3.33333 11.3333C3.33333 12.1157 2.58717 12.75 1.66667 12.75C0.746167 12.75 0 12.1157 0 11.3333C0 10.5509 0.746167 9.91667 1.66667 9.91667Z"/>
+<path d="M1.66667 4.95832C2.58717 4.95832 3.33333 5.59256 3.33333 6.37499C3.33333 7.15741 2.58717 7.79166 1.66667 7.79166C0.746167 7.79166 0 7.15741 0 6.37499C0 5.59256 0.746167 4.95832 1.66667 4.95832Z"/>
+<path d="M1.66667 1.00136e-05C2.58717 1.00136e-05 3.33333 0.634252 3.33333 1.41668C3.33333 2.1991 2.58717 2.83334 1.66667 2.83334C0.746167 2.83334 0 2.1991 0 1.41668C0 0.634252 0.746167 1.00136e-05 1.66667 1.00136e-05Z"/>
+</svg>
+            <!-- Menu de opções adicionado dentro do botão de detalhes -->
+            <ul class="detalhes-menu">
+              <li class="opcao-pagamento">Adicionar forma de pagamento</li>
+              <li class="opcao-excluir">Excluir horário</li>
+            </ul>
+</div>
+
+          </div>
         </div>`;
       } else {
         agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status}" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}">
         <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
-        <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
-        <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+          <div class="status">
+            <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
+            <div class="servico" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.servico}</div>
+            <div class="detalhes">
+            <svg width="4" height="13" viewBox="0 0 4 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.66667 9.91667C2.58717 9.91667 3.33333 10.5509 3.33333 11.3333C3.33333 12.1157 2.58717 12.75 1.66667 12.75C0.746167 12.75 0 12.1157 0 11.3333C0 10.5509 0.746167 9.91667 1.66667 9.91667Z" />
+<path d="M1.66667 4.95832C2.58717 4.95832 3.33333 5.59256 3.33333 6.37499C3.33333 7.15741 2.58717 7.79166 1.66667 7.79166C0.746167 7.79166 0 7.15741 0 6.37499C0 5.59256 0.746167 4.95832 1.66667 4.95832Z" />
+<path d="M1.66667 1.00136e-05C2.58717 1.00136e-05 3.33333 0.634252 3.33333 1.41668C3.33333 2.1991 2.58717 2.83334 1.66667 2.83334C0.746167 2.83334 0 2.1991 0 1.41668C0 0.634252 0.746167 1.00136e-05 1.66667 1.00136e-05Z"/>
+</svg>
+            <!-- Menu de opções adicionado dentro do botão de detalhes -->
+            <ul class="detalhes-menu">
+              <li class="opcao-pagamento">Adicionar forma de pagamento</li>
+              <li class="opcao-excluir">Excluir horário</li>
+            </ul>
+</div>
+
+          </div>  
         </div>`;
       }
     }
   });
   let ocupados = document.querySelectorAll(".horarioTudo.Ocupado");
   atualizarPag(ocupados);
+
+  // === CONFIGURAÇÃO DO MENU DOS TRÊS PONTOS (DETALHES) ===
+  ocupados.forEach((ocupado) => {
+    // Localiza o botão de três pontos (.detalhes) dentro do card ocupado
+    let detalhesBotao = ocupado.querySelector(".detalhes");
+    // Localiza o respectivo menu de opções
+    let menu = ocupado.querySelector(".detalhes-menu");
+
+    if (detalhesBotao && menu) {
+      // 1. Ouvinte para abrir/fechar o menu ao clicar nos três pontos
+      detalhesBotao.addEventListener("click", function (evento) {
+        // MUITO IMPORTANTE: Impede a propagação do clique para o container pai ocupado (.horarioTudo.Ocupado),
+        // evitando que o modal de pagamento/detalhes seja aberto acidentalmente ao clicar nas opções!
+        evento.stopPropagation();
+
+        // Fecha todos os outros menus que porventura estejam abertos
+        document.querySelectorAll(".detalhes-menu").forEach((m) => {
+          if (m !== menu) {
+            m.classList.remove("ativo");
+            m.parentElement.classList.remove("ativo");
+          }
+        });
+
+        // Alterna o estado ativo do menu atual e o botão
+        menu.classList.toggle("ativo");
+        detalhesBotao.classList.toggle("ativo");
+      });
+
+      // 2. Ouvinte para a opção de "Adicionar forma de pagamento"
+      let opcaoPagamento = menu.querySelector(".opcao-pagamento");
+      if (opcaoPagamento) {
+        opcaoPagamento.addEventListener("click", function (evento) {
+          // Impede propagação para não dar conflito
+          evento.stopPropagation();
+
+          // Fecha o menu atual
+          menu.classList.remove("ativo");
+          detalhesBotao.classList.remove("ativo");
+
+          // Simula programaticamente um clique no container ocupado principal
+          // Isso chama automaticamente a função original formaPg(), abrindo o modal correto
+          ocupado.click();
+        });
+      }
+
+      // 3. Ouvinte para a opção de "Excluir horário"
+      let opcaoExcluir = menu.querySelector(".opcao-excluir");
+      if (opcaoExcluir) {
+        opcaoExcluir.addEventListener("click", function (evento) {
+          // Impede propagação para que o clique não abra o modal de pagamento
+          evento.stopPropagation();
+
+          // Fecha o menu atual
+          menu.classList.remove("ativo");
+          detalhesBotao.classList.remove("ativo");
+
+          // Captura a data e a hora do agendamento a partir do container principal (.horarioTudo)
+          const dataAgendamento = ocupado.dataset.data;
+          const horaAgendamento = ocupado.dataset.hora;
+
+          // Caixa de diálogo nativa para confirmar a exclusão com o usuário
+          if (
+            confirm(
+              `Deseja realmente excluir o agendamento de ${dataAgendamento} às ${horaAgendamento}?`,
+            )
+          ) {
+            // Realiza a chamada fetch post para a rota Flask que criamos no backend
+            fetch("/excluirHorario", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                idFuncionario: idFuncionario,
+                dataAgendamento: dataAgendamento,
+                horaAgendamento: horaAgendamento,
+              }),
+            })
+              .then((resposta) => resposta.json()) // Converte a resposta do Flask em JSON
+              .then((dados) => {
+                // Verifica se a exclusão foi bem sucedida
+                if (dados.sucesso === true || dados.mensagem === true) {
+                  // Recarrega a página para atualizar a agenda na tela de forma limpa
+                  window.location.reload();
+                } else {
+                  // Caso contrário, mostra a mensagem de erro retornada pelo servidor
+                  alert(
+                    "Erro ao excluir horário: " +
+                      (dados.mensagem || "Erro desconhecido"),
+                  );
+                }
+              })
+              .catch((erro) => {
+                console.error("Erro na requisição de exclusão:", erro);
+                alert("Ocorreu um erro técnico ao tentar excluir o horário.");
+              });
+          }
+        });
+      }
+    }
+  });
+
+  // Ouvinte global para fechar o menu caso o usuário clique em qualquer outro lugar fora do menu
+  document.addEventListener("click", function () {
+    document.querySelectorAll(".detalhes-menu").forEach((m) => {
+      m.classList.remove("ativo");
+    });
+    document.querySelectorAll(".detalhes").forEach((d) => {
+      d.classList.remove("ativo");
+    });
+  });
+
   let botoesAgenda = document.querySelectorAll(".botaoAgenda");
   botoesAgenda.forEach((botao) => {
     botao.addEventListener("click", function pegaData() {
@@ -391,6 +536,9 @@ function agendar(servicosAtivos) {
   let form = document.querySelector("#formAgendamento");
   botaoAgendar.addEventListener("click", function agendamento(event) {
     event.preventDefault();
+    // Limpa aviso anterior do modal de agendamento
+    document.querySelector(".modal-agendamento .aviso-modal").innerHTML = "";
+
     if (!form.checkValidity()) {
       form.reportValidity(); // mostra as mensagens de erro do HTML
       return;
@@ -402,6 +550,13 @@ function agendar(servicosAtivos) {
     servicosAtivos.forEach((servicoSelecionado) => {
       nomeDosServicos.push(servicoSelecionado.dataset.servicoselecionado);
     });
+
+    // Se nenhuma opção de serviço foi selecionada, exibe mensagem de erro no modal e impede o envio
+    if (nomeDosServicos.length === 0) {
+      document.querySelector(".modal-agendamento .aviso-modal").innerHTML =
+        "Selecione pelo menos um serviço para agendar";
+      return;
+    }
 
     //Enviar via API para py
     fetch("/agendar", {
@@ -462,10 +617,10 @@ function atualizarPag(ocupados) {
   });
 
   document.querySelectorAll('input[name="formaPag"]').forEach((radio) => {
-      radio.addEventListener("change", () => {
-        document.querySelectorAll(".aviso-modal")[1].innerHTML = "";
-      });
+    radio.addEventListener("change", () => {
+      document.querySelectorAll(".aviso-modal")[1].innerHTML = "";
     });
+  });
   //Quando enviar pego todos os valores
   botaoEnviar.addEventListener("click", function envio() {
     let inputValor = document.querySelector(".valorAgendamento");
@@ -477,7 +632,7 @@ function atualizarPag(ocupados) {
         "Selecione uma forma de pagamento";
       return;
     }
-  
+
     //Envio para o JS
     fetch("/atualizarPg", {
       method: "post",
@@ -504,3 +659,134 @@ buscarServico();
 buscarNome();
 hoje();
 funcionarioId();
+
+// ==================== CÓDIGO DO FILTRO DA AGENDA ====================
+
+// Obtém o período do dia correspondente ao horário informado
+// Períodos: manha (antes das 12h), tarde (das 12h às 17h59) e noite (a partir das 18h)
+function obterPeriodo(horario) {
+  // Extrai apenas a hora e converte para número inteiro
+  const hora = parseInt(horario.split(":")[0], 10);
+
+  // Retorna o período com base na hora
+  if (hora < 12) {
+    return "manha";
+  } else if (hora < 18) {
+    return "tarde";
+  } else {
+    return "noite";
+  }
+}
+
+// Filtra a exibição dos horários na tela com base no período selecionado no dropdown
+function filtrarAgenda() {
+  // Captura o elemento do dropdown
+  const dropdown = document.querySelector(".drop-down-filtro");
+  // Obtém o filtro atualmente selecionado (padrão: "tudo")
+  const filtroAtivo = dropdown.dataset.filtro || "tudo";
+  // Pega todos os cards de agendamento na tela
+  const horarios = document.querySelectorAll(".horarioTudo");
+
+  // Percorre cada elemento de horário para aplicar o filtro
+  horarios.forEach((bloco) => {
+    // Localiza o elemento que possui a hora do agendamento
+    const elementoHora = bloco.querySelector(".horario");
+    if (!elementoHora) return;
+
+    // Pega o valor da hora a partir do atributo data-hora ou do conteúdo de texto
+    const horaTexto =
+      elementoHora.dataset.hora || elementoHora.textContent.trim();
+    // Identifica o período correspondente (manha, tarde ou noite)
+    const periodo = obterPeriodo(horaTexto);
+
+    // Se o filtro for "tudo" ou bater com o período do agendamento, mostra o card, senão esconde
+    if (filtroAtivo === "tudo" || periodo === filtroAtivo) {
+      bloco.style.display = ""; // Restaura a exibição padrão (grid/flex/etc)
+    } else {
+      bloco.style.display = "none"; // Oculta o card
+    }
+  });
+}
+
+// Inicializa o funcionamento e a interatividade do dropdown de filtros
+function inicializarFiltro() {
+  // Captura o container do dropdown e a lista de opções
+  const dropdown = document.querySelector(".drop-down-filtro");
+  const opcoesLista = document.querySelector(".opcoes-filtro");
+  const spanFiltro = dropdown.querySelector("span");
+
+  // Abre ou fecha o menu de opções ao clicar no dropdown
+  dropdown.addEventListener("click", (evento) => {
+    // Evita propagação para que o evento de fechar ao clicar fora não seja disparado imediatamente
+    evento.stopPropagation();
+    opcoesLista.classList.toggle("ativo");
+  });
+
+  // Adiciona evento de clique para cada opção da lista
+  opcoesLista.querySelectorAll("li").forEach((opcao) => {
+    opcao.addEventListener("click", (evento) => {
+      // Impede que o clique na opção abra/feche o dropdown de forma errada
+      evento.stopPropagation();
+
+      // Atualiza o texto visual do dropdown com a opção escolhida
+      spanFiltro.textContent = opcao.textContent;
+      // Define a opção no atributo customizado data-filtro
+      dropdown.dataset.filtro = opcao.dataset.opcao;
+
+      // Fecha a lista de opções
+      opcoesLista.classList.remove("ativo");
+
+      // Executa a filtragem dos horários na tela
+      filtrarAgenda();
+    });
+  });
+
+  // Fecha a lista de opções se o usuário clicar em qualquer outro lugar da página
+  document.addEventListener("click", () => {
+    opcoesLista.classList.remove("ativo");
+  });
+}
+
+// Salva a referência da função mostrarAgenda original para não interferir na sua implementação
+const mostrarAgendaOriginal = mostrarAgenda;
+
+// Sobrescrevemos mostrarAgenda para executar a lógica original e depois aplicar o filtro ativo
+mostrarAgenda = function (dados) {
+  // Executa a função original exatamente como foi criada sem interferir no seu funcionamento
+  mostrarAgendaOriginal(dados);
+
+  // Aplica o filtro selecionado nos novos elementos recém-renderizados
+  filtrarAgenda();
+};
+
+// Executa a inicialização do filtro dropdown ao carregar a página
+inicializarFiltro();
+
+// ==================== ATUALIZAÇÃO DO TÍTULO DA AGENDA ====================
+
+// Função simples para atualizar o título da agenda com o nome do profissional selecionado
+function atualizarTituloAgenda() {
+  // Pega o elemento do título da agenda no HTML
+  const agendaTitulo = document.querySelector(".agenda-titulo");
+
+  // Pega todos os cards dos profissionais/funcionários
+  const funcionarios = document.querySelectorAll(".funcionario");
+
+  // Percorre a lista de funcionários cadastrados na tela
+  funcionarios.forEach((funcionario) => {
+    // Se for o funcionário ativo no carregamento inicial (verificando o ID)
+    if (funcionario.dataset.id == idFuncionario) {
+      // Define o título inicial usando o atributo data-nome do profissional
+      agendaTitulo.textContent = `Agenda de ${funcionario.dataset.nome}`;
+    }
+
+    // Adiciona o ouvinte de clique em cada card de funcionário para atualizar o título dinamicamente
+    funcionario.addEventListener("click", () => {
+      // Quando clicado, atualiza o texto do título para o nome do profissional selecionado
+      agendaTitulo.textContent = `Agenda de ${funcionario.dataset.nome}`;
+    });
+  });
+}
+
+// Executa a inicialização da atualização do título da agenda
+atualizarTituloAgenda();

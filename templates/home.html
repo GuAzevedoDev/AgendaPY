@@ -47,6 +47,11 @@
         <h3>{{sessaoFun.funcionario_nome}}</h3>
         <span>{{sessaoFun.funcionario_cargo}}</span>
       </div>
+      <a href="{{ url_for('logoutFunc') }}" class="btn-logout" title="Sair">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
     </div>
   </div>
 </header>
@@ -82,7 +87,7 @@
       <h2 class="texto-menor cor-3">Selecione o profissional</h2>
       <ul class="lista-profissionais">
         {% for funcionario in funcionarios %}
-        <li data-id="{{funcionario[0]}}" class="funcionario">
+        <li data-id="{{funcionario[0]}}" class="funcionario" data-nome="{{funcionario[1]}}">
           <div>
             <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
           </div>
@@ -113,15 +118,20 @@
     <div class="agenda">
       <div class="cabecalho-agenda">
         <div class="cabecalho-agenda-texto">
-          <h2 class="cor-2 texto">Agenda da Mali</h2>
+          <h2 class="cor-2 texto agenda-titulo">Agenda da Mali</h2>
           <span class="cor-3 dia-semana"></span>
         </div>
-        <div class="drop-down-filtro">
+        <div class="drop-down-filtro" data-filtro="tudo">
           <span>Dia inteiro</span>
           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.4012 9.24534L13.0391 16.5446L5.74036 9.18242C5.53834 8.97832 5.20892 8.97728 5.00508 9.1793C4.80124 9.38132 4.79994 9.71074 5.00196 9.91432L12.5924 17.5708C12.6873 17.6665 12.8095 17.7172 12.9335 17.7239C12.9697 17.726 13.0058 17.7237 13.0414 17.7185C13.0555 17.7206 13.069 17.7239 13.083 17.7242C13.2245 17.7317 13.3688 17.6821 13.4769 17.5744L21.1331 9.98348C21.3372 9.78146 21.3385 9.4523 21.1363 9.2482C20.934 9.0441 20.6048 9.04306 20.4012 9.24534Z" fill="black" />
+            <path d="M20.4012 9.24534L13.0391 16.5446L5.74036 9.18242C5.53834 8.97832 5.20892 8.97728 5.00508 9.1793C4.80124 9.38132 4.79994 9.71074 5.00196 9.91432L12.5924 17.5708C12.6873 17.6665 12.8095 17.7172 12.9335 17.7239C12.9697 17.726 13.0058 17.7237 13.0414 17.7185C13.0555 17.7206 13.069 17.7239 13.083 17.7242C13.2245 17.7317 13.3688 17.6821 13.4769 17.5744L21.1331 9.98348C21.3372 9.78146 21.3385 9.4523 21.1363 9.2482C20.934 9.0441 20.6048 9.04306 20.4012 9.24534Z" />
           </svg>
-
+          <ul class="opcoes-filtro">
+            <li data-opcao="tudo">Dia inteiro</li>
+            <li data-opcao="manha">Manhã</li>
+            <li data-opcao="tarde">Tarde</li>
+            <li data-opcao="noite">Noite</li>
+          </ul>
         </div>
       </div>
       <div class="agenda-horarios">
@@ -225,40 +235,43 @@
 </dialog>
 
 
-
 <dialog class="modal-detalhes modal-container">
   <div class="header-modal">
     <h1 class="texto">Detalhes</h1>
-    <button onclick="fechaModal('detalhes')">
+    <button onclick="document.querySelector('.modal-detalhes').close()" aria-label="Fechar modal">
       <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path opacity="0.5" d="M27.5775 15C27.5775 21.9035 21.9652 27.5 15.0422 27.5C8.11909 27.5 2.50684 21.9035 2.50684 15C2.50684 8.09644 8.11909 2.5 15.0422 2.5C21.9652 2.5 27.5775 8.09644 27.5775 15Z" fill="#D3D3D3" />
         <path d="M11.2436 11.2121C11.6108 10.846 12.206 10.846 12.5732 11.2121L15.0422 13.6742L17.5113 11.2121C17.8785 10.846 18.4737 10.846 18.8408 11.2121C19.208 11.5782 19.208 12.1718 18.8408 12.538L16.3719 15L18.8408 17.462C19.208 17.8281 19.208 18.4217 18.8408 18.7879C18.4737 19.154 17.8784 19.154 17.5112 18.7879L15.0422 16.3259L12.5733 18.7879C12.2061 19.154 11.6108 19.154 11.2436 18.7879C10.8765 18.4217 10.8765 17.8282 11.2436 17.4621L13.7127 15L11.2436 12.5379C10.8765 12.1718 10.8765 11.5782 11.2436 11.2121Z" fill="#B8B1AE" />
       </svg>
     </button>
   </div>
+
   <div class="main-modal">
     <dl>
       <dt>Data</dt>
-      <dd class="data-detalhes"></dd>
+      <dd class="data-detalhes">12/05/2025</dd>
     </dl>
     <dl>
       <dt>Hora</dt>
-      <dd class="hora-detalhes"></dd>
+      <dd class="hora-detalhes">14:30</dd>
     </dl>
     <dl>
-      <dt>Servico</dt>
-      <dd class="servico-detalhes"></dd>
+      <dt>Serviço</dt>
+      <dd class="servico-detalhes">Corte + Barba</dd>
     </dl>
     <dl>
       <dt>Forma de pagamento</dt>
-      <dd class="pagamento-detalhes"></dd>
+      <dd class="pagamento-detalhes">Cartão de crédito</dd>
     </dl>
-    <dl>
+    <dl class="full-width">
       <dt>Valor total</dt>
-      <dd class="valor-detalhes"></dd>
+      <dd class="valor-detalhes">R$ 85,00</dd>
     </dl>
   </div>
 </dialog>
+
+
+
 <script>
   let idFuncionario = {{ sessaoFun.funcionario_id }}
 </script>

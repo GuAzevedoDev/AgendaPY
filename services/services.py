@@ -133,6 +133,7 @@ def mostrarServicos():
 #Agendamentos
 def gerarHorarios():
    horarios = [
+    "07:00", "07:30",
     "08:00", "08:30",
     "09:00", "09:30",
     "10:00", "10:30",
@@ -379,3 +380,25 @@ def atualizarPagoWeb(valor,formaPag,funcionarioId,data,hora):
   conexao.commit()
 
   return True
+
+def excluirHorarioWeb(idFuncionario, data, hora):
+  # Estabelece conexão com o banco de dados
+  conexao = conectar()
+  cursor = conexao.cursor()
+  
+  # Busca o ID do agendamento para poder remover as dependências primeiro (tabela agendamentos_servicos)
+  cursor.execute("SELECT id FROM agendamentos WHERE funcionario_id = ? AND data = ? AND horario = ?;", (idFuncionario, data, hora))
+  agendamento = cursor.fetchone()
+  
+  if agendamento:
+    agendamento_id = agendamento[0]
+    # Remove os serviços vinculados a esse agendamento
+    cursor.execute("DELETE FROM agendamentos_servicos WHERE agendamentos_id = ?;", (agendamento_id,))
+    # Remove o agendamento principal
+    cursor.execute("DELETE FROM agendamentos WHERE id = ?;", (agendamento_id,))
+    conexao.commit()
+    conexao.close()
+    return True
+  
+  conexao.close()
+  return False
