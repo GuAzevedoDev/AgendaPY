@@ -1,8 +1,13 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,buscarServicoWeb,marcarHorarioWeb,atualizarPagoWeb,excluirHorarioWeb
+from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,atualizarPagoWeb,excluirHorarioWeb,AgendamentosService, ServicosService
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
 import re
 import hashlib
 from auth import login_required
+
+servicos_service = ServicosService()
+agendamento_service = AgendamentosService()
+
+
 app = Flask(__name__)
 app.secret_key = "Gugu.000"
 
@@ -106,7 +111,7 @@ def agendar():
     if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
         return jsonify({"mensagem": "Preencha todos os campos"})
     
-    mensagemAgendamento = marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
+    mensagemAgendamento = agendamento_service.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
     return jsonify({"mensagem": mensagemAgendamento})
 
 
@@ -128,7 +133,8 @@ def buscarServico():
     dados = request.json
     nomeServico = dados['nomeServico']
     if request.method == "POST":
-        servicosEncontrados = buscarServicoWeb(nomeServico)
+        servicos_service = ServicosService()
+        servicosEncontrados = servicos_service.buscarServicoWeb(nomeServico)
         return servicosEncontrados
 
 
