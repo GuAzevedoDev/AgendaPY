@@ -1,0 +1,11 @@
+#Onde guardo senhas de apis e senhas de BD
+.env
+
+#Ambiente virtual com muitas pastas e arquivos
+.venv/
+
+#Cache
+__pycache__/
+
+#Banco de dados
+*.db

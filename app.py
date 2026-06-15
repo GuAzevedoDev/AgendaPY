@@ -1,17 +1,20 @@
-from services.services import cadastrarClienteWeb,loginFuncionarioWeb,mostrarAgendaWeb,mostrarFuncionariosWeb,buscarNomeWeb,atualizarPagoWeb,excluirHorarioWeb,AgendamentosService, ServicosService
+from services.services import AgendamentosService, ServicosService,Funcionario,Cliente
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
-import re
+from config import DevelopmentConfig
 import hashlib
 from auth import login_required
 
 servicos_service = ServicosService()
 agendamento_service = AgendamentosService()
+funcionario_service = Funcionario()
+cliente_service = Cliente()
 
+def create_app(config = DevelopmentConfig):
+    app = Flask(__name__)
+    app.config.from_object(config)
+    return app
 
-app = Flask(__name__)
-app.secret_key = "Gugu.000"
-
-
+app = create_app()
 #Login
 
 #Pagina de login, retorna html
@@ -32,7 +35,7 @@ def login():
        
         #validacao de formulario
         if usuario and senha:
-            funcionario = loginFuncionarioWeb(usuario, senhaHex)
+            funcionario = funcionario_service.loginFuncionarioWeb(usuario, senhaHex)
         else:
             flash("Preencha todos os campos"), 400
             return redirect(url_for("login"))
@@ -67,7 +70,7 @@ def logoutFunc():
 @app.route("/")
 @login_required     #Verifica se existe um funcionario logado
 def home():
-    funcionarios = mostrarFuncionariosWeb()
+    funcionarios = funcionario_service.mostrarFuncionariosWeb()
     sessaoFun = {
         "funcionario_id": session["funcionario_id"],
         "funcionario_nome": session["funcionario_nome"],
@@ -88,7 +91,7 @@ def calendario():
     
 
     #Chamo a funcao
-    horarios = mostrarAgendaWeb(idFuncionario,dataSelecionada)
+    horarios = agendamento_service.mostrarAgendaWeb(idFuncionario,dataSelecionada)
     return jsonify(horarios)
 
 
@@ -122,7 +125,7 @@ def buscarNome():
     dados = request.json
     nomeCliente = dados['nomeCliente']
     if request.method == "POST":
-        nomesEncontrados = buscarNomeWeb(nomeCliente)
+        nomesEncontrados = cliente_service.buscarNomeWeb(nomeCliente)
         return  nomesEncontrados
 
 
@@ -133,7 +136,6 @@ def buscarServico():
     dados = request.json
     nomeServico = dados['nomeServico']
     if request.method == "POST":
-        servicos_service = ServicosService()
         servicosEncontrados = servicos_service.buscarServicoWeb(nomeServico)
         return servicosEncontrados
 
@@ -153,9 +155,9 @@ def atualizarPg():
     #Validacao do formulario de agendamento
     if not valorAgendamento or not formaPagamento or not dataAgendamento or not horaAgendamento:
         return jsonify({"mensagem": "Preencha todos os campos"})
-    
 
-    mensagemPagamento = atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
+
+    mensagemPagamento = agendamento_service.atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
     return jsonify({"mensagem": mensagemPagamento})
 
 
@@ -176,47 +178,12 @@ def excluirHorario():
         return jsonify({"mensagem": "Dados incompletos para exclusão", "sucesso": False}), 400
 
     # Tenta excluir o agendamento no banco
-    sucesso = excluirHorarioWeb(idFuncionario, data, hora)
+    sucesso = agendamento_service.excluirAgendamentoWeb(idFuncionario, data, hora)
     if sucesso:
         return jsonify({"mensagem": "Horário excluído com sucesso", "sucesso": True})
     else:
         return jsonify({"mensagem": "Agendamento não encontrado ou já excluído", "sucesso": False})
 
-
-# #Cadastrar clientes
-# @app.route("/CadastroClientes", methods=["POST"])
-# @login_required     #Verifica se existe um funcionario logado
-# def cadastroClienteWeb():
-    # dados = request.json
-    # nome = dados["nome"]
-    # numero = dados["telefone"]
-    # telefone_limpo = re.sub(r"\D", "", numero)
-
-    # if not re.fullmatch(r"\d{11}", telefone_limpo):
-    #     return jsonify({"mensagem": "Telefone inválido"}), 400  # ← 400 Bad Request
-
-    # if nome and telefone_limpo:
-    #     cadastrarClienteWeb(nome, telefone_limpo)
-    # else:
-    #     return jsonify({"mensagem": "Preencha todos os campos"}), 400
-
-    # return jsonify({"mensagem": "Cliente cadastrado com sucesso"}), 200
-
-
-
-
-
-
-
-
-
-# def agendar():
-#     dados = request.json
-#     cliente_id = dados["cliente_id"]
-#     funcionario_id = dados["funcionario_id"]
-#     servico_id = dados["servico_id"]
-#     horario = dados["horario"]
-#     data = dados["data"]
 
 if __name__ == "__main__":
     app.run(debug=True)
