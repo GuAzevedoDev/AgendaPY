@@ -9,16 +9,16 @@ from contextlib import contextmanager
 class AgendaPy(Exception):
   pass
 
-class AgendamentoError(Exception):
+class AgendamentoError(AgendaPy):
   pass
 
-class ClienteError(Exception):
+class ClienteError(AgendaPy):
   pass
 
-class FuncionarioError(Exception):
+class FuncionarioError(AgendaPy):
   pass
 
-class ServicoError(Exception):
+class ServicoError(AgendaPy):
   pass
 
 
@@ -39,8 +39,9 @@ def get_db():
 
 
 #Funcionario
+
 class Funcionario:
-  def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple | None:
+  def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
   #Conectar com banco de forma segura
     with get_db() as db:
       cursor = db.cursor()
@@ -51,11 +52,11 @@ class Funcionario:
       funcionarioEncontrado = cursor.fetchone()
 
       #Se nao encontrado nao passa no if, verifico se a senha esta correta
-      if funcionarioEncontrado and senha == funcionarioEncontrado[4]:
-        return funcionarioEncontrado
+      if not funcionarioEncontrado or senha != funcionarioEncontrado[4]:
+        raise FuncionarioError("Credenciais invalidas")
       
       #Se nao retorno none
-      return None
+      return funcionarioEncontrado
   
   def mostrarFuncionariosWeb(self) -> list:
     conexao = conectar()
@@ -104,7 +105,7 @@ class ServicosService:
 
     #Se nao tiver servicos cadastrados
     if not servicos:
-      return []
+      raise("Sem servicos cadastrados")
     
     #Passo por todos se bater com o nome digitado retorno a lista com os servicos selecionados
     for servico in servicos:
@@ -113,7 +114,6 @@ class ServicosService:
           listaServicos.append(servico[0])
 
     #Retorno a lista com os servicos selecionados
-    print(listaServicos)
     return listaServicos
   
   def mostrarServicosWeb(self)-> list:
@@ -139,7 +139,7 @@ class ServicosService:
       cursor.execute("INSERT INTO servicos(nome,duracao_min) VALUES(?,?)",(nome,duracao))
 
       #Retorno id gerado
-      return db.lastrowid
+      return cursor.lastrowid
 
   def relacionarServico(self,idServico:int,idFuncionarioLogado:int) -> bool:
     #Conexao segura
@@ -198,44 +198,30 @@ class AgendamentosService:
   
   def marcarHorarioWeb(self,idFuncionarioLogado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str) -> str:
     #Selecionar data
-    if not self.selecionarDataWeb(data):
-      raise AgendamentoError("Data inválida")
+    data = self.selecionarDataWeb(data)
 
     #Selecionar horario
     horarioEscolhido = self.selecionarHorarioWeb(idFuncionarioLogado,data,hora)
-
-    if hora != horarioEscolhido:
-      return horarioEscolhido
     
     #Selecione o nome do cliente
     cliente_service = Cliente()
     clienteEscolhido = cliente_service.pesquisarClienteWeb(nome,num)
-
-    if not clienteEscolhido:
-      return clienteEscolhido
     
     #Selecione o servico
     servicos_service = ServicosService()
     servicos_ids = servicos_service.selecionarServicoWeb(nomesServicos)
     
-    if not servicos_ids:
-      return "Sem servicos cadastrados"
-    
     #Passar para o banco
-    conexao = conectar()
-    cursor = conexao.cursor()
-    cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,data))
-    conexao.commit()
-    
-    #Pego id do agendamento cadastrado e salvo em uma variavel
-    agendamento_id = cursor.lastrowid
+    with get_db() as db:
+      cursor = db.cursor()
+      cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,data))
 
-    #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
-    for servico_id in servicos_ids:
-      cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
+      #Pego id do agendamento cadastrado e salvo em uma variavel
+      agendamento_id = cursor.lastrowid
 
-    conexao.commit()
-    conexao.close()
+      #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
+      for servico_id in servicos_ids:
+        cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
     return True
 
   def selecionarHorarioWeb(self,funcionarioLogado, data, horarioEscolhido) -> str:
@@ -247,10 +233,10 @@ class AgendamentosService:
         ocupados.append(horario['hora'])
     
     if horarioEscolhido not in horarios:
-      return "Esse horario não é válido"
+      raise AgendamentoError("Esse horario não é válido")
     
     if horarioEscolhido in ocupados:
-      return "Esse horario já está ocupado"
+      raise AgendamentoError("Esse horario já está ocupado")
     
     return horarioEscolhido
 
@@ -288,7 +274,7 @@ class AgendamentosService:
             tudoHorarios.append({"hora":horario,"status":"Livre"})
     return tudoHorarios
   
-  def selecionarDataWeb(self,data:str) -> bool:
+  def selecionarDataWeb(self,data:str) -> str:
     #Pego a data atual
     dataAtual:str = datetime.now()
 
@@ -297,10 +283,10 @@ class AgendamentosService:
     
     #Se aconteceu antes retorna None
     if dataUsuario.date() < dataAtual.date():
-      return False
+      raise AgendamentoError("Essa data esta no passado")
     
     #Se tiver tudo certo retorno a data
-    return True
+    return data
 
   def excluirAgendamentoWeb(self,idFuncionario, data, hora) -> bool:
     # Estabelece conexão com o banco de dados
@@ -311,22 +297,21 @@ class AgendamentosService:
     cursor.execute("SELECT id FROM agendamentos WHERE funcionario_id = ? AND data = ? AND horario = ?;", (idFuncionario, data, hora))
     agendamento = cursor.fetchone()
     
-    if agendamento:
-      agendamento_id = agendamento[0]
+    #Caso nao exista agendamento
+    if not agendamento:
+      raise AgendamentoError("Não existe esse agendamento")
+    agendamento_id = agendamento[0]
 
-      # Remove os serviços vinculados a esse agendamento
-      cursor.execute("DELETE FROM agendamentos_servicos WHERE agendamentos_id = ?;", (agendamento_id,))
+    # Remove os serviços vinculados a esse agendamento
+    cursor.execute("DELETE FROM agendamentos_servicos WHERE agendamentos_id = ?;", (agendamento_id,))
 
-      # Remove o agendamento principal
-      cursor.execute("DELETE FROM agendamentos WHERE id = ?;", (agendamento_id,))
-      conexao.commit()
-      conexao.close()
-      return True
-    
+    # Remove o agendamento principal
+    cursor.execute("DELETE FROM agendamentos WHERE id = ?;", (agendamento_id,))
+    conexao.commit()
     conexao.close()
-    return False
-
-  def atualizarPagoWeb(self,valor,formaPag,funcionarioId,data,hora) -> str | bool:
+    return True
+    
+  def atualizarPagoWeb(self,valor,formaPag,funcionarioId,data,hora) -> bool:
     conexao = conectar()
     cursor = conexao.cursor()
     status = "confirmado"
@@ -334,10 +319,10 @@ class AgendamentosService:
     valorFormatado = float(valor)
     
     if valorFormatado <= 0:
-      return "Valor inválido"
+      raise AgendamentoError("Valor inválido")
     
     if not formaPag in formasDePag:
-      return "Forma de pagamento inválida"
+      raise AgendamentoError("Forma de pagamento inválida")
     
     cursor.execute("""UPDATE agendamentos
                   SET valor_pago = ?,forma_pagamento = ?,status = ?
@@ -351,7 +336,7 @@ class AgendamentosService:
 #Clientes
 
 class Cliente:
-  def pesquisarClienteWeb(self,nome,num):
+  def pesquisarClienteWeb(self,nome,num) -> int:
     conexao = conectar()
     cursor = conexao.cursor()
     cursor.execute("SELECT id FROM clientes WHERE nome = ?;",
@@ -363,7 +348,7 @@ class Cliente:
       return clienteCadastrado
 
     if clientesEncontrados:
-      return clientesEncontrados[0]
+      return clientesEncontrados
   
   def cadastrarClienteWeb(self,nome,numero) -> int:
     conexao = conectar()
@@ -372,6 +357,8 @@ class Cliente:
       (nome, numero))
     conexao.commit()
     cliente_id = cursor.lastrowid
+    if not cliente_id:
+      raise ClienteError("nao foi possivel cadastrar o cliente")
     return cliente_id
 
   def buscarNomeWeb(self,nome) -> list:
