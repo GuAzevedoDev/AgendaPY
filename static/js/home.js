@@ -100,13 +100,14 @@ function mostraDias(diaX) {
   //Senao dia 1
   else {
     diaCima.textContent = 1;
-    diaCima.dataset.diaCima = 1;
+    diaCima.dataset.diaCima = "01";
   }
 
   //Percorro todos para pegar o clicado
   diasAtivos.forEach((dia) => {
     //Quando chegar no dia atual coloca ele ativo
-    if (dia.dataset.dia === diaCima.dataset.diaCima) {
+
+    if ("0" + dia.dataset.dia === diaCima.dataset.diaCima) {
       dia.classList.add("ativo");
     }
 
@@ -176,10 +177,8 @@ function somaSubtrai(sinal) {
 function hoje() {
   datas.ano = datas.anoAtual;
   datas.mes = datas.mesAtual;
-
   divDias.innerHTML = "";
   mostraDias(datas.diaAtual);
-
   document.querySelector(".dias-calendario .ativo").click();
 }
 
@@ -378,7 +377,7 @@ function mostrarAgenda(dados) {
       let inputData = document.querySelector(".dataCliente");
       abreModal("agendamento");
       inputHora.value = horaAgenda;
-      inputData.value = dataAgenda;
+      inputData.value = "0" + dataAgenda;
     });
   });
 }

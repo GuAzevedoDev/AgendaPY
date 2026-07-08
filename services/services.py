@@ -348,7 +348,7 @@ class Cliente:
       return clienteCadastrado
 
     if clientesEncontrados:
-      return clientesEncontrados
+      return clientesEncontrados[0]
   
   def cadastrarClienteWeb(self,nome,numero) -> int:
     conexao = conectar()

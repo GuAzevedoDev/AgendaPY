@@ -86,7 +86,7 @@ def home():
 def calendario():
     #Pego os dados do js
     dados = request.json
-    dataSelecionada = dados['data']
+    dataSelecionada = "0"+dados['data']
     idFuncionario = dados['idFuncionario']
     
 
