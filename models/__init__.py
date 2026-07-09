@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-from . import Clientes
+from . import clientes
 
-__all__ = [Clientes]
+__all__ = [Clientes,]
 

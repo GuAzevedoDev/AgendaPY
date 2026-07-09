@@ -9,7 +9,7 @@ class Agendamentos(Base):
     db.Integer,
     db.ForeignKey("clientes.id")
   )
-  funcionario_id = db.Column(db.Integer,nullable = False)
+  funcionario_id = db.Column(db.Integer,db.ForeignKey("funcionarios.id"))
   horario = db.Column(db.String,nullable = False)
   data = db.Column(db.Date,nullable = False)
   valor_pago = db.Column(db.Integer,nullable = False)
