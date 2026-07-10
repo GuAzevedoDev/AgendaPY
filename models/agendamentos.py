@@ -16,6 +16,9 @@ class Agendamentos(Base):
   forma_pagamento = db.Column(db.Integer,nullable = False)
   status = db.Column(db.Enum('confirmado','cancelado','concluido',name = 'status_type'),default='confirmado')
 
+  cliente = db.relationship('Clientes',back_populates= "agendamentos")
+  funcionario = db.relationship('Funcionarios',back_populates= "agendamentos")
+
         
                      
 #         -- servicos e funcionarios

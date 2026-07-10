@@ -3,5 +3,5 @@ db = SQLAlchemy()
 
 from . import clientes
 
-__all__ = [Clientes,]
+__all__ = ['Clientes',]
 
