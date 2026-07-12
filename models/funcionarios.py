@@ -5,10 +5,10 @@ class Funcionarios(Base):
   __tablename__ = "funcionarios"
 
   nome = db.Column(db.String,nullable = False)
-  cargo = db.Column(db.String,db.Enum('dono','profissional', name = cargo_types))
+  cargo = db.Column(db.String,db.Enum('dono','profissional', name = 'cargo_types'))
   funcao = db.Column(db.String,nullable = False)
   senha = db.Column(db.String,nullable = False)
-
+  
 
   
 
@@ -25,14 +25,7 @@ class Funcionarios(Base):
 #         );
         
                      
-#         -- servicos e funcionarios
-#         CREATE TABLE IF NOT EXISTS servicos_funcionarios (
-#             funcionario_id INTEGER NOT NULL,
-#             servico_id     INTEGER NOT NULL,
-#             PRIMARY KEY (funcionario_id, servico_id),
-#             FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE,
-#             FOREIGN KEY (servico_id) REFERENCES servicos(id) ON DELETE CASCADE
-#         );
+#        
                      
 
 #         -- agendamentos
