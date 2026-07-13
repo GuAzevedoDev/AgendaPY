@@ -7,6 +7,7 @@ class Clientes(Base):
   nome = db.Column(db.String,nullable = False)
   numero = db.Column(db.String,nullable = False)
 
+  agendamentos = db.relationship('Agendamentos',back_populates = 'cliente')
 
 
 
