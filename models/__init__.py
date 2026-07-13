@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-from . import Clientes
-from . import Agendamentos
-from . import Funcionarios
+from .clientes import Clientes
+from .agendamentos import Agendamentos
+from .funcionarios import Funcionarios
+from .servicos import Servicos
+from .servicos_agendamentos import ServicosAgendamentos
 
-__all__ = ['Clientes','Agendamentos','Funcionarios']
+__all__ = ['db','Clientes','Agendamentos','Funcionarios','Servicos','ServicosAgendamentos']
 

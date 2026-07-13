@@ -2,47 +2,18 @@ from core.database import conectar
 import hashlib
 from datetime import datetime
 from contextlib import contextmanager
+from exeptions import AgendamentoError,ClienteError,FuncionarioError,ServicoError
+from repositories import AgendamentoRepository,ClienteRepository
 
-
-
-#Classes para erros
-class AgendaPy(Exception):
-  pass
-
-class AgendamentoError(AgendaPy):
-  pass
-
-class ClienteError(AgendaPy):
-  pass
-
-class FuncionarioError(AgendaPy):
-  pass
-
-class ServicoError(AgendaPy):
-  pass
-
-
-
-#Conexao com banco
-@contextmanager
-def get_db():
-    conexao = conectar()
-    try:
-        yield conexao
-        conexao.commit()
-    except Exception:
-        conexao.rollback()
-        raise
-    finally:
-        conexao.close()
-
+repo_agendamento = AgendamentoRepository()
+repo_cliente = ClienteRepository()
 
 
 #Funcionario
 
 class Funcionario:
   def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
-  #Conectar com banco de forma segura
+    #Conectar com banco de forma segura
     with get_db() as db:
       cursor = db.cursor()
       cursor.execute("SELECT id, nome, cargo, funcao, senha FROM funcionarios WHERE nome = ?",
@@ -212,16 +183,16 @@ class AgendamentosService:
     servicos_ids = servicos_service.selecionarServicoWeb(nomesServicos)
     
     #Passar para o banco
-    with get_db() as db:
-      cursor = db.cursor()
-      cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,data))
+    cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,data))
 
-      #Pego id do agendamento cadastrado e salvo em uma variavel
-      agendamento_id = cursor.lastrowid
+    repo_agendamento.cadastrar_horario()
 
-      #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
-      for servico_id in servicos_ids:
-        cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
+    #Pego id do agendamento cadastrado e salvo em uma variavel
+    agendamento_id = cursor.lastrowid
+
+    #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
+    for servico_id in servicos_ids:
+      cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
     return True
 
   def selecionarHorarioWeb(self,funcionarioLogado, data, horarioEscolhido) -> str:
@@ -333,39 +304,26 @@ class AgendamentosService:
 
 
 
-#Clientes
+#Clientes(ORM OK)
 
 class Cliente:
   def pesquisarClienteWeb(self,nome,num) -> int:
-    conexao = conectar()
-    cursor = conexao.cursor()
-    cursor.execute("SELECT id FROM clientes WHERE nome = ?;",
-      (nome,))
-    clientesEncontrados = cursor.fetchone()
+    cliente_encontrado = repo_cliente.buscar_cliente(nome)
+    cliente_encontrado_id = cliente_encontrado[0]
 
-    if not clientesEncontrados:
+    if not cliente_encontrado_id:
       clienteCadastrado = self.cadastrarClienteWeb(nome,num)
       return clienteCadastrado
 
-    if clientesEncontrados:
-      return clientesEncontrados[0]
+    return cliente_encontrado_id
   
   def cadastrarClienteWeb(self,nome,numero) -> int:
-    conexao = conectar()
-    cursor = conexao.cursor()
-    cursor.execute( "INSERT INTO clientes (nome, telefone) VALUES (?, ?)",
-      (nome, numero))
-    conexao.commit()
-    cliente_id = cursor.lastrowid
+    cliente = repo_cliente.cadastrar_cliente(nome,numero)
+    cliente_id = cliente[0]
     if not cliente_id:
-      raise ClienteError("nao foi possivel cadastrar o cliente")
+      raise ClienteError("Nao foi possivel cadastrar o cliente")
     return cliente_id
 
   def buscarNomeWeb(self,nome) -> list:
-    conexao = conectar()
-    cursor = conexao.cursor()
-    nomeTotal = "%" + nome + "%" 
-    cursor.execute("SELECT id, nome, telefone FROM clientes WHERE nome LIKE ?;",
-      (nomeTotal,))
-    clientesEncontrados = cursor.fetchall()
-    return clientesEncontrados
+    clientes_encontrados = repo_cliente.busca_pesquisa_cliente(nome)
+    return clientes_encontrados

@@ -1,0 +1,54 @@
+from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
+import hashlib
+from auth import login_required
+
+auth_bp = Blueprint("auth")
+
+@app.auth_bp("/login", methods=["GET", "POST"])
+def login():
+    #Se estiver no metodo get ele so pega a renderiza o html
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    #Se estiver no metodo POST ele pega os dados do usuario 
+    elif request.method == "POST":
+        #Pega dado do form HTML
+        usuario = request.form["nomeUsuario"]
+        #O encode transforma o utf puro pra bytes pois o hash so aceita bytes
+        senha = request.form["senhaUsuario"].encode('utf-8')
+        hashSenha = hashlib.sha256(senha)
+        senhaHex = hashSenha.hexdigest()
+       
+        #validacao de formulario
+        if usuario and senha:
+            funcionario = funcionario_service.loginFuncionarioWeb(usuario, senhaHex)
+        else:
+            flash("Preencha todos os campos"), 400
+            return redirect(url_for("login"))
+    
+        if not funcionario:
+            flash("Senha ou Usuario incorretos"), 400
+            return redirect(url_for("login"))
+        
+        # login OK
+        session["funcionario_id"] = funcionario[0]
+        session["funcionario_nome"] = funcionario[1]
+        session["funcionario_cargo"] = funcionario[2]
+        session["funcionario_funcao"] = funcionario[3]
+        #Caso passe por todos os retornos o login esta OK e redireciona
+        #Dentro da url_for(nome da funcao)
+        return redirect(url_for("home"))
+    
+
+
+#Rota de logout
+@app.auth_bp("/logout")
+@login_required     #Verifica se existe um funcionario logado
+def logoutFunc():
+    #Limpa sessao
+    session.clear()
+    
+    #Redirecionamento para funcao login
+    return redirect(url_for("login"))
+
+
