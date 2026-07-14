@@ -13,5 +13,5 @@ class FuncionarioRepository:
   def cadastrar_funcionarios(self,nome:str,cargo:str,funcao:str,senha:str):
     funcionario = Funcionarios(nome,cargo,funcao,senha)
     db.session.add(funcionario)
-    db.commit()
+    db.session.commit()
     return funcionario

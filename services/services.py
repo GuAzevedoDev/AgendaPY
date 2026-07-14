@@ -72,7 +72,7 @@ class ServicosService:
     #Retorno a lista com os servicos selecionados
     return listaServicos
   
-  def mostrarServicosWeb(self)-> list:
+  def mostrarServicosWeb(self) -> list:
     #Conexao segura com db
     servicosEncontrados = repo_servico.mostrar_servicos()
 
@@ -88,7 +88,7 @@ class ServicosService:
     servico = repo_servico.cadastrar_servico(nome,duracao)
     return servico[0]
 
-  def buscarServicoWeb(self,servico:str)-> list:
+  def buscarServicoWeb(self,servico:str) -> list:
     servicosEncontrados = repo_funcionario.busca_pesquisa_cliente(servico)
 
     return servicosEncontrados
@@ -99,7 +99,7 @@ class ServicosService:
 
 class AgendamentosService:
   @staticmethod
-  def gerarHorarios()-> list:
+  def gerarHorarios() -> list:
     #Inicio a lista horarios
     horarios = []
 
@@ -210,14 +210,9 @@ class AgendamentosService:
     #Se tiver tudo certo retorno a data
     return data
 
-  def excluirAgendamentoWeb(self,idFuncionario, data, hora) -> bool:
-    # Estabelece conexão com o banco de dados
-    conexao = conectar()
-    cursor = conexao.cursor()
-    
+  def excluirAgendamentoWeb(self,funcionario_id, data, hora) -> bool:
     # Busca o ID do agendamento para poder remover as dependências primeiro (tabela agendamentos_servicos)
-    cursor.execute("SELECT id FROM agendamentos WHERE funcionario_id = ? AND data = ? AND horario = ?;", (idFuncionario, data, hora))
-    agendamento = cursor.fetchone()
+    agendamento = AgendamentoRepository.buscar_agendamento(funcionario_id,data,hora)
     
     #Caso nao exista agendamento
     if not agendamento:
@@ -225,31 +220,27 @@ class AgendamentosService:
     agendamento_id = agendamento[0]
 
     # Remove os serviços vinculados a esse agendamento
-    cursor.execute("DELETE FROM agendamentos_servicos WHERE agendamentos_id = ?;", (agendamento_id,))
+    AgendamentoRepository.excluir_servicos_agendamentos(agendamento_id)
 
     # Remove o agendamento principal
-    cursor.execute("DELETE FROM agendamentos WHERE id = ?;", (agendamento_id,))
-    conexao.commit()
-    conexao.close()
+    AgendamentoRepository.excluir_agendamento(agendamento)
+
     return True
     
-  def atualizarPagoWeb(self,valor,formaPag,funcionarioId,data,hora) -> bool:
+  def atualizarPagoWeb(self,valor,forma_de_pag,funcionario_id,data,hora) -> bool:
     conexao = conectar()
     cursor = conexao.cursor()
     status = "confirmado"
-    formasDePag = ["pix",'debito','dinheiro','credito']
-    valorFormatado = float(valor)
+    formas_de_pag = ["pix",'debito','dinheiro','credito']
+    valor_formatado = float(valor)
     
     if valorFormatado <= 0:
       raise AgendamentoError("Valor inválido")
     
-    if not formaPag in formasDePag:
+    if not forma_pag in formas_de_pag:
       raise AgendamentoError("Forma de pagamento inválida")
     
-    cursor.execute("""UPDATE agendamentos
-                  SET valor_pago = ?,forma_pagamento = ?,status = ?
-                  WHERE funcionario_id = ? AND data = ? AND horario = ?;""",(valorFormatado,formaPag,status,funcionarioId,data,hora))
-    conexao.commit()
+    AgendamentoRepository.atualizar_agendamento(valor_formatado,forma_de_pag,status,funcionario_id,data,hora)
 
     return True
 

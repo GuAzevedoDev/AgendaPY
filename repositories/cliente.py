@@ -9,7 +9,7 @@ class ClienteRepository:
   def cadastrar_cliente(self,nome:str,numero:str) -> tuple:
     cliente = Clientes(nome,numero)
     db.session.add(cliente)
-    db.commit()
+    db.session.commit()
     return cliente
 
   def busca_pesquisa_cliente(self,nome:str) -> list:
