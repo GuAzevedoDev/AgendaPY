@@ -1,70 +1,55 @@
-from core.database import conectar
 import hashlib
 from datetime import datetime
 from contextlib import contextmanager
 from exeptions import AgendamentoError,ClienteError,FuncionarioError,ServicoError
-from repositories import AgendamentoRepository,ClienteRepository
+from repositories import AgendamentoRepository,ClienteRepository,FuncionarioRepository,ServicoRepository
 
 repo_agendamento = AgendamentoRepository()
 repo_cliente = ClienteRepository()
+repo_funcionario = FuncionarioRepository()
+repo_servico = ServicoRepository()
 
 
-#Funcionario
+#Funcionario(ORM OK)
 
 class Funcionario:
   def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
-    #Conectar com banco de forma segura
-    with get_db() as db:
-      cursor = db.cursor()
-      cursor.execute("SELECT id, nome, cargo, funcao, senha FROM funcionarios WHERE nome = ?",
-        (nome.capitalize(),))
-      
-      #Se encontrado ele salva na variavel
-      funcionarioEncontrado = cursor.fetchone()
+    #Se encontrado ele salva na variavel
+    funcionarioEncontrado = repo_funcionario.buscar_funcionario(nome.capitalize())
 
-      #Se nao encontrado nao passa no if, verifico se a senha esta correta
-      if not funcionarioEncontrado or senha != funcionarioEncontrado[4]:
-        raise FuncionarioError("Credenciais invalidas")
+    #Se nao encontrado nao passa no if, verifico se a senha esta correta
+    if not funcionarioEncontrado or senha != funcionarioEncontrado[4]:
+      raise FuncionarioError("Credenciais invalidas")
       
-      #Se nao retorno none
-      return funcionarioEncontrado
+    #Se nao retorno none
+    return funcionarioEncontrado
   
   def mostrarFuncionariosWeb(self) -> list:
-    conexao = conectar()
-    cursor = conexao.cursor()
-    cursor.execute("SELECT id, nome, cargo, funcao FROM funcionarios")
-    funcionariosEncontrados = cursor.fetchall()
+    funcionariosEncontrados = repo_funcionario.mostrar_funcionarios()
     return funcionariosEncontrados
 
   def cadastrarFuncionarios(self):
-    with get_db() as db:
-      cursor = db.cursor()
-      while True:
-        nome = input("Digite seu nome: ")
+    while True:
+      nome = input("Digite seu nome: ")
+      funcionarioExistente = repo_funcionario.buscar_funcionario(nome)
 
-        db.execute("SELECT nome FROM funcionarios WHERE nome = ?", (nome,))
-        funcionarioExistente = cursor.fetchone()
-
-        if funcionarioExistente is None:
-          break
+      if funcionarioExistente is None:
+        break
             
-        print(f"Funcionario '{nome}' ja existe, tente outro nome.")
+      print(f"Funcionario '{nome}' ja existe, tente outro nome.")
 
-      cargo = input("Digite seu cargo [dono] // [profissional]: ")
-      funcao = input("Digite sua funcao: ")
-      senha = input("Digite sua senha: ").encode('utf-8')
-      hashSenha = hashlib.sha256(senha)
-      senhaHex = hashSenha.hexdigest()
+    cargo = input("Digite seu cargo [dono] // [profissional]: ")
+    funcao = input("Digite sua funcao: ")
+    senha = input("Digite sua senha: ").encode('utf-8')
+    hashSenha = hashlib.sha256(senha)
+    senhaHex = hashSenha.hexdigest()
 
-      db.execute(
-          "INSERT INTO funcionarios (nome, cargo, funcao, senha) VALUES (?, ?, ?, ?)",
-          (nome, cargo.lower(),funcao, senhaHex)
-        )
-      print(f"Funcionario {nome} adicionado!")
+    repo_funcionario.cadastrar_funcionarios(nome,cargo.lower(),funcao,senhaHex)
+    print(f"Funcionario {nome} adicionado!")
 
 
 
-#Servicos
+#Servicos (ORM OK)
 
 class ServicosService:
   def selecionarServicoWeb(self,nomesServicos:list) -> list:
@@ -89,62 +74,28 @@ class ServicosService:
   
   def mostrarServicosWeb(self)-> list:
     #Conexao segura com db
-    with get_db() as db:
-      cursor = db.cursor()
+    servicosEncontrados = repo_servico.mostrar_servicos()
 
-      #Seleciono todos
-      cursor.execute("SELECT id,nome FROM servicos")
-      servicosEncontrados = cursor.fetchall()
-
-      #Se nao exitir retorno lista vazia
-      if not servicosEncontrados:
-        return []
-      #Se exitir retorno lista com todos
-      return servicosEncontrados
+    #Se nao exitir retorno lista vazia
+    if not servicosEncontrados:
+      return []
+    
+    #Se exitir retorno lista com todos
+    return servicosEncontrados
   
   def cadastrarServicosWeb(self,nome:str, duracao:int) -> int:
-    #Conexao segura com db
-    with get_db() as db:
-      cursor = db.cursor()
-      #Insiro no bd as informacoes passadas nos parametros
-      cursor.execute("INSERT INTO servicos(nome,duracao_min) VALUES(?,?)",(nome,duracao))
-
-      #Retorno id gerado
-      return cursor.lastrowid
-
-  def relacionarServico(self,idServico:int,idFuncionarioLogado:int) -> bool:
-    #Conexao segura
-    with get_db() as db:
-      cursor = db.cursor()
-
-      #Insiro se nao existir, se existir nao lanca erro
-      cursor.execute("INSERT OR IGNORE INTO servicos_funcionarios(funcionario_id,servico_id)VALUES(?,?)",(idFuncionarioLogado,idServico))
-
-      #Pego se alinha retornar 1
-      linhas = db.rowcount
-      if linhas == 0:
-        return False
-      return True
+    #Insiro no bd as informacoes passadas nos parametros
+    servico = repo_servico.cadastrar_servico(nome,duracao)
+    return servico[0]
 
   def buscarServicoWeb(self,servico:str)-> list:
-    #Estabeleco conexao segura
-    with get_db() as db:
-      cursor = db.cursor()
+    servicosEncontrados = repo_funcionario.busca_pesquisa_cliente(servico)
 
-      #Concateno para fazer a pesquisa com like
-      servicoTotal = "%" + servico + "%"
-
-      #Pego tudo todos com like
-      cursor.execute("SELECT id, nome, duracao_min FROM servicos WHERE nome LIKE ?;",
-        (servicoTotal,))
-      servicosEncontrados = cursor.fetchall()
-
-      #Retorno a lista
-      return servicosEncontrados
+    return servicosEncontrados
 
 
 
-#Agendamentos
+#Agendamentos 
 
 class AgendamentosService:
   @staticmethod

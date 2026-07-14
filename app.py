@@ -1,8 +1,8 @@
 from services.services import AgendamentosService, ServicosService,Funcionario,Cliente
 from flask import Flask
 from config import DevelopmentConfig
-from controllers import agendamento_bp,auth_bp,home_bp
-
+from controllers import db,agendamento_bp,auth_bp,home_bp
+import os
 
 servicos_service = ServicosService()
 agendamento_service = AgendamentosService()
@@ -16,8 +16,7 @@ def create_app(config = DevelopmentConfig):
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
         pasta,"banco.db"
     )
-    return app
-
+    
     #Inicio o app
     db.init_app(app)
 
@@ -29,7 +28,8 @@ def create_app(config = DevelopmentConfig):
     #Passo o contexto (necessario)
     with app.app_context():
         db.create_all()
-    
+        
+    return app
 app = create_app()
 
 

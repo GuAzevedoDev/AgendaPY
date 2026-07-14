@@ -1,4 +1,6 @@
-from .repositories import AgendamentoRepository
-from .repositories import ClienteRepository
+from .agendamento import AgendamentoRepository
+from .cliente import ClienteRepository
+from .funcionario import FuncionarioRepository
+from .servicos import ServicoRepository
 
-__all__ = ["AgendamentoRepository","ClienteRepository"]
+__all__ = ["AgendamentoRepository","ClienteRepository","FuncionarioRepository","ServicoRepository"]
