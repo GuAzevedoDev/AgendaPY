@@ -8,3 +8,5 @@ class Funcionarios(Base):
   cargo = db.Column(db.String,db.Enum('dono','profissional', name = 'cargo_types'))
   funcao = db.Column(db.String,nullable = False)
   senha = db.Column(db.String,nullable = False)
+
+  agendamentos = db.relationship('Agendamentos',back_populates= 'funcionario')

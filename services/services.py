@@ -14,15 +14,19 @@ repo_servico = ServicoRepository()
 
 class Funcionario:
   def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
-    #Se encontrado ele salva na variavel
-    funcionarioEncontrado = repo_funcionario.buscar_funcionario(nome.capitalize())
+    #Transformar a senha em hash para comparação com db
+    senha = senha.encode('utf-8')
+    senha = hashlib.sha256(senha)
+    senha = senha.hexdigest()
 
+    #Se encontrado ele salva na variavel
+    funcionario_encontrado = repo_funcionario.buscar_funcionario(nome.capitalize())
     #Se nao encontrado nao passa no if, verifico se a senha esta correta
-    if not funcionarioEncontrado or senha != funcionarioEncontrado[4]:
+    if not funcionario_encontrado or senha != funcionario_encontrado.senha:
       raise FuncionarioError("Credenciais invalidas")
-      
-    #Se nao retorno none
-    return funcionarioEncontrado
+
+    #Se tudo ok retorno funcionario_encontrado
+    return funcionario_encontrado
   
   def mostrarFuncionariosWeb(self) -> list:
     funcionariosEncontrados = repo_funcionario.mostrar_funcionarios()
@@ -95,7 +99,7 @@ class ServicosService:
 
 
 
-#Agendamentos 
+#Agendamentos(Falta apenas mostrarAgendaWeb)
 
 class AgendamentosService:
   @staticmethod
@@ -142,55 +146,55 @@ class AgendamentosService:
       AgendamentoRepository.cadastrar_servico_agendamento(servico_id,agendamento_id)
     return True
 
-  def selecionarHorarioWeb(self,funcionarioLogado, data, horarioEscolhido) -> str:
+  def selecionarHorarioWeb(self,id_funcionario_logado, data, horario_escolhido) -> str:
     horarios = AgendamentosService.gerarHorarios()
-    tudoHorarios = self.mostrarAgendaWeb(funcionarioLogado,data)
+    tudoHorarios = self.mostrarAgendaWeb(id_funcionario_logado,data)
     ocupados = []
     for horario in tudoHorarios:
       if horario['status'] == 'Ocupado':
         ocupados.append(horario['hora'])
     
-    if horarioEscolhido not in horarios:
+    if horario_escolhido not in horarios:
       raise AgendamentoError("Esse horario não é válido")
     
-    if horarioEscolhido in ocupados:
+    if horario_escolhido in ocupados:
       raise AgendamentoError("Esse horario já está ocupado")
     
-    return horarioEscolhido
+    return horario_escolhido
 
-  # def mostrarAgendaWeb(self,funcionarioLogado, data) -> list:
-  #   conexao = conectar()
-  #   cursor = conexao.cursor()
-  #   ocupados = []
-  #   tudoHorarios = []
-  #   horarios = AgendamentosService.gerarHorarios()
-  #   cursor.execute("""
-  #         SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
-  #         FROM agendamentos
-  #         INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
-  #         INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
-  #         INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
-  #         WHERE funcionario_id = ?
-  #         AND data = ?
-  #   """, (funcionarioLogado, data))
+  def mostrarAgendaWeb(self,funcionarioLogado, data) -> list:
+    conexao = conectar()
+    cursor = conexao.cursor()
+    ocupados = []
+    tudoHorarios = []
+    horarios = AgendamentosService.gerarHorarios()
+    cursor.execute("""
+          SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
+          FROM agendamentos
+          INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
+          INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
+          INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
+          WHERE funcionario_id = ?
+          AND data = ?
+    """, (funcionarioLogado, data))
 
-  #   horariosDia = cursor.fetchall()
+    horariosDia = cursor.fetchall()
 
-  #   for horario in horarios:
-  #       encontrado = False
+    for horario in horarios:
+        encontrado = False
 
-  #       for agendamento in horariosDia:
-  #           hora, cliente, servico, status, valorPago,formaPagamento = agendamento
+        for agendamento in horariosDia:
+            hora, cliente, servico, status, valorPago,formaPagamento = agendamento
 
-  #           if horario == hora:
-  #               tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
-  #               encontrado = True
-  #               ocupados.append(agendamento)
-  #               break
+            if horario == hora:
+                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
+                encontrado = True
+                ocupados.append(agendamento)
+                break
 
-  #       if not encontrado:
-  #           tudoHorarios.append({"hora":horario,"status":"Livre"})
-  #   return tudoHorarios
+        if not encontrado:
+            tudoHorarios.append({"hora":horario,"status":"Livre"})
+    return tudoHorarios
   
   def selecionarDataWeb(self,data:str) -> str:
     #Pego a data atual

@@ -3,11 +3,11 @@ from exeptions import ClienteError
 
 class ClienteRepository:
   def buscar_cliente(self,nome:str) -> tuple:
-    cliente = Clientes.query.filter_by(nome == nome).first()
+    cliente = Clientes.query.filter_by(nome = nome).first()
     return cliente
 
   def cadastrar_cliente(self,nome:str,numero:str) -> tuple:
-    cliente = Clientes(nome,numero)
+    cliente = Clientes(nome = nome,numero = numero)
     db.session.add(cliente)
     db.session.commit()
     return cliente

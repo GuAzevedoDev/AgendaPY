@@ -7,7 +7,7 @@ class ServicoRepository:
     return servicos
   
   def cadastrar_servico(nome:str,duracao:int) -> tuple:
-    servico = Servicos(nome,duracao)
+    servico = Servicos(nome = nome,duracao = duracao)
     db.session.add(servico)
     db.session.commit()
     return servico

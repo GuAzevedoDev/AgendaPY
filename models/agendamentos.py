@@ -4,7 +4,6 @@ from .base import Base
 class Agendamentos(Base):
   __tablename__ = "agendamentos"
 
-  nome = db.Column(db.String,nullable = False)
   cliente_id = db.Column(
     db.Integer,
     db.ForeignKey("clientes.id"),
@@ -19,7 +18,9 @@ class Agendamentos(Base):
 
   cliente = db.relationship('Clientes',back_populates= "agendamentos")
   funcionario = db.relationship('Funcionarios',back_populates= "agendamentos")
+
   servicos_agendamentos = db.relationship(
-        "ServicosAgendamentos",
-        back_populates="agendamento",
-    )
+    "ServicosAgendamentos", 
+    back_populates="agendamento"
+  )
+  
