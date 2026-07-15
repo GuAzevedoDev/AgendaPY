@@ -146,7 +146,7 @@ class AgendamentosService:
       AgendamentoRepository.cadastrar_servico_agendamento(servico_id,agendamento_id)
     return True
 
-  def selecionarHorarioWeb(self,id_funcionario_logado, data, horario_escolhido) -> str:
+  def selecionarHorarioWeb(self,id_funcionario_logado:int, data:str, horario_escolhido:str) -> str:
     horarios = AgendamentosService.gerarHorarios()
     tudoHorarios = self.mostrarAgendaWeb(id_funcionario_logado,data)
     ocupados = []
@@ -162,7 +162,7 @@ class AgendamentosService:
     
     return horario_escolhido
 
-  def mostrarAgendaWeb(self,funcionarioLogado, data) -> list:
+  def mostrarAgendaWeb(self,id_funcionario_logado:int, data:str) -> list:
     conexao = conectar()
     cursor = conexao.cursor()
     ocupados = []
@@ -176,7 +176,7 @@ class AgendamentosService:
           INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
           WHERE funcionario_id = ?
           AND data = ?
-    """, (funcionarioLogado, data))
+    """, (id_funcionario_logado, data))
 
     horariosDia = cursor.fetchall()
 

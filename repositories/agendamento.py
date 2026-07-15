@@ -43,4 +43,8 @@ class AgendamentoRepository:
 
     db.session.commit()
 
+  def trazer_horarios_dias(self,data:str,funcionario_id:int):
+    agendamentos = Agendamentos.query.filter_by(funcionario_id = funcionario_id,data = data).all()
+    for agendamento in agendamentos:
+      cliente = agendamento.cliente
 
