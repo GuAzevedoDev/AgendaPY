@@ -1,12 +1,13 @@
-from flask import Blueprint,jsonify
+from flask import Blueprint,jsonify,request
 from auth import login_required
+from services.services import AgendamentosService,Cliente,ServicosService
 
+agendamento_bp = Blueprint('agendamento',__name__,url_prefix="/agendar")
+repo_agendamento = AgendamentosService()
+repo_cliente = Cliente()
+repo_servico = ServicosService()
 
-agendamento_bp = Blueprint('agendamento',url_prefix="/agendar")
-
-
-
-@app.route('/', methods=["GET", "POST"])
+@agendamento_bp.route('/', methods=["GET", "POST"])
 @login_required     #Verifica se existe um funcionario logado
 def agendar():
     #Pego do JS
@@ -24,22 +25,22 @@ def agendar():
     if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
         return jsonify({"mensagem": "Preencha todos os campos"})
     
-    mensagemAgendamento = agendamento_service.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
+    mensagemAgendamento = repo_agendamento.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
     return jsonify({"mensagem": mensagemAgendamento})
 
 
 
-@app.route('/buscaNome', methods=["GET", "POST"])
+@agendamento_bp.route('/buscaNome', methods=["GET", "POST"])
 @login_required   
 def buscarNome():
     dados = request.json
     nomeCliente = dados['nomeCliente']
     if request.method == "POST":
-        nomesEncontrados = cliente_service.buscarNomeWeb(nomeCliente)
+        nomesEncontrados = repo_cliente.buscarNomeWeb(nomeCliente)
         return  nomesEncontrados
 
 
-@app.route("/calendario", methods = ['POST'])
+@agendamento_bp.route("/calendario", methods = ['POST'])
 @login_required     #Verifica se existe um funcionario logado
 def calendario():
     #Pego os dados do js
@@ -49,23 +50,23 @@ def calendario():
     
 
     #Chamo a funcao
-    horarios = agendamento_service.mostrarAgendaWeb(idFuncionario,dataSelecionada)
+    horarios = repo_agendamento.mostrarAgendaWeb(idFuncionario,dataSelecionada)
     return jsonify(horarios)
 
   
 
-@app.route('/buscaServico', methods=["GET", "POST"])
+@agendamento_bp.route('/buscaServico', methods=["GET", "POST"])
 @login_required   
 def buscarServico():
     dados = request.json
     nomeServico = dados['nomeServico']
     if request.method == "POST":
-        servicosEncontrados = servicos_service.buscarServicoWeb(nomeServico)
+        servicosEncontrados = repo_servico.buscarServicoWeb(nomeServico)
         return servicosEncontrados
 
 
 
-@app.route('/atualizarPg', methods=["GET", "POST"])
+@agendamento_bp.route('/atualizarPg', methods=["GET", "POST"])
 @login_required   
 def atualizarPg():
     #Pego do JS
@@ -82,12 +83,12 @@ def atualizarPg():
         return jsonify({"mensagem": "Preencha todos os campos"})
 
 
-    mensagemPagamento = agendamento_service.atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
+    mensagemPagamento = repo_agendamento.atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
     return jsonify({"mensagem": mensagemPagamento})
 
 
 
-@app.route('/excluirHorario', methods=["POST"])
+@agendamento_bp.route('/excluirHorario', methods=["POST"])
 @login_required   
 def excluirHorario():
     # Pega os dados enviados pelo JavaScript (fetch)
@@ -104,7 +105,7 @@ def excluirHorario():
         return jsonify({"mensagem": "Dados incompletos para exclusão", "sucesso": False}), 400
 
     # Tenta excluir o agendamento no banco
-    sucesso = agendamento_service.excluirAgendamentoWeb(idFuncionario, data, hora)
+    sucesso = repo_agendamento.excluirAgendamentoWeb(idFuncionario, data, hora)
     if sucesso:
         return jsonify({"mensagem": "Horário excluído com sucesso", "sucesso": True})
     else:

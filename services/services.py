@@ -118,32 +118,28 @@ class AgendamentosService:
       #Retorno os horarios
     return horarios
   
-  def marcarHorarioWeb(self,idFuncionarioLogado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str) -> str:
+  def marcarHorarioWeb(self,id_funcionario_logado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str) -> str:
     #Selecionar data
     data = self.selecionarDataWeb(data)
 
     #Selecionar horario
-    horarioEscolhido = self.selecionarHorarioWeb(idFuncionarioLogado,data,hora)
+    horario_escolhido = self.selecionarHorarioWeb(id_funcionario_logado,data,hora)
     
     #Selecione o nome do cliente
     cliente_service = Cliente()
-    clienteEscolhido = cliente_service.pesquisarClienteWeb(nome,num)
+    cliente_escolhido_id = cliente_service.pesquisarClienteWeb(nome,num)
     
     #Selecione o servico
     servicos_service = ServicosService()
     servicos_ids = servicos_service.selecionarServicoWeb(nomesServicos)
     
     #Passar para o banco
-    cursor.execute("""INSERT INTO agendamentos(cliente_id,funcionario_id,horario,data)VALUES(?,?,?,?)""",(clienteEscolhido,idFuncionarioLogado,horarioEscolhido,data))
-
-    repo_agendamento.cadastrar_horario()
-
-    #Pego id do agendamento cadastrado e salvo em uma variavel
-    agendamento_id = cursor.lastrowid
+    agendamento = repo_agendamento.cadastrar_horario(cliente_escolhido_id,id_funcionario_logado,horario_escolhido,data)
+    agendamento_id = agendamento[0]
 
     #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
     for servico_id in servicos_ids:
-      cursor.execute("INSERT INTO agendamentos_servicos (servicos_id,agendamentos_id) VALUES (?,?)", (servico_id,agendamento_id))
+      AgendamentoRepository.cadastrar_servico_agendamento(servico_id,agendamento_id)
     return True
 
   def selecionarHorarioWeb(self,funcionarioLogado, data, horarioEscolhido) -> str:
@@ -162,39 +158,39 @@ class AgendamentosService:
     
     return horarioEscolhido
 
-  def mostrarAgendaWeb(self,funcionarioLogado, data) -> list:
-    conexao = conectar()
-    cursor = conexao.cursor()
-    ocupados = []
-    tudoHorarios = []
-    horarios = AgendamentosService.gerarHorarios()
-    cursor.execute("""
-          SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
-          FROM agendamentos
-          INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
-          INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
-          INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
-          WHERE funcionario_id = ?
-          AND data = ?
-    """, (funcionarioLogado, data))
+  # def mostrarAgendaWeb(self,funcionarioLogado, data) -> list:
+  #   conexao = conectar()
+  #   cursor = conexao.cursor()
+  #   ocupados = []
+  #   tudoHorarios = []
+  #   horarios = AgendamentosService.gerarHorarios()
+  #   cursor.execute("""
+  #         SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
+  #         FROM agendamentos
+  #         INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
+  #         INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
+  #         INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
+  #         WHERE funcionario_id = ?
+  #         AND data = ?
+  #   """, (funcionarioLogado, data))
 
-    horariosDia = cursor.fetchall()
+  #   horariosDia = cursor.fetchall()
 
-    for horario in horarios:
-        encontrado = False
+  #   for horario in horarios:
+  #       encontrado = False
 
-        for agendamento in horariosDia:
-            hora, cliente, servico, status, valorPago,formaPagamento = agendamento
+  #       for agendamento in horariosDia:
+  #           hora, cliente, servico, status, valorPago,formaPagamento = agendamento
 
-            if horario == hora:
-                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
-                encontrado = True
-                ocupados.append(agendamento)
-                break
+  #           if horario == hora:
+  #               tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
+  #               encontrado = True
+  #               ocupados.append(agendamento)
+  #               break
 
-        if not encontrado:
-            tudoHorarios.append({"hora":horario,"status":"Livre"})
-    return tudoHorarios
+  #       if not encontrado:
+  #           tudoHorarios.append({"hora":horario,"status":"Livre"})
+  #   return tudoHorarios
   
   def selecionarDataWeb(self,data:str) -> str:
     #Pego a data atual
@@ -227,20 +223,18 @@ class AgendamentosService:
 
     return True
     
-  def atualizarPagoWeb(self,valor,forma_de_pag,funcionario_id,data,hora) -> bool:
-    conexao = conectar()
-    cursor = conexao.cursor()
+  def atualizarPagoWeb(self,valor,forma_pag,funcionario_id,data,hora) -> bool:
     status = "confirmado"
     formas_de_pag = ["pix",'debito','dinheiro','credito']
     valor_formatado = float(valor)
     
-    if valorFormatado <= 0:
+    if valor_formatado <= 0:
       raise AgendamentoError("Valor inválido")
     
     if not forma_pag in formas_de_pag:
       raise AgendamentoError("Forma de pagamento inválida")
     
-    AgendamentoRepository.atualizar_agendamento(valor_formatado,forma_de_pag,status,funcionario_id,data,hora)
+    AgendamentoRepository.atualizar_agendamento(valor_formatado,forma_pag,status,funcionario_id,data,hora)
 
     return True
 

@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash
+from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash,Blueprint
 import hashlib
 from auth import login_required
+from services.services import Funcionario
 
-auth_bp = Blueprint("auth")
+auth_bp = Blueprint("auth",__name__)
 
-@app.auth_bp("/login", methods=["GET", "POST"])
+
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     #Se estiver no metodo get ele so pega a renderiza o html
     if request.method == "GET":
@@ -20,8 +22,9 @@ def login():
         senhaHex = hashSenha.hexdigest()
        
         #validacao de formulario
+        repo_funcionario = Funcionario()
         if usuario and senha:
-            funcionario = funcionario_service.loginFuncionarioWeb(usuario, senhaHex)
+            funcionario = repo_funcionario.loginFuncionarioWeb(usuario, senhaHex)
         else:
             flash("Preencha todos os campos"), 400
             return redirect(url_for("login"))
@@ -42,7 +45,7 @@ def login():
 
 
 #Rota de logout
-@app.auth_bp("/logout")
+@auth_bp.route("/logout")
 @login_required     #Verifica se existe um funcionario logado
 def logoutFunc():
     #Limpa sessao
