@@ -14,6 +14,6 @@ class ClienteRepository:
 
   def busca_pesquisa_cliente(self,nome:str) -> list:
     #ilike faz a pesquisa sem comparar maiusculas e minusculas, mas existe tambem o like(ele compara)
-    clientes = Clientes.query.ilike(f"%{nome}%").all()
+    clientes = Clientes.query.filter(Clientes.nome.ilike(f"%{nome}%")).all()
 
     return clientes

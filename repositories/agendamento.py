@@ -2,13 +2,12 @@ from models import db,Agendamentos,ServicosAgendamentos
 from exeptions import AgendamentoError
 
 class AgendamentoRepository:
-  def cadastrar_horario(self,cliente_id:int,funcionario_id:int,horario:str,data:str,valor_pago:int,forma_pagamento:str,status:str):
-    agendamento = Agendamentos(cliente_id = cliente_id,funcionario_id = funcionario_id,horario = horario,data = data,valor_pago = valor_pago,forma_pagamento = forma_pagamento,status = status)
-    try:
-      db.session.add(agendamento)
-      db.session.commit()
-    except:
-      raise AgendamentoError("Falha ao adicionar o agendamento no banco")
+  def cadastrar_horario(self,cliente_id:int,funcionario_id:int,horario:str,data:str):
+    agendamento = Agendamentos(cliente_id = cliente_id,funcionario_id = funcionario_id,horario = horario,data = data)
+
+    db.session.add(agendamento)
+    db.session.commit()
+
 
     return agendamento
 
@@ -24,7 +23,7 @@ class AgendamentoRepository:
     return agendamento
 
   def atualizar_agendamento(self,valor_formatado:int,forma_pagamento:str,status:str,funcionario_id:int,data:str,hora:str):
-    agendamento = self.buscar_agendamento(funcionario_id,data,hora)
+    agendamento = self.buscar_agendamento(funcionario_id= funcionario_id,data = data,hora = hora)
 
     agendamento.valor_pago = valor_formatado
     agendamento.forma_pagamento = forma_pagamento
@@ -45,6 +44,6 @@ class AgendamentoRepository:
 
   def trazer_horarios_dias(self,data:str,funcionario_id:int):
     agendamentos = Agendamentos.query.filter_by(funcionario_id = funcionario_id,data = data).all()
-    for agendamento in agendamentos:
-      cliente = agendamento.cliente
+     
+    return agendamentos
 

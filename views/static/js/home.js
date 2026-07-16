@@ -132,7 +132,7 @@ function mostraDias(diaX) {
       diaSemana.innerHTML = `${diasSemana[diaSemanaAtual]}, ${dia.dataset.dia} de ${mesCima.dataset.mesCima}`;
 
       //Envio o dia clicado para o back
-      fetch("/calendario", {
+      fetch("/agendar/calendario", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -323,7 +323,7 @@ function mostrarAgenda(dados) {
             )
           ) {
             // Realiza a chamada fetch post para a rota Flask que criamos no backend
-            fetch("/excluirHorario", {
+            fetch("/agendar/excluirHorario", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -377,7 +377,7 @@ function mostrarAgenda(dados) {
       let inputData = document.querySelector(".dataCliente");
       abreModal("agendamento");
       inputHora.value = horaAgenda;
-      inputData.value = "0" + dataAgenda;
+      inputData.value = dataAgenda;
     });
   });
 }
@@ -428,7 +428,7 @@ function buscarNome() {
   let nomesLista = document.querySelectorAll(".nome-lista");
 
   inputNome.addEventListener("input", function pegaNome() {
-    fetch("/buscaNome", {
+    fetch("/agendar/buscaNome", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -467,7 +467,7 @@ function buscarServico() {
   );
 
   inputServico.addEventListener("input", function pegaServico() {
-    fetch("/buscaServico", {
+    fetch("/agendar/buscaServico", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -476,6 +476,7 @@ function buscarServico() {
     })
       .then((resposta) => resposta.json()) // converte para JSON
       .then((servicos) => {
+        console.log(servicos)
         listaServicos.innerHTML = "";
         servicos.forEach((servico) => {
           listaServicos.innerHTML += `<li class="servico-lista" data-servico="${servico[1]}"> ${servico[1]} </li>`;
@@ -633,7 +634,7 @@ function atualizarPag(ocupados) {
     }
 
     //Envio para o JS
-    fetch("/atualizarPg", {
+    fetch("/agendar/atualizarPg", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

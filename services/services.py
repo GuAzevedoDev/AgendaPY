@@ -56,7 +56,7 @@ class Funcionario:
 #Servicos (ORM OK)
 
 class ServicosService:
-  def selecionarServicoWeb(self,nomesServicos:list) -> list:
+  def selecionar_servico_web(self,nomesServicos:list) -> list:
     #Pego todos os servicos
     servicos = self.mostrarServicosWeb()
 
@@ -70,8 +70,8 @@ class ServicosService:
     #Passo por todos se bater com o nome digitado retorno a lista com os servicos selecionados
     for servico in servicos:
       for nome in nomesServicos:
-        if servico[1] == nome:
-          listaServicos.append(servico[0])
+        if servico.nome == nome:
+          listaServicos.append(servico.id)
 
     #Retorno a lista com os servicos selecionados
     return listaServicos
@@ -90,12 +90,17 @@ class ServicosService:
   def cadastrarServicosWeb(self,nome:str, duracao:int) -> int:
     #Insiro no bd as informacoes passadas nos parametros
     servico = repo_servico.cadastrar_servico(nome,duracao)
-    return servico[0]
+    return servico.id
 
   def buscarServicoWeb(self,servico:str) -> list:
-    servicosEncontrados = repo_funcionario.busca_pesquisa_cliente(servico)
+    servicos_encontrados = repo_servico.busca_pesquisa_servicos(servico)
+    #Retorna tudo de servicos em uma lista logo preciso de iterar e fazer uma lista so de id e nome
+    nomes_servicos = []
 
-    return servicosEncontrados
+    for servico in servicos_encontrados:
+      nomes_servicos.append((servico.id,servico.nome))
+
+    return nomes_servicos
 
 
 
@@ -103,7 +108,7 @@ class ServicosService:
 
 class AgendamentosService:
   @staticmethod
-  def gerarHorarios() -> list:
+  def gerar_horarios() -> list:
     #Inicio a lista horarios
     horarios = []
 
@@ -112,11 +117,11 @@ class AgendamentosService:
 
     #Inicio no horarioI e finalizo na horaF
     for i in range(horaI,horaF + 1):
-      horarios.append(f"{horaI}:00")
+      horarios.append(datetime.strptime(f"{horaI}:00","%H:%M").time())
 
       #Quando for igual a horaF nao coloca o :30 na lista
       if horaF != i:
-        horarios.append(f"{horaI}:30")
+        horarios.append(datetime.strptime(f"{horaI}:30","%H:%M").time())
       horaI = horaI + 1
 
       #Retorno os horarios
@@ -124,31 +129,33 @@ class AgendamentosService:
   
   def marcarHorarioWeb(self,id_funcionario_logado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str) -> str:
     #Selecionar data
-    data = self.selecionarDataWeb(data)
+    data = self.selecionar_data_web(data)
 
     #Selecionar horario
-    horario_escolhido = self.selecionarHorarioWeb(id_funcionario_logado,data,hora)
+    horario_escolhido = self.selecionar_horario_web(id_funcionario_logado,data,hora)
     
     #Selecione o nome do cliente
     cliente_service = Cliente()
-    cliente_escolhido_id = cliente_service.pesquisarClienteWeb(nome,num)
+    cliente_escolhido_id = cliente_service.pesquisar_cliente_web(nome,num)
     
     #Selecione o servico
     servicos_service = ServicosService()
-    servicos_ids = servicos_service.selecionarServicoWeb(nomesServicos)
+    servicos_ids = servicos_service.selecionar_servico_web(nomesServicos)
     
     #Passar para o banco
     agendamento = repo_agendamento.cadastrar_horario(cliente_escolhido_id,id_funcionario_logado,horario_escolhido,data)
-    agendamento_id = agendamento[0]
+    agendamento_id = agendamento.id
 
     #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
     for servico_id in servicos_ids:
-      AgendamentoRepository.cadastrar_servico_agendamento(servico_id,agendamento_id)
+      repo_agendamento  .cadastrar_servico_agendamento(servico_id,agendamento_id)
     return True
 
-  def selecionarHorarioWeb(self,id_funcionario_logado:int, data:str, horario_escolhido:str) -> str:
-    horarios = AgendamentosService.gerarHorarios()
+  def selecionar_horario_web(self,id_funcionario_logado:int, data:str, horario_escolhido:str) -> str:
+    horarios = AgendamentosService.gerar_horarios()
     tudoHorarios = self.mostrarAgendaWeb(id_funcionario_logado,data)
+    horario_escolhido = self.converter_hora(horario_escolhido)
+    data = self.converter_data(data)
     ocupados = []
     for horario in tudoHorarios:
       if horario['status'] == 'Ocupado':
@@ -163,40 +170,37 @@ class AgendamentosService:
     return horario_escolhido
 
   def mostrarAgendaWeb(self,id_funcionario_logado:int, data:str) -> list:
-    conexao = conectar()
-    cursor = conexao.cursor()
     ocupados = []
     tudoHorarios = []
-    horarios = AgendamentosService.gerarHorarios()
-    cursor.execute("""
-          SELECT horario, clientes.nome, servicos.nome, status,valor_pago,forma_pagamento
-          FROM agendamentos
-          INNER JOIN agendamentos_servicos ON agendamentos.id = agendamentos_servicos.agendamentos_id
-          INNER JOIN servicos ON agendamentos_servicos.servicos_id = servicos.id
-          INNER JOIN clientes ON agendamentos.cliente_id = clientes.id
-          WHERE funcionario_id = ?
-          AND data = ?
-    """, (id_funcionario_logado, data))
-
-    horariosDia = cursor.fetchall()
+    horarios = AgendamentosService.gerar_horarios()
+    data = self.converter_data(data)
+    horarios_dia = repo_agendamento.trazer_horarios_dias(data,id_funcionario_logado)
 
     for horario in horarios:
         encontrado = False
 
-        for agendamento in horariosDia:
-            hora, cliente, servico, status, valorPago,formaPagamento = agendamento
+        for agendamento in horarios_dia:
+            hora = agendamento.horario
+            cliente = agendamento.cliente.nome
+            servicos_agendamentos = agendamento.servicos_agendamentos
+            servico_total = []
+            for servico_agendamento in servicos_agendamentos:
+              servico_total.append(servico_agendamento.servico.nome)
+            status = agendamento.status
+            valor_pago = agendamento.valor_pago
+            forma_pagamento = agendamento.forma_pagamento
 
             if horario == hora:
-                tudoHorarios.append({"hora":horario,"status":"Ocupado","cliente":cliente,"servico":servico,"concluido":status,"valorPago":valorPago,"formaPagamento":formaPagamento})
+                tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Ocupado","cliente":cliente,"servico":servico_total,"concluido":status,"valorPago":valor_pago,"formaPagamento":forma_pagamento})
                 encontrado = True
                 ocupados.append(agendamento)
                 break
 
         if not encontrado:
-            tudoHorarios.append({"hora":horario,"status":"Livre"})
+            tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Livre"})
     return tudoHorarios
   
-  def selecionarDataWeb(self,data:str) -> str:
+  def selecionar_data_web(self,data:str) -> str:
     #Pego a data atual
     dataAtual:str = datetime.now()
 
@@ -208,26 +212,33 @@ class AgendamentosService:
       raise AgendamentoError("Essa data esta no passado")
     
     #Se tiver tudo certo retorno a data
-    return data
+    return dataUsuario
 
-  def excluirAgendamentoWeb(self,funcionario_id, data, hora) -> bool:
+  def excluirAgendamentoWeb(self,funcionario_id:int, data:str, hora:str) -> bool:
     # Busca o ID do agendamento para poder remover as dependências primeiro (tabela agendamentos_servicos)
-    agendamento = AgendamentoRepository.buscar_agendamento(funcionario_id,data,hora)
+    # Passar data e hora para o tipo correto
+    data = self.converter_data(data)
+    hora = self.converter_hora(hora)
+
+    agendamento = repo_agendamento.buscar_agendamento(funcionario_id,data,hora)
     
     #Caso nao exista agendamento
     if not agendamento:
       raise AgendamentoError("Não existe esse agendamento")
-    agendamento_id = agendamento[0]
+    agendamento_id = agendamento.id
 
     # Remove os serviços vinculados a esse agendamento
-    AgendamentoRepository.excluir_servicos_agendamentos(agendamento_id)
+    repo_agendamento.excluir_servicos_agendamentos(agendamento_id)
 
     # Remove o agendamento principal
-    AgendamentoRepository.excluir_agendamento(agendamento)
+    repo_agendamento.excluir_agendamento(agendamento)
 
     return True
     
   def atualizarPagoWeb(self,valor,forma_pag,funcionario_id,data,hora) -> bool:
+    data = self.converter_data(data)
+    hora = self.converter_hora(hora)
+
     status = "confirmado"
     formas_de_pag = ["pix",'debito','dinheiro','credito']
     valor_formatado = float(valor)
@@ -238,32 +249,50 @@ class AgendamentosService:
     if not forma_pag in formas_de_pag:
       raise AgendamentoError("Forma de pagamento inválida")
     
-    AgendamentoRepository.atualizar_agendamento(valor_formatado,forma_pag,status,funcionario_id,data,hora)
+    repo_agendamento.atualizar_agendamento(valor_formatado,forma_pag,status,funcionario_id,data,hora)
 
     return True
 
+  def converter_hora(self,hora):
+    if isinstance(hora,str):
+      hora = datetime.strptime(hora,"%H:%M").time()
+    elif hora is None:
+      raise AgendamentoError("Nao foi possivel converter a hora")
+    return hora
+  
+  def converter_data(self,data):
+    if isinstance(data,str):
+      data = datetime.strptime(data, "%d/%m/%Y").date()
+    elif data is None:
+      raise AgendamentoError("Nao foi possivel converter a data")
+    
+    return data
+    
 
 
 #Clientes(ORM OK)
 
 class Cliente:
-  def pesquisarClienteWeb(self,nome,num) -> int:
+  def pesquisar_cliente_web(self,nome:str,num:str) -> int:
     cliente_encontrado = repo_cliente.buscar_cliente(nome)
-    cliente_encontrado_id = cliente_encontrado[0]
+    cliente_encontrado_id = cliente_encontrado.id
 
     if not cliente_encontrado_id:
-      clienteCadastrado = self.cadastrarClienteWeb(nome,num)
+      clienteCadastrado = self.cadastrar_cliente_web(nome,num)
       return clienteCadastrado
 
     return cliente_encontrado_id
   
-  def cadastrarClienteWeb(self,nome,numero) -> int:
+  def cadastrar_cliente_web(self,nome:str,numero:str) -> int:
     cliente = repo_cliente.cadastrar_cliente(nome,numero)
-    cliente_id = cliente[0]
+    cliente_id = cliente.id
     if not cliente_id:
       raise ClienteError("Nao foi possivel cadastrar o cliente")
     return cliente_id
 
-  def buscarNomeWeb(self,nome) -> list:
+  def buscar_nome_web(self,nome:str) -> list:
     clientes_encontrados = repo_cliente.busca_pesquisa_cliente(nome)
-    return clientes_encontrados
+    lista_clientes = []
+    for cliente in clientes_encontrados:
+      lista_clientes.append((cliente.id,cliente.nome,cliente.numero))
+    return lista_clientes

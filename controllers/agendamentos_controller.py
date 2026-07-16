@@ -36,7 +36,7 @@ def buscarNome():
     dados = request.json
     nomeCliente = dados['nomeCliente']
     if request.method == "POST":
-        nomesEncontrados = repo_cliente.buscarNomeWeb(nomeCliente)
+        nomesEncontrados = repo_cliente.buscar_nome_web(nomeCliente)
         return  nomesEncontrados
 
 
@@ -45,7 +45,7 @@ def buscarNome():
 def calendario():
     #Pego os dados do js
     dados = request.json
-    dataSelecionada = "0"+dados['data']
+    dataSelecionada = dados['data']
     idFuncionario = dados['idFuncionario']
     
 
@@ -59,10 +59,10 @@ def calendario():
 @login_required   
 def buscarServico():
     dados = request.json
-    nomeServico = dados['nomeServico']
+    nome_servico = dados['nomeServico']
     if request.method == "POST":
-        servicosEncontrados = repo_servico.buscarServicoWeb(nomeServico)
-        return servicosEncontrados
+        servicos_encontrados = repo_servico.buscarServicoWeb(nome_servico)
+        return servicos_encontrados
 
 
 

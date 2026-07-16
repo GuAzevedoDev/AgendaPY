@@ -7,13 +7,12 @@ class Agendamentos(Base):
   cliente_id = db.Column(
     db.Integer,
     db.ForeignKey("clientes.id"),
-    primary_key=True
   )
-  funcionario_id = db.Column(db.Integer,db.ForeignKey("funcionarios.id"),primary_key=True)
-  horario = db.Column(db.String,nullable = False)
+  funcionario_id = db.Column(db.Integer,db.ForeignKey("funcionarios.id"))
+  horario = db.Column(db.Time,nullable = False)
   data = db.Column(db.Date,nullable = False)
-  valor_pago = db.Column(db.Integer,nullable = False)
-  forma_pagamento = db.Column(db.Integer,nullable = False)
+  valor_pago = db.Column(db.Integer,nullable = True )
+  forma_pagamento = db.Column(db.Integer,nullable = True)
   status = db.Column(db.Enum('confirmado','cancelado','concluido',name = 'status_type'),default='confirmado')
 
   cliente = db.relationship('Clientes',back_populates= "agendamentos")
