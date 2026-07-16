@@ -19,6 +19,6 @@ if __name__ == "__main__":
         # agendamento = agendamento.mostrarAgendaWeb(1,data)
         # servico = servico.cadastrarServicosWeb("Escova",180)
         # cliente = cliente.cadastrar_cliente_web("Dona Geralda","31980257381")
-        # agendamento = repo_agendamento.cadastrar_horario(1,1,hora,data,100,"pix")
+        # agendamento = repo_agendamento.cadastrar_horario(1,1,hora,data)
         # agendamento_servico = repo_agendamento.cadastrar_servico_agendamento(1,1)
 

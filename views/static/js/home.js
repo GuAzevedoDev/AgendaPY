@@ -64,95 +64,95 @@ let datas = {
 
 //Adiciona os dias no html
 function mostraDias(diaX) {
-  //Pego o ultimo dia do mes
-  //Zero do proximo mes e o ultimo dia do anterior
-  let ultimoDia = new Date(datas.ano, datas.mes, 0).getDate();
+  // //Pego o ultimo dia do mes
+  // //Zero do proximo mes e o ultimo dia do anterior
+  // let ultimoDia = new Date(datas.ano, datas.mes, 0).getDate();
 
-  //pego a data e o get day retorna o dia da semana(0 = domingo)
-  let primeiroDia = new Date(datas.ano, datas.mes - 1, 1).getDay();
+  // //pego a data e o get day retorna o dia da semana(0 = domingo)
+  // let primeiroDia = new Date(datas.ano, datas.mes - 1, 1).getDay();
 
-  //Mostra os dias do mes
-  for (let i = 1; i <= primeiroDia; i++) {
-    divDias.innerHTML += `<div class = "diaVazio"></div>`;
-  }
-  for (let i = 1; i <= ultimoDia; i++) {
-    divDias.innerHTML += `<div class="dia" data-data="${i}/${String(datas.mes).padStart(2, "0")}/${datas.ano}" data-dia = "${i}">${i} </div>`;
-  }
+  // //Mostra os dias do mes
+  // for (let i = 1; i <= primeiroDia; i++) {
+  //   divDias.innerHTML += `<div class = "diaVazio"></div>`;
+  // }
+  // for (let i = 1; i <= ultimoDia; i++) {
+  //   divDias.innerHTML += `<div class="dia" data-data="${i}/${String(datas.mes).padStart(2, "0")}/${datas.ano}" data-dia = "${i}">${i} </div>`;
+  // }
 
-  //Atualiza dados em cima do calendario
-  mesCima.innerHTML = meses[datas.mes - 1];
-  mesCima.dataset.mesCima = meses[datas.mes - 1];
+  // //Atualiza dados em cima do calendario
+  // mesCima.innerHTML = meses[datas.mes - 1];
+  // mesCima.dataset.mesCima = meses[datas.mes - 1];
 
-  anoCima.innerHTML = datas.ano;
-  anoCima.dataset.anoCima = datas.ano;
-  anoCalendario.innerHTML = `${meses[datas.mes - 1]} ${datas.ano}`;
-  //Atualizo a lista dos dias dos meses
-  diasAtivos = document.querySelectorAll(".dia");
+  // anoCima.innerHTML = datas.ano;
+  // anoCima.dataset.anoCima = datas.ano;
+  // anoCalendario.innerHTML = `${meses[datas.mes - 1]} ${datas.ano}`;
+  // //Atualizo a lista dos dias dos meses
+  // diasAtivos = document.querySelectorAll(".dia");
 
   //Se o calendario estiver no mes e ano atual marco o dia atual
-  if (
-    datas.mesAtual - 1 == meses.indexOf(mesCima.dataset.mesCima) &&
-    anoCima.dataset.anoCima == datas.anoAtual
-  ) {
-    diaCima.textContent = diaX;
-    diaCima.dataset.diaCima = diaX;
-  }
-  //Senao dia 1
-  else {
-    diaCima.textContent = 1;
-    diaCima.dataset.diaCima = "01";
-  }
+  // if (
+  //   datas.mesAtual - 1 == meses.indexOf(mesCima.dataset.mesCima) &&
+  //   anoCima.dataset.anoCima == datas.anoAtual
+  // ) {
+  //   diaCima.textContent = diaX;
+  //   diaCima.dataset.diaCima = diaX;
+  // }
+  // //Senao dia 1
+  // else {
+  //   diaCima.textContent = 1;
+  //   diaCima.dataset.diaCima = "1";
+  // }
 
-  //Percorro todos para pegar o clicado
-  diasAtivos.forEach((dia) => {
-    //Quando chegar no dia atual coloca ele ativo
+  // //Percorro todos para pegar o clicado
+  // diasAtivos.forEach((dia) => {
+  //   //Quando chegar no dia atual coloca ele ativo
 
-    if ("0" + dia.dataset.dia === diaCima.dataset.diaCima) {
-      dia.classList.add("ativo");
-    }
+  //   if (dia.dataset.dia === diaCima.dataset.diaCima) {
+  //     dia.classList.add("ativo");
+  //   }
 
-    //Quando clicado tiro a classe de todos
-    dia.addEventListener("click", () => {
-      diasAtivos.forEach((diaRemove) => {
-        diaRemove.classList.remove("ativo");
-      });
+  //   //Quando clicado tiro a classe de todos
+  //   dia.addEventListener("click", () => {
+  //     diasAtivos.forEach((diaRemove) => {
+  //       diaRemove.classList.remove("ativo");
+  //     });
 
-      //Atualizo o dia em cima para o texto do clicado
-      diaCima.innerHTML = dia.dataset.dia;
-      diaCima.dataset.diaCima = dia.dataset.dia;
+  //     //Atualizo o dia em cima para o texto do clicado
+  //     diaCima.innerHTML = dia.dataset.dia;
+  //     diaCima.dataset.diaCima = dia.dataset.dia;
 
-      //Me retorna o dia da semana atual
-      let diaSemanaAtual = new Date(
-        datas.ano,
-        datas.mes - 1,
-        dia.dataset.dia,
-      ).getDay();
+  //     //Me retorna o dia da semana atual
+  //     let diaSemanaAtual = new Date(
+  //       datas.ano,
+  //       datas.mes - 1,
+  //       dia.dataset.dia,
+  //     ).getDay();
 
-      mostraDiaSemana.innerHTML = diasSemana[diaSemanaAtual];
-      diaSemana.innerHTML = `${diasSemana[diaSemanaAtual]}, ${dia.dataset.dia} de ${mesCima.dataset.mesCima}`;
+  //     mostraDiaSemana.innerHTML = diasSemana[diaSemanaAtual];
+  //     diaSemana.innerHTML = `${diasSemana[diaSemanaAtual]}, ${dia.dataset.dia} de ${mesCima.dataset.mesCima}`;
 
-      //Envio o dia clicado para o back
-      fetch("/agendar/calendario", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: dia.dataset.data,
-          idFuncionario: idFuncionario,
-        }),
-      })
-        .then((resposta) => resposta.json()) // converte para JSON
-        .then((dados) => {
-          agendaDiv.innerHTML = "";
-          mostrarAgenda(dados);
-        });
+      // //Envio o dia clicado para o back
+      // fetch("/agendar/calendario", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     data: dia.dataset.data,
+      //     idFuncionario: id_funcionario,
+      //   }),
+      // })
+      //   .then((resposta) => resposta.json()) // converte para JSON
+      //   .then((dados) => {
+      //     agendaDiv.innerHTML = "";
+      //     mostrarAgenda(dados);
+      //   });
 
       //Adiciono apenas no clicado
-      dia.classList.add("ativo");
-    });
-  });
-}
+//       dia.classList.add("ativo");
+//     });
+//   });
+// }
 
 function somaSubtrai(sinal) {
   //Se o mes for 12 e o usuario pedir para somar um ano volta para mes 1
@@ -329,7 +329,7 @@ function mostrarAgenda(dados) {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                idFuncionario: idFuncionario,
+                idFuncionario: id_funcionario,
                 dataAgendamento: dataAgendamento,
                 horaAgendamento: horaAgendamento,
               }),
@@ -388,7 +388,7 @@ function funcionarioId() {
 
   //Percorro para deixar ativado o funcionario atual
   funcionarios.forEach((funcionario) => {
-    if (idFuncionario == funcionario.dataset.id) {
+    if (id_funcionario == funcionario.dataset.id) {
       funcionario.classList.add("ativo");
     }
   });
@@ -402,7 +402,7 @@ function funcionarioId() {
       });
 
       //Atualizo o idFuncionario para o clicado
-      idFuncionario = funcionario.dataset.id;
+      id_funcionario = funcionario.dataset.id;
 
       //Coloco a classe ativo no clicado
       funcionario.classList.add("ativo");
@@ -476,7 +476,7 @@ function buscarServico() {
     })
       .then((resposta) => resposta.json()) // converte para JSON
       .then((servicos) => {
-        console.log(servicos)
+        console.log(servicos);
         listaServicos.innerHTML = "";
         servicos.forEach((servico) => {
           listaServicos.innerHTML += `<li class="servico-lista" data-servico="${servico[1]}"> ${servico[1]} </li>`;
@@ -563,7 +563,7 @@ function agendar(servicosAtivos) {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        idFuncionario: idFuncionario,
+        idFuncionario: id_funcionario,
         nomesServicos: nomeDosServicos, //Mudar para lista pegando o nome dos servicos,
         nomeCliente: inputNome.value,
         numeroCliente: inputNumero.value,
@@ -638,7 +638,7 @@ function atualizarPag(ocupados) {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        idFuncionario: idFuncionario,
+        idFuncionario: id_funcionario,
         valorAgendamento: inputValor.value,
         formaPagamento: formaPagamento.id,
         dataAgendamento: dataPag,
@@ -775,7 +775,7 @@ function atualizarTituloAgenda() {
   // Percorre a lista de funcionários cadastrados na tela
   funcionarios.forEach((funcionario) => {
     // Se for o funcionário ativo no carregamento inicial (verificando o ID)
-    if (funcionario.dataset.id == idFuncionario) {
+    if (funcionario.dataset.id == id_funcionario) {
       // Define o título inicial usando o atributo data-nome do profissional
       agendaTitulo.textContent = `Agenda de ${funcionario.dataset.nome}`;
     }

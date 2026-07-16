@@ -148,7 +148,7 @@ class AgendamentosService:
 
     #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
     for servico_id in servicos_ids:
-      repo_agendamento  .cadastrar_servico_agendamento(servico_id,agendamento_id)
+      repo_agendamento.cadastrar_servico_agendamento(servico_id,agendamento_id)
     return True
 
   def selecionar_horario_web(self,id_funcionario_logado:int, data:str, horario_escolhido:str) -> str:
