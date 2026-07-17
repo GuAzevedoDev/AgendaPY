@@ -396,7 +396,8 @@
   background: var(--cor-p1);
 }
 
-.horarioTudo.Ocupado .status {
+.horarioTudo.ocupado .status,
+.horarioTudo.confirmado .status {
   background: #fdf6f3;
   border: 1px solid rgba(188, 122, 97, 0.2);
   border-left: 3px solid var(--cor-p1);
@@ -411,11 +412,13 @@
   align-items: center;
 }
 
-.horarioTudo.Ocupado .status::before {
+.horarioTudo.ocupado .status::before,
+.horarioTudo.confirmado .status::before {
   display: none;
 }
 
-.horarioTudo.Ocupado .status::before {
+.horarioTudo.ocupado .status::before,
+.horarioTudo.confirmado .status::before {
   content: "";
   position: absolute;
   left: 0;
@@ -426,11 +429,13 @@
   border-radius: 50px;
 }
 
-.horarioTudo.Ocupado .horario::before {
+.horarioTudo.ocupado .horario::before,
+.horarioTudo.confirmado .horario::before {
   display: none;
 }
 
-.horarioTudo.Ocupado .status .detalhes {
+.horarioTudo.ocupado .status .detalhes,
+.horarioTudo.confirmado .status .detalhes {
   padding: 3px 10px;
   justify-self: right;
   display: flex;
@@ -445,17 +450,20 @@
   cursor: pointer;
 }
 
-.horarioTudo.Ocupado .status .detalhes svg {
+.horarioTudo.ocupado .status .detalhes svg,
+.horarioTudo.confirmado .status .detalhes svg {
   transition: 0.3s;
   border-radius: 50px;
   fill: #9e9a9c;
 }
 
-.horarioTudo.Ocupado .status .detalhes:hover {
+.horarioTudo.ocupado .status .detalhes:hover,
+.horarioTudo.confirmado .status .detalhes:hover {
   background: var(--cor-p1);
 }
 
-.horarioTudo.Ocupado .status .detalhes:hover svg {
+.horarioTudo.ocupado .status .detalhes:hover svg,
+.horarioTudo.confirmado .status .detalhes:hover svg {
   fill: var(--cor-p2);
 }
 
@@ -551,19 +559,19 @@
   font-size: 1rem;
 }
 
-.ativoPag.Ocupado .status {
+.ativoPag.confirmado .status {
   background: #198754;
   color: var(--cor-1);
 }
 
-.ativoPag.Ocupado .status {
+.ativoPag.confirmado .status {
   background: #f6faf7;
   border: 1px solid rgba(25, 135, 84, 0.2);
   border-left: 3px solid #198754;
   color: inherit;
 }
 
-.ativoPag.Ocupado .status::before {
+.ativoPag.confirmado .status::before {
   display: none;
 }
 
@@ -619,13 +627,13 @@
 }
 
 /* 2. CONFIGURAÇÃO DE TOOLTIP PARA OS TRÊS PONTOS (DETALHES) */
-.horarioTudo.Ocupado .status .detalhes {
+.horarioTudo.ocupado .status .detalhes {
   position: relative;
   /* Importante para o posicionamento do menu e do tooltip */
 }
 
 /* Criamos o corpo do tooltip via pseudo-elemento ::after */
-.horarioTudo.Ocupado .status .detalhes::after {
+.horarioTudo.ocupado .status .detalhes::after {
   content: "Ver mais";
   position: absolute;
   bottom: 125%;
@@ -655,13 +663,13 @@
 }
 
 /* Efeito hover nos três pontos: revela o tooltip */
-.horarioTudo.Ocupado .status .detalhes:hover::after {
+.horarioTudo.ocupado .status .detalhes:hover::after {
   opacity: 1;
   transform: translateX(-65%) scale(1);
 }
 
 /* MUITO IMPORTANTE: Esconde o tooltip "Ver mais" quando o menu estiver ativamente aberto */
-.horarioTudo.Ocupado .status .detalhes.ativo::after {
+.horarioTudo.ocupado .status .detalhes.ativo::after {
   display: none !important;
 }
 

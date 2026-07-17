@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {%block titulo%}Home{%endblock%}
 {%block id%}home{%endblock%}
-{%block js_arquivo%}home.js{%endblock%}
+{%block script_tag%}<script type="module" defer src="../static/js/main.js"></script>{%endblock%}
 
 {%block conteudo%}
 <header class="header-bg">
@@ -273,7 +273,7 @@
 
 
 <script>
-  let id_funcionario = {{ sessaoFun.funcionario_id }}
+  window.id_funcionario = {{ sessaoFun.funcionario_id }}
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
 <script src="../static/js/mascaras.js"></script>

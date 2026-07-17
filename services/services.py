@@ -191,7 +191,7 @@ class AgendamentosService:
             forma_pagamento = agendamento.forma_pagamento
 
             if horario == hora:
-                tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Ocupado","cliente":cliente,"servico":servico_total,"concluido":status,"valorPago":valor_pago,"formaPagamento":forma_pagamento})
+                tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Ocupado","cliente":cliente,"servico":servico_total,"status":status,"valorPago":valor_pago,"formaPagamento":forma_pagamento})
                 encontrado = True
                 ocupados.append(agendamento)
                 break

@@ -16,6 +16,11 @@ export let agendaDiv = document.querySelector(".agenda-horarios");
 
 export let diaAgenda = document.querySelector(".dia-agenda");
 
+export let inputNome = document.querySelector(".nomeCliente");
+export let inputNumero = document.querySelector(".numeroCliente");
+export let listaNomes = document.querySelector(".lista-nomes");
+export let nomesLista = document.querySelectorAll(".nome-lista");
+
 export let meses = [
   "Janeiro",
   "Fevereiro",
