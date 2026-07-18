@@ -13,7 +13,6 @@ repo_servico = ServicosService()
 def agendar():
     #Pego do JS
     dados = request.json
-    print(dados)
     #Salvo em variaveis
     idFuncionario = dados["idFuncionario"]
     nomeCliente = dados["nomeCliente"]

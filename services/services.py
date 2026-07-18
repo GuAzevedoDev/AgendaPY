@@ -239,10 +239,8 @@ class AgendamentosService:
 
     return True
     
-  def validar_data_hora(self,funcionario_id:int,data:str,hora:str):
-    agendamento_mesma_data = repo_agendamento.buscar_agendamento(funcionario_id,data,hora)
-
-    print(agendamento_mesma_data)
+  def validar_data_hora(self,funcionario_id:int,data:datetime,hora:str):
+    agendamento_mesma_data = repo_agendamento.buscar_agendamento(funcionario_id,data.date(),hora)
     
     if agendamento_mesma_data:
       raise AgendamentoError("Ja existe um agendamento nessa data")

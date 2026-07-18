@@ -412,6 +412,19 @@
   align-items: center;
 }
 
+.horarioTudo.ocupado .status.observacao,
+.horarioTudo.confirmado .status.observacao {
+  grid-template-columns: auto auto auto 1fr;
+}
+
+.observacao-icon {
+  display: flex;
+  align-items: center;
+}
+.observacao-icon svg {
+  height: 20px;
+}
+
 .horarioTudo.ocupado .status::before,
 .horarioTudo.confirmado .status::before {
   display: none;
@@ -552,11 +565,9 @@
 }
 
 .aviso-modal {
-  position: absolute;
-  bottom: -20px;
-  left: 0;
   color: red;
   font-size: 1rem;
+  margin-top: 10px;
 }
 
 .ativoPag.confirmado .status {
@@ -627,13 +638,15 @@
 }
 
 /* 2. CONFIGURAÇÃO DE TOOLTIP PARA OS TRÊS PONTOS (DETALHES) */
-.horarioTudo.ocupado .status .detalhes {
+.horarioTudo.ocupado .status .detalhes,
+.horarioTudo.confirmado .status .detalhes {
   position: relative;
   /* Importante para o posicionamento do menu e do tooltip */
 }
 
 /* Criamos o corpo do tooltip via pseudo-elemento ::after */
-.horarioTudo.ocupado .status .detalhes::after {
+.horarioTudo.ocupado .status .detalhes::after,
+.horarioTudo.confirmado .status .detalhes::after {
   content: "Ver mais";
   position: absolute;
   bottom: 125%;
@@ -663,7 +676,8 @@
 }
 
 /* Efeito hover nos três pontos: revela o tooltip */
-.horarioTudo.ocupado .status .detalhes:hover::after {
+.horarioTudo.ocupado .status .detalhes:hover::after,
+.horarioTudo.confirmado .status .detalhes:hover::after {
   opacity: 1;
   transform: translateX(-65%) scale(1);
 }
