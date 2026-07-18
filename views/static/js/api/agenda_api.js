@@ -44,7 +44,7 @@ export async function adicionarPagamento(idFuncionario, valorAgendamento, formaP
   return await resposta.json();
 }
 
-export async function agendarHorario(idFuncionario, nomesServicos, nomeCliente, numeroCliente, horaAgendamento, dataAgendamento) {
+export async function agendarHorario(idFuncionario, nomesServicos, nomeCliente, numeroCliente, horaAgendamento, dataAgendamento,observacao) {
   const resposta = await fetch("/agendar", {
     method: "POST",
     headers: {
@@ -57,6 +57,7 @@ export async function agendarHorario(idFuncionario, nomesServicos, nomeCliente, 
       numeroCliente,
       horaAgendamento,
       dataAgendamento,
+      observacao
     }),
   });
   return await resposta.json();

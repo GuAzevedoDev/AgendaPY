@@ -2,8 +2,8 @@ from models import db,Agendamentos,ServicosAgendamentos
 from exeptions import AgendamentoError
 
 class AgendamentoRepository:
-  def cadastrar_horario(self,cliente_id:int,funcionario_id:int,horario:str,data:str):
-    agendamento = Agendamentos(cliente_id = cliente_id,funcionario_id = funcionario_id,horario = horario,data = data)
+  def cadastrar_horario(self,cliente_id:int,funcionario_id:int,horario:str,data:str,observacao:str):
+    agendamento = Agendamentos(cliente_id = cliente_id,funcionario_id = funcionario_id,horario = horario,data = data,observacao = observacao)
 
     db.session.add(agendamento)
     db.session.commit()

@@ -127,7 +127,7 @@ class AgendamentosService:
       #Retorno os horarios
     return horarios
   
-  def marcarHorarioWeb(self,id_funcionario_logado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str) -> str:
+  def marcarHorarioWeb(self,id_funcionario_logado:int,nome:str,num:str,hora:str,data:str,nomesServicos:str,observacao:str) -> str:
     #Selecionar data
     data = self.selecionar_data_web(data)
 
@@ -143,7 +143,7 @@ class AgendamentosService:
     servicos_ids = servicos_service.selecionar_servico_web(nomesServicos)
     
     #Passar para o banco
-    agendamento = repo_agendamento.cadastrar_horario(cliente_escolhido_id,id_funcionario_logado,horario_escolhido,data)
+    agendamento = repo_agendamento.cadastrar_horario(cliente_escolhido_id,id_funcionario_logado,horario_escolhido,data,observacao)
     agendamento_id = agendamento.id
 
     #Itero a lista dos ids dos servicos escolhidos e salvo na tabela com id do mesmo agendamento
@@ -275,11 +275,11 @@ class AgendamentosService:
 class Cliente:
   def pesquisar_cliente_web(self,nome:str,num:str) -> int:
     cliente_encontrado = repo_cliente.buscar_cliente(nome)
-    cliente_encontrado_id = cliente_encontrado.id
 
-    if not cliente_encontrado_id:
+    if not cliente_encontrado:
       clienteCadastrado = self.cadastrar_cliente_web(nome,num)
       return clienteCadastrado
+    cliente_encontrado_id = cliente_encontrado.id
 
     return cliente_encontrado_id
   

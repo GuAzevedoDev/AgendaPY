@@ -12,7 +12,8 @@ class Agendamentos(Base):
   horario = db.Column(db.Time,nullable = False)
   data = db.Column(db.Date,nullable = False)
   valor_pago = db.Column(db.Integer,nullable = True )
-  forma_pagamento = db.Column(db.Integer,nullable = True)
+  forma_pagamento = db.Column(db.String,nullable = True)
+  observacao = db.Column(db.String,nullable = True)
   status = db.Column(db.Enum('confirmado','cancelado','ocupado',name = 'status_type'),default='ocupado')
 
   cliente = db.relationship('Clientes',back_populates= "agendamentos")

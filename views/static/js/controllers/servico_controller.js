@@ -69,6 +69,7 @@ function configurarBotaoAgendar() {
   const inputNumero = document.querySelector(".numeroCliente");
   const inputHora = document.querySelector(".horaCliente");
   const inputData = document.querySelector(".dataCliente");
+  const areaObservacao = document.querySelector(".observacaoAgendamento");
   const form = document.querySelector("#formAgendamento");
 
   botaoAgendar.addEventListener("click", async function agendamento(event) {
@@ -102,7 +103,8 @@ function configurarBotaoAgendar() {
         inputNome.value,
         inputNumero.value,
         inputHora.value,
-        inputData.value
+        inputData.value,
+        areaObservacao.value
       );
 
       if (dados["mensagem"] === true) {

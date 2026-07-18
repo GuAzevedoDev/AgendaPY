@@ -20,12 +20,13 @@ def agendar():
     nomesServicos = dados["nomesServicos"]
     dataAgendamento = dados["dataAgendamento"]
     horaAgendamento = dados["horaAgendamento"]
+    observacaoAgendamento = dados["observacaoAgendamento"]
 
     #Validacao do formulario de agendamento
     if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
         return jsonify({"mensagem": "Preencha todos os campos"})
     
-    mensagemAgendamento = repo_agendamento.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos)
+    mensagemAgendamento = repo_agendamento.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos,observacaoAgendamento)
     return jsonify({"mensagem": mensagemAgendamento})
 
 

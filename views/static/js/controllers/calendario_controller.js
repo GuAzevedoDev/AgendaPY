@@ -52,16 +52,16 @@ function configurarDiasListeners() {
   dias.forEach((dia) => {
     dia.addEventListener("click", async () => {
       calendarioUI.marcar_dia_ativo(dias, dia);
-      
       const diaSelecionado = dia.dataset.dia;
-      
       calendarioUI.atualizar_dia_selecionado(
         dom.diaCima,
         dom.mostraDiaSemana,
         dom.diaSemana,
         dom.diasSemana,
         diaSelecionado,
-        dom.meses[dom.datas.mes - 1]
+        dom.meses[dom.datas.mes - 1],
+        dom.anoCima,
+        dom.datas.mes
       );
       
       // Load the agenda for the clicked day
