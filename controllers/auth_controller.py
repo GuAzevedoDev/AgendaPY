@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash,Blueprint
-import hashlib
 from auth import login_required
+from exeptions import AgendaPy
 from services.services import Funcionario
 
+
+service_funcionario = Funcionario()
 auth_bp = Blueprint("auth",__name__)
 
 
@@ -13,32 +15,34 @@ def login():
         return render_template("login.html")
     
     #Se estiver no metodo POST ele pega os dados do usuario 
-    elif request.method == "POST":
-        #Pega dado do form HTML
-        usuario = request.form["nomeUsuario"]
-        #O encode transforma o utf puro pra bytes pois o hash so aceita bytes
-        senha = request.form["senhaUsuario"]
+
+    #Pega dado do form HTML
+    usuario = request.form["nomeUsuario"]
+    #O encode transforma o utf puro pra bytes pois o hash so aceita bytes
+    senha = request.form["senhaUsuario"]
        
-        #validacao de formulario
-        repo_funcionario = Funcionario()
-        if usuario and senha:
-            funcionario = repo_funcionario.loginFuncionarioWeb(usuario, senha)
-        else:
-            flash("Preencha todos os campos"), 400
-            return redirect(url_for("auth.login"))
+    #validacao de formulario
     
-        if not funcionario:
-            flash("Senha ou Usuario incorretos"), 400
-            return redirect(url_for("auth.login"))
-        
+
+    if not usuario or not senha:
+        flash("Preencha todos os campos"), 400
+        return redirect(url_for("auth.login"))
+    try:
+        funcionario = service_funcionario.loginFuncionarioWeb(usuario, senha)
         # login OK
         session["funcionario_id"] = funcionario.id
         session["funcionario_nome"] = funcionario.nome
         session["funcionario_cargo"] = funcionario.cargo
         session["funcionario_funcao"] = funcionario.funcao
-        #Caso passe por todos os retornos o login esta OK e redireciona
+
+        #Caso passe por todos o s retornos o login esta OK e redireciona
         #Dentro da url_for(nome da funcao)
         return redirect(url_for("home.home"))
+    except AgendaPy as e:
+        flash(str(e), "erro")
+        return redirect(url_for("auth.login"))
+        
+       
     
 
 

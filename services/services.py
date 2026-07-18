@@ -134,6 +134,8 @@ class AgendamentosService:
     #Selecionar horario
     horario_escolhido = self.selecionar_horario_web(id_funcionario_logado,data,hora)
     
+    self.validar_data_hora(id_funcionario_logado,data,horario_escolhido)
+
     #Selecione o nome do cliente
     cliente_service = Cliente()
     cliente_escolhido_id = cliente_service.pesquisar_cliente_web(nome,num)
@@ -189,9 +191,10 @@ class AgendamentosService:
             status = agendamento.status
             valor_pago = agendamento.valor_pago
             forma_pagamento = agendamento.forma_pagamento
+            observacao = agendamento.observacao
 
             if horario == hora:
-                tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Ocupado","cliente":cliente,"servico":servico_total,"status":status,"valorPago":valor_pago,"formaPagamento":forma_pagamento})
+                tudoHorarios.append({"hora":horario.strftime("%H:%M"),"status":"Ocupado","cliente":cliente,"servico":servico_total,"status":status,"valorPago":valor_pago,"formaPagamento":forma_pagamento,"observacao":observacao})
                 encontrado = True
                 ocupados.append(agendamento)
                 break
@@ -210,6 +213,7 @@ class AgendamentosService:
     #Se aconteceu antes retorna None
     if dataUsuario.date() < dataAtual.date():
       raise AgendamentoError("Essa data esta no passado")
+    
     
     #Se tiver tudo certo retorno a data
     return dataUsuario
@@ -235,6 +239,14 @@ class AgendamentosService:
 
     return True
     
+  def validar_data_hora(self,funcionario_id:int,data:str,hora:str):
+    agendamento_mesma_data = repo_agendamento.buscar_agendamento(funcionario_id,data,hora)
+
+    print(agendamento_mesma_data)
+    
+    if agendamento_mesma_data:
+      raise AgendamentoError("Ja existe um agendamento nessa data")
+
   def atualizarPagoWeb(self,valor,forma_pag,funcionario_id,data,hora) -> bool:
     data = self.converter_data(data)
     hora = self.converter_hora(hora)

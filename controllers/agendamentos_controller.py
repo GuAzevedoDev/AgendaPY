@@ -1,18 +1,19 @@
 from flask import Blueprint,jsonify,request
 from auth import login_required
 from services.services import AgendamentosService,Cliente,ServicosService
+from exeptions import AgendaPy,AgendamentoError,ClienteError,FuncionarioError,ServicoError
 
 agendamento_bp = Blueprint('agendamento',__name__,url_prefix="/agendar")
-repo_agendamento = AgendamentosService()
+agendamento_service = AgendamentosService()
 repo_cliente = Cliente()
 repo_servico = ServicosService()
 
-@agendamento_bp.route('/', methods=["GET", "POST"])
+@agendamento_bp.route('/', methods=["POST"])
 @login_required     #Verifica se existe um funcionario logado
 def agendar():
     #Pego do JS
     dados = request.json
-
+    print(dados)
     #Salvo em variaveis
     idFuncionario = dados["idFuncionario"]
     nomeCliente = dados["nomeCliente"]
@@ -20,15 +21,25 @@ def agendar():
     nomesServicos = dados["nomesServicos"]
     dataAgendamento = dados["dataAgendamento"]
     horaAgendamento = dados["horaAgendamento"]
-    observacaoAgendamento = dados["observacaoAgendamento"]
+    observacaoAgendamento = dados["observacao"]
 
     #Validacao do formulario de agendamento
     if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
-        return jsonify({"mensagem": "Preencha todos os campos"})
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Preencha todos os campos"
+            }),400
     
-    mensagemAgendamento = repo_agendamento.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos,observacaoAgendamento)
-    return jsonify({"mensagem": mensagemAgendamento})
-
+    try:
+        agendamento_service.marcarHorarioWeb(idFuncionario,nomeCliente,numeroCliente,horaAgendamento,dataAgendamento,nomesServicos,observacaoAgendamento)
+        return jsonify({
+            "sucesso": True,
+            }),201
+    except AgendaPy as e:
+        return jsonify({
+            "sucesso": False,
+            "mensagem": str(e)
+            }),400
 
 
 @agendamento_bp.route('/buscaNome', methods=["GET", "POST"])
@@ -51,8 +62,17 @@ def calendario():
     
 
     #Chamo a funcao
-    horarios = repo_agendamento.mostrarAgendaWeb(idFuncionario,dataSelecionada)
-    return jsonify(horarios)
+    try:
+        horarios = agendamento_service.mostrarAgendaWeb(idFuncionario,dataSelecionada)
+        return jsonify({
+            "sucesso": True,
+            "mensagem":horarios
+            }),200
+    except AgendaPy as e:
+        return jsonify({
+            "sucesso": False,
+            "mensagem":str(e)
+            }),400
 
   
 
@@ -81,11 +101,21 @@ def atualizarPg():
     horaAgendamento = dados["horaAgendamento"]
     #Validacao do formulario de agendamento
     if not valorAgendamento or not formaPagamento or not dataAgendamento or not horaAgendamento:
-        return jsonify({"mensagem": "Preencha todos os campos"})
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Preencha todos os campos"
+            }),400
 
-
-    mensagemPagamento = repo_agendamento.atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
-    return jsonify({"mensagem": mensagemPagamento})
+    try:
+        mensagemPagamento = agendamento_service.atualizarPagoWeb(valorAgendamento,formaPagamento,idFuncionario,dataAgendamento,horaAgendamento)
+        return jsonify({
+            "sucesso": True,
+            })
+    except AgendaPy as e:
+        return jsonify({
+            "sucesso": False,
+            "mensagem": str(e)
+            }),400
 
 
 
@@ -106,8 +136,9 @@ def excluirHorario():
         return jsonify({"mensagem": "Dados incompletos para exclusão", "sucesso": False}), 400
 
     # Tenta excluir o agendamento no banco
-    sucesso = repo_agendamento.excluirAgendamentoWeb(idFuncionario, data, hora)
-    if sucesso:
-        return jsonify({"mensagem": "Horário excluído com sucesso", "sucesso": True})
-    else:
-        return jsonify({"mensagem": "Agendamento não encontrado ou já excluído", "sucesso": False})
+    try:
+        sucesso = agendamento_service.excluirAgendamentoWeb(idFuncionario, data, hora)
+        if sucesso:
+            return jsonify({"mensagem": "Horário excluído com sucesso", "sucesso": True}),200
+    except AgendaPy as e:
+            return jsonify({"mensagem": str(e), "sucesso": False}),400

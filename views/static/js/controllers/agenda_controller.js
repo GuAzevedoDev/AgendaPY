@@ -16,7 +16,10 @@ export function iniciarAgenda() {
 
 export async function carregarAgendaDoDia(diaData) {
   try {
-    const agenda = await agendaApi.enviar_dia_clicado(diaData, window.id_funcionario);
+    const agenda = await agendaApi.enviar_dia_clicado(
+      diaData,
+      window.id_funcionario,
+    );
     dom.agendaDiv.innerHTML = "";
     renderizaAgendamentos(agenda, diaData);
   } catch (err) {
@@ -25,12 +28,12 @@ export async function carregarAgendaDoDia(diaData) {
 }
 
 export function renderizaAgendamentos(agenda, diaData) {
-  agendaUI.mostrar_agenda_horarios(agenda, dom.agendaDiv, diaData);
+  agendaUI.mostrar_agenda_horarios(agenda["mensagem"], dom.agendaDiv, diaData);
 
   const cards = dom.agendaDiv.querySelectorAll(".horarioTudo");
   cards.forEach((card) => {
     const status = card.querySelector(".horario").dataset.status;
-    
+
     if (status === "Livre") {
       const botao = card.querySelector(".botaoAgenda");
       if (botao) {
@@ -76,7 +79,18 @@ function configurarCardOcupadoOuConcluido(card) {
         card.click();
       });
     }
-
+      const opcaoObservacao = menu.querySelector(".opcao-observacao");
+      if (opcaoObservacao) {
+        opcaoObservacao.addEventListener("click", (evento) => {
+          evento.stopPropagation();
+          menu.classList.remove("ativo");
+          detalhesBotao.classList.remove("ativo");
+          let observacaoTexto = document.querySelector(".observacao-texto")
+          observacaoTexto.textContent = card.dataset.observacao
+          abreModal("observacao")
+          
+        });
+      }
     const opcaoExcluir = menu.querySelector(".opcao-excluir");
     if (opcaoExcluir) {
       opcaoExcluir.addEventListener("click", async (evento) => {
@@ -87,13 +101,24 @@ function configurarCardOcupadoOuConcluido(card) {
         const dataAgendamento = card.dataset.data;
         const horaAgendamento = card.dataset.hora;
 
-        if (confirm(`Deseja realmente excluir o agendamento de ${dataAgendamento} às ${horaAgendamento}?`)) {
+        if (
+          confirm(
+            `Deseja realmente excluir o agendamento de ${dataAgendamento} às ${horaAgendamento}?`,
+          )
+        ) {
           try {
-            const dados = await agendaApi.excluir_horario(window.id_funcionario, dataAgendamento, horaAgendamento);
+            const dados = await agendaApi.excluir_horario(
+              window.id_funcionario,
+              dataAgendamento,
+              horaAgendamento,
+            );
             if (dados.sucesso === true || dados.mensagem === true) {
               window.location.reload();
             } else {
-              alert("Erro ao excluir horário: " + (dados.mensagem || "Erro desconhecido"));
+              alert(
+                "Erro ao excluir horário: " +
+                  (dados.mensagem || "Erro desconhecido"),
+              );
             }
           } catch (err) {
             console.error("Erro na requisição de exclusão:", err);
@@ -116,9 +141,12 @@ function configurarCardOcupadoOuConcluido(card) {
 
       document.querySelector(".data-detalhes").innerHTML = informacoes.data;
       document.querySelector(".hora-detalhes").innerHTML = informacoes.hora;
-      document.querySelector(".servico-detalhes").innerHTML = informacoes.servicos;
-      document.querySelector(".pagamento-detalhes").innerHTML = informacoes.formaPagamento;
-      document.querySelector(".valor-detalhes").innerHTML = informacoes.valorPago;
+      document.querySelector(".servico-detalhes").innerHTML =
+        informacoes.servicos;
+      document.querySelector(".pagamento-detalhes").innerHTML =
+        informacoes.formaPagamento;
+      document.querySelector(".valor-detalhes").innerHTML =
+        informacoes.valorPago;
 
       abreModal("detalhes");
     } else {
@@ -135,7 +163,9 @@ function configurarBotaoAtualizarPagamento() {
 
   botaoEnviar.addEventListener("click", async () => {
     const inputValor = document.querySelector(".valorAgendamento");
-    const formaPagamento = document.querySelector('input[name="formaPag"]:checked');
+    const formaPagamento = document.querySelector(
+      'input[name="formaPag"]:checked',
+    );
     const avisos = document.querySelectorAll(".aviso-modal");
     const aviso = avisos[1] || avisos[0];
 
@@ -150,12 +180,11 @@ function configurarBotaoAtualizarPagamento() {
         inputValor.value,
         formaPagamento.id,
         dataPagActive,
-        horaPagActive
+        horaPagActive,
       );
 
-      if (dados["mensagem"] === true) {
+      if (dados["sucesso"] === true) {
         window.location.reload();
-
       } else {
         console.log(dados["mensagem"]);
       }

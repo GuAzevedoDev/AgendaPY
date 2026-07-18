@@ -274,7 +274,21 @@
   </div>
 </dialog>
 
+<dialog class="modal-observacao modal-container">
+  <div class="header-modal">
+    <h1 class="texto">Observacao</h1>
+    <button onclick="document.querySelector('.modal-observacao').close()" aria-label="Fechar modal">
+      <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path opacity="0.5" d="M27.5775 15C27.5775 21.9035 21.9652 27.5 15.0422 27.5C8.11909 27.5 2.50684 21.9035 2.50684 15C2.50684 8.09644 8.11909 2.5 15.0422 2.5C21.9652 2.5 27.5775 8.09644 27.5775 15Z" fill="#D3D3D3" />
+        <path d="M11.2436 11.2121C11.6108 10.846 12.206 10.846 12.5732 11.2121L15.0422 13.6742L17.5113 11.2121C17.8785 10.846 18.4737 10.846 18.8408 11.2121C19.208 11.5782 19.208 12.1718 18.8408 12.538L16.3719 15L18.8408 17.462C19.208 17.8281 19.208 18.4217 18.8408 18.7879C18.4737 19.154 17.8784 19.154 17.5112 18.7879L15.0422 16.3259L12.5733 18.7879C12.2061 19.154 11.6108 19.154 11.2436 18.7879C10.8765 18.4217 10.8765 17.8282 11.2436 17.4621L13.7127 15L11.2436 12.5379C10.8765 12.1718 10.8765 11.5782 11.2436 11.2121Z" fill="#B8B1AE" />
+      </svg>
+    </button>
+  </div>
 
+  <div class="main-modal">
+    <p class="observacao-texto"></p>
+  </div>
+</dialog>
 
 <script>
   window.id_funcionario = {{ sessaoFun.funcionario_id }}

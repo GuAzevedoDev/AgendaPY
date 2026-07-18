@@ -37,9 +37,13 @@ function criar_card_ocupado(horario, agendaDiv, dataDiaAtivo) {
     servico: horario.servico,
     cliente: horario.cliente,
     profissional: horario.profissional,
+    observacao: horario.observacao,
   };
-
-  agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status}" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}">
+  let observacaoOpcao = ""
+  if (agenda.observacao) {
+    observacaoOpcao = '<li class="opcao-observacao">Ver observações</li>';
+  }
+  agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status}" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}" data-observacao="${agenda.observacao}">
         <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
           <div class="status">
             <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
@@ -53,6 +57,7 @@ function criar_card_ocupado(horario, agendaDiv, dataDiaAtivo) {
             <!-- Menu de opções adicionado dentro do botão de detalhes -->
             <ul class="detalhes-menu">
               <li class="opcao-pagamento">Adicionar forma de pagamento</li>
+              ${observacaoOpcao}
               <li class="opcao-excluir">Excluir horário</li>
             </ul>
 </div>
@@ -71,8 +76,14 @@ function criar_card_concluido(horario, agendaDiv, dataDiaAtivo) {
     servico: horario.servico,
     cliente: horario.cliente,
     profissional: horario.profissional,
+    observacao: horario.observacao,
   };
-  agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status} ativoPag" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}" data-valorPago="${agenda.valorPago}" data-formaPag="${agenda.formaPagamento}" data-nomeCliente="${agenda.cliente}" data-servico="${agenda.servico}">
+  let observacaoOpcao = ""
+  
+  if (agenda.observacao) {
+    observacaoOpcao = '<li class="opcao-observacao">Ver observações</li>';
+  }
+  agendaDiv.innerHTML += `<div class="horarioTudo ${agenda.status} ativoPag" data-data="${dataDiaAtivo}" data-hora="${agenda.horario}" data-valorPago="${agenda.valorPago}" data-formaPag="${agenda.formaPagamento}" data-nomeCliente="${agenda.cliente}" data-servico="${agenda.servico}" data-observacao="${agenda.observacao}">
         <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.horario}</div>
           <div class="status">       
             <div class="cliente" data-hora="${agenda.horario}" data-status = "${agenda.status}">${agenda.cliente}</div>
@@ -86,6 +97,7 @@ function criar_card_concluido(horario, agendaDiv, dataDiaAtivo) {
             <!-- Menu de opções adicionado dentro do botão de detalhes -->
             <ul class="detalhes-menu">
               <li class="opcao-pagamento">Adicionar forma de pagamento</li>
+              ${observacaoOpcao}
               <li class="opcao-excluir">Excluir horário</li>
             </ul>
 </div>

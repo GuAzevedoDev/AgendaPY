@@ -11,7 +11,7 @@ export function iniciarClientes() {
       clienteUi.coloca_nome_lista(clientes, dom.listaNomes);
       
       const nomesLista = document.querySelectorAll(".nome-lista");
-      clienteUi.ativa_cliente_selecionado(nomesLista);
+      clienteUi.ativa_cliente_selecionado();
     } catch (err) {
       console.error("Erro ao obter lista de clientes:", err);
     }
