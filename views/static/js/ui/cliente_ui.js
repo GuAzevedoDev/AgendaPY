@@ -1,4 +1,5 @@
 import * as dom from "./dom.js";
+import * as cliente_api from "../api/cliente_api.js";
 
 let indiceSelecionado = -1;
 
@@ -40,7 +41,7 @@ export function coloca_nome_lista(clientes, listaNomes) {
           tabindex="-1">
           ${cliente[1]}
         </li>
-      `
+      `,
     )
     .join("");
 
@@ -90,4 +91,29 @@ export function ativa_cliente_selecionado() {
         break;
     }
   });
+}
+
+export function mostrarClientes(clientes, listaClientes) {
+  clientes.forEach((cliente) => {
+    let dados = {
+      id: cliente["id"],
+      nome: cliente["nome"],
+      numero: cliente["numero"],
+    };
+    listaClientes.innerHTML += `<li class="cliente-item" data-id = "${dados.id}">
+              <div class="cliente-inicial">${dados.nome[0].toUpperCase()}</div>
+              <div class="cliente-info">
+                <h3>${dados.nome}</h3>
+                <span class="cor-3">${dados.numero}</span>
+              </div>
+            </li>`;
+  });
+}
+
+export function marcaClicado(clienteClicado, clientesItens) {
+  //Tirar todos marcados
+  clientesItens.forEach((item) => {
+    item.classList.remove("ativo");
+  });
+  clienteClicado.classList.add("ativo");
 }

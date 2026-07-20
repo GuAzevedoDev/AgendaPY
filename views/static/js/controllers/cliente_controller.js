@@ -2,18 +2,22 @@ import * as dom from "../ui/dom.js";
 import * as clienteApi from "../api/cliente_api.js";
 import * as clienteUi from "../ui/cliente_ui.js";
 
-export function iniciarClientes() {
-  if (!dom.inputNome) return;
+export async function iniciarClientes() {
+  await mostrarClientes();
+  mostraHistoricoCliente();
+}
 
-  dom.inputNome.addEventListener("input", async function pegaNome() {
-    try {
-      const clientes = await clienteApi.pegaNomes(dom.inputNome.value);
-      clienteUi.coloca_nome_lista(clientes, dom.listaNomes);
-      
-      const nomesLista = document.querySelectorAll(".nome-lista");
-      clienteUi.ativa_cliente_selecionado();
-    } catch (err) {
-      console.error("Erro ao obter lista de clientes:", err);
-    }
+export async function mostrarClientes() {
+  let clientes = await clienteApi.mostrarClientes();
+  clienteUi.mostrarClientes(clientes, dom.clientesLista);
+}
+
+export async function mostraHistoricoCliente() {
+  let clientesItens = document.querySelectorAll(".cliente-item");
+  clientesItens.forEach((item) => {
+    item.addEventListener("click", () => {
+      clienteUi.marcaClicado(item, clientesItens);
+      dadosCliente = clienteApi.pegaDadosCliente(item.dataset.id)
+    });
   });
 }

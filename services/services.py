@@ -306,3 +306,56 @@ class Cliente:
     for cliente in clientes_encontrados:
       lista_clientes.append((cliente.id,cliente.nome,cliente.numero))
     return lista_clientes
+
+  def mostrar_clientes(self) -> list:
+    clientes = repo_cliente.trazer_todos_clientes()
+    clientes_totais = []
+    for cliente in clientes:
+      cliente_id = cliente.id
+      cliente_nome = cliente.nome
+      cliente_numero = cliente.numero
+
+      clientes_totais.append({
+        "id": cliente_id,
+        "nome": cliente_nome,
+        "numero": cliente_numero,
+      })
+
+    return clientes_totais
+  
+  def pegar_historico(self,cliente_id:int) -> list:
+    dados_cliente = repo_cliente.buscar_cliente_id(cliente_id)
+    todos_agendamentos = []
+
+    cliente_nome = dados_cliente.nome
+    cliente_numero = dados_cliente.numero
+
+    agendamentos = dados_cliente.agendamentos
+    
+    for agendamento in agendamentos:
+      servicos_totais = []
+      
+      agendamento_data = agendamento.data
+      data_formatada = agendamento_data.strftime("%d/%m/%Y")
+
+      agendamento_horario = agendamento.horario
+      agendamento_horario = str(agendamento_horario)
+
+      agendamento_profissional = agendamento.funcionario.nome
+      servicos = agendamento.servicos_agendamentos
+
+      for servico in servicos:
+        servicos_totais.append(servico.servico.nome)
+
+      dados_agendamento = {
+        "cliente_nome": cliente_nome,
+        "cliente_numero": cliente_numero,
+        "agendamento_data": data_formatada,
+        "agendamento_horario": agendamento_horario,
+        "agendamento_profissional": agendamento_profissional,
+        "servicos": servicos_totais
+      }
+      
+      todos_agendamentos.append(dados_agendamento)
+
+    print(todos_agendamentos)

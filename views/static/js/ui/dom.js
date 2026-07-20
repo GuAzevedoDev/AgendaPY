@@ -20,6 +20,9 @@ export let inputNome = document.querySelector(".nomeCliente");
 export let inputNumero = document.querySelector(".numeroCliente");
 export let listaNomes = document.querySelector(".lista-nomes");
 export let nomesLista = document.querySelectorAll(".nome-lista");
+export let clientesLista = document.querySelector(".clientes-lista");
+
+
 
 export let meses = [
   "Janeiro",

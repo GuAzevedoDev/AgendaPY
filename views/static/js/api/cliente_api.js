@@ -8,3 +8,21 @@ export async function pegaNomes(nomeCliente) {
   });
   return await resposta.json();
 }
+
+export async function mostrarClientes() {
+  const resposta = await fetch("/clientes/mostrar", {
+    method: "GET",
+  });
+  return await resposta.json();
+}
+
+export async function pegaDadosCliente(idCliente) {
+  const resposta = await fetch("/agendar/historico", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: idCliente,
+    }),
+  });
+  return await resposta.json();
+}

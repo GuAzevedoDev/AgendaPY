@@ -17,3 +17,12 @@ class ClienteRepository:
     clientes = Clientes.query.filter(Clientes.nome.ilike(f"%{nome}%")).all()
 
     return clientes
+
+  def trazer_todos_clientes(self) -> list:
+    clientes = Clientes.query.all()
+    return clientes
+  
+  def buscar_cliente_id(self,id) -> tuple:
+    cliente = Clientes.query.filter_by(id = id).first()
+    
+    return cliente

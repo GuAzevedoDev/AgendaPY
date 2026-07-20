@@ -15,7 +15,9 @@ hora = datetime.strptime("10:30","%H:%M").time()
 
 if __name__ == "__main__":
     with app.app_context():
-        funcionario = funcionario.cadastrarFuncionarios()
+        dados = cliente.pegar_historico(1)
+        # print(dados)
+        # funcionario = funcionario.cadastrarFuncionarios()
         # agendamento = agendamento.mostrarAgendaWeb(1,data)
         # servico = servico.cadastrarServicosWeb("Escova",180)
         # cliente = cliente.cadastrar_cliente_web("Dona Geralda","31980257381")

@@ -5,13 +5,16 @@ import * as clienteController from "./controllers/cliente_controller.js";
 import * as servicoController from "./controllers/servico_controller.js";
 import * as funcionarioController from "./controllers/funcionario_controller.js";
 
-
 window.abreModal = abreModal;
 window.fechaModal = fechaModal;
 
+if (document.querySelector(".pagina-agenda")) {
+  servicoController.iniciarServicos();
+  funcionarioController.iniciarFuncionarios();
+  calendarioController.iniciarCalendario();
+  agendaController.iniciarAgenda();
+}
 
-calendarioController.iniciarCalendario();
-agendaController.iniciarAgenda();
-clienteController.iniciarClientes();
-servicoController.iniciarServicos();
-funcionarioController.iniciarFuncionarios();
+if (document.querySelector(".pagina-clientes")) {
+  clienteController.iniciarClientes();
+}

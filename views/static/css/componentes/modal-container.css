@@ -6,7 +6,6 @@
 .modal-container {
   width: 700px;
   height: 650px;
-  overflow-y: scroll;
   background: var(--cor-1);
   margin: auto;
   border: 1px solid rgba(188, 122, 97, 0.15);

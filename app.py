@@ -1,7 +1,7 @@
 from services.services import AgendamentosService, ServicosService,Funcionario,Cliente
 from flask import Flask
 from config import DevelopmentConfig
-from controllers import agendamento_bp,auth_bp,home_bp
+from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp
 from models import db
 import os
 
@@ -27,6 +27,7 @@ def create_app(config = DevelopmentConfig):
     app.register_blueprint(agendamento_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(home_bp)
+    app.register_blueprint(clientes_bp)
 
     #Passo o contexto (necessario)
     with app.app_context():
