@@ -324,6 +324,7 @@ class Cliente:
     return clientes_totais
   
   def pegar_historico(self,cliente_id:int) -> list:
+    cliente_id = int(cliente_id)
     dados_cliente = repo_cliente.buscar_cliente_id(cliente_id)
     todos_agendamentos = []
 
@@ -357,5 +358,3 @@ class Cliente:
       }
       
       todos_agendamentos.append(dados_agendamento)
-
-    print(todos_agendamentos)

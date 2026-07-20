@@ -15,9 +15,10 @@ export async function mostrarClientes() {
 export async function mostraHistoricoCliente() {
   let clientesItens = document.querySelectorAll(".cliente-item");
   clientesItens.forEach((item) => {
-    item.addEventListener("click", () => {
+    item.addEventListener("click", async () => {
       clienteUi.marcaClicado(item, clientesItens);
-      dadosCliente = clienteApi.pegaDadosCliente(item.dataset.id)
+      let dadosCliente = await clienteApi.pegaDadosCliente(item.dataset.id)
+      console.log(dadosCliente)
     });
   });
 }

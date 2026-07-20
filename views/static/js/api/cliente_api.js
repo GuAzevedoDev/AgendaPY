@@ -17,8 +17,8 @@ export async function mostrarClientes() {
 }
 
 export async function pegaDadosCliente(idCliente) {
-  const resposta = await fetch("/agendar/historico", {
-    method: "GET",
+  const resposta = await fetch("/clientes/historico", {
+    method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       id: idCliente,
