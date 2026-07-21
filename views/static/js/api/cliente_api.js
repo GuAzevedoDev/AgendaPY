@@ -26,3 +26,14 @@ export async function pegaDadosCliente(idCliente) {
   });
   return await resposta.json();
 }
+
+export async function pesquisarClientes(termo) {
+  const resposta = await fetch("/clientes/pesquisar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      termo: termo,
+    }),
+  });
+  return await resposta.json();
+}

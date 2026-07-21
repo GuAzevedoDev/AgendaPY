@@ -21,6 +21,8 @@ export let inputNumero = document.querySelector(".numeroCliente");
 export let listaNomes = document.querySelector(".lista-nomes");
 export let nomesLista = document.querySelectorAll(".nome-lista");
 export let clientesLista = document.querySelector(".clientes-lista");
+export let inputPesquisaCliente = document.querySelector(".search-input");
+export let btnPesquisaCliente = document.querySelector(".search-btn");
 
 export let nomeCliente = document.querySelector(".cliente-detalhes-header h2");
 export let numeroCliente = document.querySelector(

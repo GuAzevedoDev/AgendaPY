@@ -5,6 +5,7 @@ import * as clienteUi from "../ui/cliente_ui.js";
 export async function iniciarClientes() {
   await mostrarClientes();
   mostraHistoricoCliente();
+  configurarPesquisa();
 }
 
 export async function mostrarClientes() {
@@ -27,4 +28,24 @@ export async function mostraHistoricoCliente() {
       }
     });
   });
+}
+
+export function configurarPesquisa() {
+  if (!dom.inputPesquisaCliente) return;
+
+  const realizarPesquisa = async () => {
+    let termo = dom.inputPesquisaCliente.value;
+    let clientes = await clienteApi.pesquisarClientes(termo);
+    clienteUi.mostrarClientes(clientes, dom.clientesLista);
+    mostraHistoricoCliente();
+  };
+
+  dom.inputPesquisaCliente.addEventListener("input", realizarPesquisa);
+
+  if (dom.btnPesquisaCliente) {
+    dom.btnPesquisaCliente.addEventListener("click", (e) => {
+      e.preventDefault();
+      realizarPesquisa();
+    });
+  }
 }

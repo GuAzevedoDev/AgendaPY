@@ -322,6 +322,19 @@ class Cliente:
       })
 
     return clientes_totais
+
+  def pesquisar_clientes_web(self, termo: str) -> list:
+    if not termo or not termo.strip():
+      return self.mostrar_clientes()
+    clientes_encontrados = repo_cliente.busca_pesquisa_cliente(termo.strip())
+    clientes_totais = []
+    for cliente in clientes_encontrados:
+      clientes_totais.append({
+        "id": cliente.id,
+        "nome": cliente.nome,
+        "numero": cliente.numero,
+      })
+    return clientes_totais
   
   def pegar_historico(self,cliente_id:int) -> list:
     cliente_id = int(cliente_id)

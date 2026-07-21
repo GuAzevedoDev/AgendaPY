@@ -30,3 +30,11 @@ def mostar_historico():
     id = dados["id"]
     historico = cliente_service.pegar_historico(id)
     return jsonify(historico)
+
+@clientes_bp.route("/pesquisar", methods=['GET', 'POST'])
+@login_required
+def pesquisar_clientes():
+    dados = request.json or {}
+    termo = dados.get("termo", "")
+    clientes = cliente_service.pesquisar_clientes_web(termo)
+    return jsonify(clientes)

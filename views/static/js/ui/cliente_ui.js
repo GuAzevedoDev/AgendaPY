@@ -94,6 +94,7 @@ export function ativa_cliente_selecionado() {
 }
 
 export function mostrarClientes(clientes, listaClientes) {
+  listaClientes.innerHTML = "";
   clientes.forEach((cliente) => {
     let dados = {
       id: cliente["id"],
@@ -121,6 +122,12 @@ export function marcaClicado(clienteClicado, clientesItens) {
 export function inserirHistoricoCima(nome, numero) {
   dom.nomeCliente.innerHTML = nome;
   dom.numeroCliente.innerHTML = numero;
+  let inicial = document.querySelector(
+    ".cliente-detalhes-header .cliente-inicial",
+  );
+  if (inicial && nome) {
+    inicial.innerText = nome[0].toUpperCase();
+  }
 }
 
 export function inserirHistorico(historico, totalAgendamentos) {
