@@ -22,7 +22,17 @@ export let listaNomes = document.querySelector(".lista-nomes");
 export let nomesLista = document.querySelectorAll(".nome-lista");
 export let clientesLista = document.querySelector(".clientes-lista");
 
-
+export let nomeCliente = document.querySelector(".cliente-detalhes-header h2");
+export let numeroCliente = document.querySelector(
+  ".cliente-detalhes-header span",
+);
+export let metricaTotalAgendamentos =
+  document.querySelectorAll(".metrica-valor")[0];
+export let metricaUltimoAgendamento =
+  document.querySelectorAll(".metrica-valor")[1];
+export let listaUltimosAgendamentos = document.querySelector(
+  ".agendamentos-historico-lista",
+);
 
 export let meses = [
   "Janeiro",

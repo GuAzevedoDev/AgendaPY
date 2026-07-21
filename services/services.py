@@ -332,10 +332,10 @@ class Cliente:
     cliente_numero = dados_cliente.numero
 
     agendamentos = dados_cliente.agendamentos
-    
+    contador = 0
     for agendamento in agendamentos:
       servicos_totais = []
-      
+      contador += 1
       agendamento_data = agendamento.data
       data_formatada = agendamento_data.strftime("%d/%m/%Y")
 
@@ -354,7 +354,8 @@ class Cliente:
         "agendamento_data": data_formatada,
         "agendamento_horario": agendamento_horario,
         "agendamento_profissional": agendamento_profissional,
-        "servicos": servicos_totais
+        "servicos": servicos_totais,
       }
       
       todos_agendamentos.append(dados_agendamento)
+    return todos_agendamentos

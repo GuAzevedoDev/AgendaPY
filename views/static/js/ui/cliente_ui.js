@@ -100,7 +100,7 @@ export function mostrarClientes(clientes, listaClientes) {
       nome: cliente["nome"],
       numero: cliente["numero"],
     };
-    listaClientes.innerHTML += `<li class="cliente-item" data-id = "${dados.id}">
+    listaClientes.innerHTML += `<li class="cliente-item" data-id = "${dados.id}" data-nome = "${dados.nome}" data-numero = "${dados.numero}">
               <div class="cliente-inicial">${dados.nome[0].toUpperCase()}</div>
               <div class="cliente-info">
                 <h3>${dados.nome}</h3>
@@ -116,4 +116,38 @@ export function marcaClicado(clienteClicado, clientesItens) {
     item.classList.remove("ativo");
   });
   clienteClicado.classList.add("ativo");
+}
+
+export function inserirHistoricoCima(nome, numero) {
+  dom.nomeCliente.innerHTML = nome;
+  dom.numeroCliente.innerHTML = numero;
+}
+
+export function inserirHistorico(historico, totalAgendamentos) {
+  let dados = {
+    agendamento_data: historico["agendamento_data"],
+    agendamento_horario: historico["agendamento_horario"],
+    agendamento_profissional: historico["agendamento_profissional"],
+    cliente_nome: historico["cliente_nome"],
+    cliente_numero: historico["cliente_numero"],
+    servicos: historico["servicos"],
+  };
+  dom.metricaTotalAgendamentos.innerHTML = totalAgendamentos;
+  dom.listaUltimosAgendamentos.innerHTML += `<div class="agendamento-historico-card">
+              <div class="agendamento-tempo">
+                <span class="cor-2 data">${dados.agendamento_data}</span>
+                <span class="cor-3 hora">${dados.agendamento_horario}</span>
+              </div>
+              <div class="agendamento-info">
+                <h4 class="cor-2 servico">${dados.servicos.map((item) => item).join(" + ")}</h4>
+                <span class="cor-3 profissional">Profissional: ${dados.agendamento_profissional}</span>
+              </div>
+            </div>`;
+}
+
+export function limparHistorico() {
+  let listaHistoricoAgendamentos = document.querySelector(
+    ".agendamentos-historico-lista",
+  );
+  listaHistoricoAgendamentos.innerHTML = "";
 }

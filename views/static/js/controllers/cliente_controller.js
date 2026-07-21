@@ -17,8 +17,14 @@ export async function mostraHistoricoCliente() {
   clientesItens.forEach((item) => {
     item.addEventListener("click", async () => {
       clienteUi.marcaClicado(item, clientesItens);
-      let dadosCliente = await clienteApi.pegaDadosCliente(item.dataset.id)
-      console.log(dadosCliente)
+      clienteUi.inserirHistoricoCima(item.dataset.nome, item.dataset.numero);
+      clienteUi.limparHistorico();
+      let dadosCliente = await clienteApi.pegaDadosCliente(item.dataset.id);
+      if (dadosCliente) {
+        dadosCliente.forEach((dado) => {
+          clienteUi.inserirHistorico(dado, dadosCliente.length);
+        });
+      }
     });
   });
 }
