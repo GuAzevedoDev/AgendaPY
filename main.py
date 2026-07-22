@@ -1,5 +1,5 @@
 from app import app 
-from services.services import Funcionario,ServicosService,AgendamentosService,Cliente
+from services import Funcionario,ServicosService,AgendamentosService,Cliente
 from repositories import AgendamentoRepository
 from datetime import datetime
 

@@ -1,25 +1,14 @@
-from services.services import AgendamentosService, ServicosService,Funcionario,Cliente
 from flask import Flask
 from config import DevelopmentConfig
 from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp
 from models import db
-import os
-
-servicos_service = ServicosService()
-agendamento_service = AgendamentosService()
-funcionario_service = Funcionario()
-cliente_service = Cliente()
 
 def create_app(config = DevelopmentConfig):
     app = Flask(__name__,
-        template_folder="views/templates",
-        static_folder="views/static",)
+        template_folder=config.TEMPLATE_FOLDER,
+        static_folder=config.STATIC_FOLDER,)
     app.config.from_object(config)
-    pasta = os.path.abspath(os.path.dirname(__file__))
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-        pasta,"banco.db"
-    )
-    
+
     #Inicio o app
     db.init_app(app)
 

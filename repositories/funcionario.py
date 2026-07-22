@@ -1,5 +1,4 @@
 from models import db,Funcionarios
-from exeptions import FuncionarioError
 
 class FuncionarioRepository:
   def buscar_funcionario(self,nome:str) -> tuple:

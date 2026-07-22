@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for,jsonify,session,flash,Blueprint
 from auth import login_required
 from exeptions import AgendaPy
-from services.services import Funcionario
+from services import Funcionario
 
 
 service_funcionario = Funcionario()

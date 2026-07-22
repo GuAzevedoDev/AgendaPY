@@ -1,0 +1,52 @@
+.main-profissional {
+  grid-column: 1/-1;
+  margin-bottom: 40px;
+}
+
+.main-profissional h2 {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.main-profissional ul {
+  display: flex;
+  gap: 100px;
+}
+
+.main-profissional ul li {
+  display: flex;
+  gap: 10px;
+  border: 1px solid rgba(158, 154, 156, 0.25);
+  padding: 8px 14px;
+  border-radius: 10px;
+  align-items: center;
+  transition: 0.2s;
+  cursor: pointer;
+  background: var(--cor-1);
+}
+
+.main-profissional ul li.ativo {
+  border-color: var(--cor-p1);
+  background: #fdf6f3;
+}
+
+.main-profissional ul li:hover {
+  border-color: rgba(188, 122, 97, 0.5);
+  background: #fdf6f3;
+}
+
+.main-profissional ul li h3 {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.main-profissional ul li span {
+  font-weight: 400;
+  color: var(--cor-3);
+  font-size: 0.75rem;
+}
+
+.main-profissional ul li img {
+  max-width: 40px;
+  border-radius: 4px;
+}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session,jsonify,request
 from auth import login_required
-from services.services import Cliente
+from services import Cliente
 
 cliente_service = Cliente()
 

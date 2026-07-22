@@ -1,5 +1,4 @@
 from models import db,Servicos
-from exeptions import ServicoError
 
 class ServicoRepository:
   def mostrar_servicos(self) -> list:

@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for,session
 from models import Agendamentos,Clientes,Funcionarios,ServicosAgendamentos,Servicos
 from auth import login_required
-from services.services import Funcionario
+from services import Funcionario
 
 repo_funcionario = Funcionario()
 

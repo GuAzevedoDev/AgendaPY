@@ -1,7 +1,7 @@
 from flask import Blueprint,jsonify,request
 from auth import login_required
-from services.services import AgendamentosService,Cliente,ServicosService
-from exeptions import AgendaPy,AgendamentoError,ClienteError,FuncionarioError,ServicoError
+from services import AgendamentosService,Cliente,ServicosService
+from exeptions import AgendaPy
 
 agendamento_bp = Blueprint('agendamento',__name__,url_prefix="/agendar")
 agendamento_service = AgendamentosService()

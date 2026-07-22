@@ -1,5 +1,4 @@
 from models import db,Clientes
-from exeptions import ClienteError
 
 class ClienteRepository:
   def buscar_cliente(self,nome:str) -> tuple:

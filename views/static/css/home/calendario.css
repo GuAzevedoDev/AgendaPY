@@ -1,0 +1,122 @@
+.calendario {
+  grid-column: 1;
+  padding: 20px;
+  border: 1px solid #fee8df;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(188, 122, 97, 0.22);
+}
+
+.calendario > span {
+  padding-left: 5px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.cima-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 25px;
+  justify-items: center;
+  border-bottom: 1px solid var(--cor-3);
+  padding-bottom: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  width: 100%;
+}
+
+.cima-calendario span {
+  width: 50px;
+}
+
+.dias-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 25px;
+  justify-items: center;
+}
+
+.dia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dia:hover {
+  background: #8f5540;
+  color: var(--cor-1);
+}
+
+.dia.ativo {
+  background: var(--cor-p1);
+  color: var(--cor-1);
+}
+
+.drop-down-filtro {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(158, 154, 156, 0.35);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: var(--cor-1);
+  user-select: none;
+  font-size: 0.875rem;
+  color: var(--cor-3);
+  font-weight: 500;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.drop-down-filtro svg {
+  fill: var(--cor-3);
+}
+
+.drop-down-filtro:hover {
+  border-color: rgba(188, 122, 97, 0.4);
+  color: var(--cor-2);
+}
+
+.drop-down-filtro:hover svg {
+  fill: var(--cor-2);
+}
+
+.opcoes-filtro {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: var(--cor-1);
+  border: 1px solid rgba(188, 122, 97, 0.15);
+  border-radius: 8px;
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.opcoes-filtro.ativo {
+  display: block;
+}
+
+.opcoes-filtro li {
+  padding: 9px 12px;
+  border-radius: 5px;
+  transition: 0.2s;
+  color: var(--cor-2);
+  font-size: 0.875rem;
+}
+
+.opcoes-filtro li:hover {
+  background: #fdf6f3;
+  color: var(--cor-p1);
+}
