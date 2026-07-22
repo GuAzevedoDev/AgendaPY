@@ -1,0 +1,197 @@
+/* ══════════════════════════════════════════════════════════════
+   PAGINA AGENDA — MOBILE
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  #home .main {
+    display: block;
+  }
+
+  .header-main {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  .header-main .mostra {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .mostra-data {
+    width: auto;
+    flex-grow: 1;
+  }
+
+  .mostraDia {
+    width: 56px;
+    height: 56px;
+  }
+
+  .setas-calendario {
+    margin-right: 0;
+  }
+
+  .setas-calendario span,
+  .hoje {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hoje {
+    padding: 5px 20px;
+    width: auto;
+  }
+
+  /* Profissionais em lista horizontal */
+  .main-profissional {
+    margin-bottom: 24px;
+  }
+
+  .main-profissional ul {
+    display: flex;
+    overflow-x: auto;
+    gap: 14px;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .main-profissional ul li {
+    flex: 0 0 auto;
+    padding: 10px 16px;
+  }
+
+  /* Calendario compacto tipo semana */
+  .calendario {
+    margin-bottom: 24px;
+    padding: 14px;
+  }
+
+  .cima-calendario {
+    display: none;
+  }
+
+  .dias-calendario {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dia,
+  .diaVazio {
+    flex: 0 0 52px;
+    scroll-snap-align: start;
+  }
+
+  .diaVazio {
+    display: none;
+  }
+
+  .dia {
+    width: 52px;
+    height: 64px;
+    border-radius: 12px;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.95rem;
+  }
+
+  .dia-semana-mini {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--cor-3);
+    text-transform: uppercase;
+  }
+
+  .dia.ativo .dia-semana-mini {
+    color: var(--cor-1);
+  }
+
+  /* Agenda / horarios */
+  .agenda {
+    margin-left: 0;
+    padding: 14px;
+  }
+
+  .horarioTudo {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .horarioTudo .horario {
+    height: auto;
+  }
+
+  .horarioTudo .horario::before {
+    display: none;
+  }
+
+  .horarioTudo .status,
+  .horarioTudo.ocupado .status,
+  .horarioTudo.confirmado .status {
+    grid-column: 1;
+  }
+
+  .horarioTudo button,
+  .horarioTudo.ocupado .status .detalhes,
+  .horarioTudo.confirmado .status .detalhes {
+    width: 44px;
+    height: 44px;
+  }
+
+  .botaoAgenda {
+    width: 100%;
+    height: 44px;
+  }
+
+  /* FAB novo agendamento */
+  #home .header-main .btn {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(188, 122, 97, 0.45);
+    z-index: 500;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  #home .header-main .btn::after {
+    content: "+";
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  #home .header-main .btn:active {
+    transform: scale(0.92);
+  }
+}
+
+@media (max-width: 480px) {
+  .dia {
+    flex-basis: 46px;
+    width: 46px;
+    height: 58px;
+  }
+
+  #home .header-main .btn {
+    width: 52px;
+    height: 52px;
+    right: 16px;
+    bottom: 18px;
+  }
+}

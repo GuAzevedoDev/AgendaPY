@@ -1,0 +1,90 @@
+/* ══════════════════════════════════════════════════════════════
+   MENU MOBILE (hamburguer + drawer)
+   Reaproveita o .header-bg/.header existente como drawer.
+   Breakpoints: 900px (tablet/telefone), 480px (telefone pequeno)
+══════════════════════════════════════════════════════════════ */
+
+.btn-menu-mobile {
+  display: none;
+}
+
+.overlay-menu-mobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .btn-menu-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: var(--cor-1);
+    color: var(--cor-p1);
+    box-shadow: 0 4px 20px rgba(188, 122, 97, 0.22);
+    z-index: 1100;
+    cursor: pointer;
+  }
+
+  .overlay-menu-mobile {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+
+  .overlay-menu-mobile.ativo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #home,
+  #clientes-page {
+    display: block;
+    height: auto;
+  }
+
+  #home .main-bg,
+  #clientes-page .main-bg {
+    padding: 80px 16px 40px;
+  }
+
+  .header-bg {
+    grid-column: unset;
+    height: auto;
+  }
+
+  .header {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 280px;
+    max-width: 82vw;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.25);
+  }
+
+  .header.menu-aberto {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-menu-mobile {
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+  }
+}

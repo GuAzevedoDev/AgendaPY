@@ -1,0 +1,64 @@
+/* ══════════════════════════════════════════════════════════════
+   MODAIS — MOBILE (quase tela cheia, deslizam de baixo pra cima)
+══════════════════════════════════════════════════════════════ */
+
+@keyframes mobileModalIn {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-container {
+    width: 100vw;
+    height: 92vh;
+    max-width: 100vw;
+    max-height: 92vh;
+    margin: auto 0 0 0;
+    position: fixed;
+    inset: auto 0 0 0;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 18px;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    animation: mobileModalIn 0.28s ease;
+  }
+
+  .modal-container .header-modal {
+    padding-bottom: 12px;
+  }
+
+  .modal-agendamento .main-modal form > ol > li,
+  .modal-detalhes .main-modal {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-agendamento .main-modal form > ol > li:nth-child(2) input,
+  .modal-agendamento .main-modal form > ol > li:not(:first-child) {
+    grid-column: 1;
+  }
+
+  .main-modal form li input,
+  .observacaoAgendamento,
+  .valorAgendamento {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .dinheiro-container,
+  .pix-container,
+  .credito-container,
+  .debito-container {
+    padding: 4px 14px;
+  }
+
+  .modal-container .footer-modal .btn {
+    font-size: 1rem;
+    padding: 14px;
+  }
+}

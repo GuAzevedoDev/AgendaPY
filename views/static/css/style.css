@@ -10,6 +10,16 @@
 
 /* importacoes paginas */
 @import './paginas/login.css';
-@import './paginas/home.css';
+@import './home/layout.css';
+@import './home/profissionais.css';
+@import './home/calendario.css';
+@import './home/agenda.css';
+@import './home/scrollbar.css';
 @import './paginas/clientes.css';
+
+/* importacoes mobile */
+@import './mobile/mobile-menu.css';
+@import './mobile/mobile-agenda.css';
+@import './mobile/mobile-clientes.css';
+@import './mobile/mobile-modais.css';
 
