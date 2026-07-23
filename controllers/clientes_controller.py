@@ -27,15 +27,21 @@ def mostrar_clientes():
 @clientes_bp.route("/historico",methods = ['GET','POST'])
 @login_required
 def mostar_historico():
-    dados = request.json
-    id = dados["id"]
-    historico = cliente_service.pegar_historico(id)
-    return jsonify(historico)
+    dados = request.get_json(silent=True) or {}
+    cliente_id = dados.get("id")
+    if not cliente_id:
+        return jsonify({"sucesso": False, "mensagem": "Cliente nao informado"}), 400
+
+    try:
+        historico = cliente_service.pegar_historico(cliente_id)
+        return jsonify(historico)
+    except AgendaPy as e:
+        return jsonify({"sucesso": False, "mensagem": str(e)}), 400
 
 @clientes_bp.route("/pesquisar", methods=['GET', 'POST'])
 @login_required
 def pesquisar_clientes():
-    dados = request.json or {}
+    dados = request.get_json(silent=True) or {}
     termo = dados.get("termo", "")
     clientes = cliente_service.pesquisar_clientes_web(termo)
     return jsonify(clientes)
@@ -43,7 +49,7 @@ def pesquisar_clientes():
 @clientes_bp.route("/cadastrar", methods=['POST'])
 @login_required
 def cadastrar_cliente():
-    dados = request.json or {}
+    dados = request.get_json(silent=True) or {}
     nome = dados.get("nome", "").strip()
     numero = dados.get("numero", "").strip()
 

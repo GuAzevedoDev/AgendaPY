@@ -1,7 +1,9 @@
+import { csrfToken } from "../utils/csrf.js";
+
 export async function pegaNomes(nomeCliente) {
   const resposta = await fetch("/agendar/buscaNome", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
     body: JSON.stringify({
       nomeCliente: nomeCliente,
     }),
@@ -19,7 +21,7 @@ export async function mostrarClientes() {
 export async function pegaDadosCliente(idCliente) {
   const resposta = await fetch("/clientes/historico", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
     body: JSON.stringify({
       id: idCliente,
     }),
@@ -30,7 +32,7 @@ export async function pegaDadosCliente(idCliente) {
 export async function pesquisarClientes(termo) {
   const resposta = await fetch("/clientes/pesquisar", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
     body: JSON.stringify({
       termo: termo,
     }),
@@ -41,7 +43,7 @@ export async function pesquisarClientes(termo) {
 export async function cadastrarCliente(nome, numero) {
   const resposta = await fetch("/clientes/cadastrar", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
     body: JSON.stringify({
       nome: nome,
       numero: numero,

@@ -4,6 +4,9 @@
 #Ambiente virtual com muitas pastas e arquivos
 .venv/
 
+#Config local do Claude Code
+.claude/
+
 #Cache
 __pycache__/
 

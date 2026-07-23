@@ -2,13 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for,jsonify,ses
 from auth import login_required
 from exeptions import AgendaPy
 from services import Funcionario
-
+from extensions import limiter
 
 service_funcionario = Funcionario()
 auth_bp = Blueprint("auth",__name__)
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
+@limiter.limit("10 per minute", methods=["POST"])
 def login():
     #Se estiver no metodo get ele so pega a renderiza o html
     if request.method == "GET":
@@ -17,9 +18,9 @@ def login():
     #Se estiver no metodo POST ele pega os dados do usuario 
 
     #Pega dado do form HTML
-    usuario = request.form["nomeUsuario"]
+    usuario = request.form.get("nomeUsuario", "")
     #O encode transforma o utf puro pra bytes pois o hash so aceita bytes
-    senha = request.form["senhaUsuario"]
+    senha = request.form.get("senhaUsuario", "")
        
     #validacao de formulario
     
@@ -30,6 +31,7 @@ def login():
     try:
         funcionario = service_funcionario.loginFuncionarioWeb(usuario, senha)
         # login OK
+        session.permanent = True  # ativa o PERMANENT_SESSION_LIFETIME (expira em 30min de inatividade)
         session["funcionario_id"] = funcionario.id
         session["funcionario_nome"] = funcionario.nome
         session["funcionario_cargo"] = funcionario.cargo

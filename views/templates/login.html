@@ -14,6 +14,8 @@
         <span class="texto-menor cor-p1">Use as credenciais fornecidas pelo seu gestor</span>
       </div>
       <form action="/login" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
         <div class="nome-form-login">
           <label for="nome" class="texto-menor">Usuario</label>
           <input type="text" id="nome" name="nomeUsuario" placeholder="Digite seu usuario">

@@ -12,15 +12,15 @@ repo_servico = ServicosService()
 @login_required     #Verifica se existe um funcionario logado
 def agendar():
     #Pego do JS
-    dados = request.json
+    dados = request.get_json(silent=True) or {}
     #Salvo em variaveis
-    idFuncionario = dados["idFuncionario"]
-    nomeCliente = dados["nomeCliente"]
-    numeroCliente = dados["numeroCliente"]
-    nomesServicos = dados["nomesServicos"]
-    dataAgendamento = dados["dataAgendamento"]
-    horaAgendamento = dados["horaAgendamento"]
-    observacaoAgendamento = dados["observacao"]
+    idFuncionario = dados.get("idFuncionario")
+    nomeCliente = dados.get("nomeCliente")
+    numeroCliente = dados.get("numeroCliente")
+    nomesServicos = dados.get("nomesServicos")
+    dataAgendamento = dados.get("dataAgendamento")
+    horaAgendamento = dados.get("horaAgendamento")
+    observacaoAgendamento = dados.get("observacao")
 
     #Validacao do formulario de agendamento
     if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
@@ -44,8 +44,8 @@ def agendar():
 @agendamento_bp.route('/buscaNome', methods=["GET", "POST"])
 @login_required   
 def buscarNome():
-    dados = request.json
-    nomeCliente = dados['nomeCliente']
+    dados = request.get_json(silent=True) or {}
+    nomeCliente = dados.get('nomeCliente', '')
     if request.method == "POST":
         nomesEncontrados = repo_cliente.buscar_nome_web(nomeCliente)
         return  nomesEncontrados
@@ -55,10 +55,12 @@ def buscarNome():
 @login_required     #Verifica se existe um funcionario logado
 def calendario():
     #Pego os dados do js
-    dados = request.json
-    dataSelecionada = dados['data']
-    idFuncionario = dados['idFuncionario']
-    
+    dados = request.get_json(silent=True) or {}
+    dataSelecionada = dados.get('data')
+    idFuncionario = dados.get('idFuncionario')
+
+    if not dataSelecionada or not idFuncionario:
+        return jsonify({"sucesso": False, "mensagem": "Dados incompletos"}), 400
 
     #Chamo a funcao
     try:
@@ -78,7 +80,7 @@ def calendario():
 @agendamento_bp.route("/diasComAgendamento", methods=["POST"])
 @login_required
 def dias_com_agendamento():
-    dados = request.json or {}
+    dados = request.get_json(silent=True) or {}
     idFuncionario = dados.get("idFuncionario")
     mes = dados.get("mes")
     ano = dados.get("ano")
@@ -96,8 +98,8 @@ def dias_com_agendamento():
 @agendamento_bp.route('/buscaServico', methods=["GET", "POST"])
 @login_required   
 def buscarServico():
-    dados = request.json
-    nome_servico = dados['nomeServico']
+    dados = request.get_json(silent=True) or {}
+    nome_servico = dados.get('nomeServico', '')
     if request.method == "POST":
         servicos_encontrados = repo_servico.buscarServicoWeb(nome_servico)
         return servicos_encontrados
@@ -108,14 +110,14 @@ def buscarServico():
 @login_required   
 def atualizarPg():
     #Pego do JS
-    dados = request.json
+    dados = request.get_json(silent=True) or {}
 
     #Salvo em variaveis
-    idFuncionario = dados["idFuncionario"]
-    valorAgendamento = dados["valorAgendamento"]
-    formaPagamento = dados["formaPagamento"]
-    dataAgendamento = dados["dataAgendamento"]
-    horaAgendamento = dados["horaAgendamento"]
+    idFuncionario = dados.get("idFuncionario")
+    valorAgendamento = dados.get("valorAgendamento")
+    formaPagamento = dados.get("formaPagamento")
+    dataAgendamento = dados.get("dataAgendamento")
+    horaAgendamento = dados.get("horaAgendamento")
     #Validacao do formulario de agendamento
     if not valorAgendamento or not formaPagamento or not dataAgendamento or not horaAgendamento:
         return jsonify({
@@ -140,7 +142,7 @@ def atualizarPg():
 @login_required   
 def excluirHorario():
     # Pega os dados enviados pelo JavaScript (fetch)
-    dados = request.json
+    dados = request.get_json(silent=True)
     if not dados:
         return jsonify({"mensagem": "Dados inválidos", "sucesso": False}), 400
 

@@ -63,6 +63,8 @@ class Cliente:
   def pegar_historico(self,cliente_id:int) -> list:
     cliente_id = int(cliente_id)
     dados_cliente = repo_cliente.buscar_cliente_id(cliente_id)
+    if not dados_cliente:
+      raise ClienteError("Cliente nao encontrado")
     todos_agendamentos = []
 
     cliente_nome = dados_cliente.nome

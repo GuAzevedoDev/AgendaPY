@@ -1,8 +1,11 @@
+import { csrfToken } from "../utils/csrf.js";
+
 export async function excluir_horario(id_funcionario, dataAgendamento, horaAgendamento) {
   const resposta = await fetch("/agendar/excluirHorario", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({
       idFuncionario: id_funcionario,
@@ -18,6 +21,7 @@ export async function enviar_dia_clicado(dia, id_funcionario) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({
       data: dia,
@@ -32,6 +36,7 @@ export async function adicionarPagamento(idFuncionario, valorAgendamento, formaP
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({
       idFuncionario,
@@ -49,6 +54,7 @@ export async function buscarDiasComAgendamento(mes, ano, idFuncionario) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({
       mes,
@@ -64,6 +70,7 @@ export async function agendarHorario(idFuncionario, nomesServicos, nomeCliente, 
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({
       idFuncionario,
