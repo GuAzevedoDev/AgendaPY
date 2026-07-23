@@ -91,6 +91,21 @@
   background: var(--cor-p1);
 }
 
+/* Horarios livres que ja passaram (dia atual) nao podem ser marcados */
+.horarioTudo.passado {
+  opacity: 0.45;
+}
+
+.horarioTudo.passado .status {
+  cursor: not-allowed;
+}
+
+.horario-indisponivel {
+  justify-self: right;
+  font-size: 0.8rem;
+  color: var(--cor-3);
+}
+
 .horarioTudo.ocupado .status,
 .horarioTudo.confirmado .status {
   background: #fdf6f3;

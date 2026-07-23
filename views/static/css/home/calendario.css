@@ -36,6 +36,7 @@
 }
 
 .dia {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,6 +54,23 @@
 .dia.ativo {
   background: var(--cor-p1);
   color: var(--cor-1);
+}
+
+/* Marcador dos dias que ja possuem horarios marcados */
+.dia.tem-agendamento::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cor-p1);
+}
+
+.dia.ativo.tem-agendamento::after {
+  background: var(--cor-1);
 }
 
 .drop-down-filtro {

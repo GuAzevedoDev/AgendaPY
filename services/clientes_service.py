@@ -68,7 +68,11 @@ class Cliente:
     cliente_nome = dados_cliente.nome
     cliente_numero = dados_cliente.numero
 
-    agendamentos = dados_cliente.agendamentos
+    agendamentos = sorted(
+      dados_cliente.agendamentos,
+      key=lambda agendamento: (agendamento.data, agendamento.horario),
+      reverse=True,
+    )
     contador = 0
     for agendamento in agendamentos:
       servicos_totais = []

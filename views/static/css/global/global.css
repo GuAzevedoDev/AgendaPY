@@ -33,3 +33,9 @@ a {
 span {
   display: block;
 }
+
+/* Aplicada via JS enquanto algum <dialog> estiver aberto (ver modal_ui.js) */
+html.scroll-bloqueado,
+html.scroll-bloqueado body {
+  overflow: hidden;
+}

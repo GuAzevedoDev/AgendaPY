@@ -29,19 +29,42 @@ function rolarParaAtivo() {
 
 export function iniciarAgendaMobile() {
   if (!window.matchMedia("(max-width: 900px)").matches) return;
-  if (!dom.divDias) return;
 
-  decorarDias();
-  rolarParaAtivo();
-
-  const observer = new MutationObserver(() => {
+  if (dom.divDias) {
     decorarDias();
     rolarParaAtivo();
-  });
-  observer.observe(dom.divDias, { childList: true });
 
-  dom.divDias.addEventListener("click", (evento) => {
-    const dia = evento.target.closest(".dia");
-    if (dia) rolarParaAtivo();
+    const observer = new MutationObserver(() => {
+      decorarDias();
+      rolarParaAtivo();
+    });
+    observer.observe(dom.divDias, { childList: true });
+
+    dom.divDias.addEventListener("click", (evento) => {
+      const dia = evento.target.closest(".dia");
+      if (dia) rolarParaAtivo();
+    });
+  }
+
+  configurarToggleDisponiveis();
+}
+
+function configurarToggleDisponiveis() {
+  const botao = document.querySelector(".btn-ver-disponiveis");
+  const listaAgenda = dom.agendaDiv;
+  if (!botao || !listaAgenda) return;
+
+  botao.addEventListener("click", () => {
+    const expandido = listaAgenda.classList.toggle("expandido");
+    botao.textContent = expandido
+      ? "Ver só agendados"
+      : "Ver horários disponíveis";
   });
+
+  // A cada troca de dia a agenda e re-renderizada; volta ao estado compacto por padrao
+  const observer = new MutationObserver(() => {
+    listaAgenda.classList.remove("expandido");
+    botao.textContent = "Ver horários disponíveis";
+  });
+  observer.observe(listaAgenda, { childList: true });
 }

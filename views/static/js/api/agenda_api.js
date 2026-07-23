@@ -44,6 +44,21 @@ export async function adicionarPagamento(idFuncionario, valorAgendamento, formaP
   return await resposta.json();
 }
 
+export async function buscarDiasComAgendamento(mes, ano, idFuncionario) {
+  const resposta = await fetch("/agendar/diasComAgendamento", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      mes,
+      ano,
+      idFuncionario,
+    }),
+  });
+  return await resposta.json();
+}
+
 export async function agendarHorario(idFuncionario, nomesServicos, nomeCliente, numeroCliente, horaAgendamento, dataAgendamento,observacao) {
   const resposta = await fetch("/agendar", {
     method: "POST",

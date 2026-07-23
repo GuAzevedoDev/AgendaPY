@@ -8,11 +8,13 @@ export function iniciarMenuMobile() {
   function abrirMenu() {
     header.classList.add("menu-aberto");
     overlay.classList.add("ativo");
+    botao.classList.add("aberto");
   }
 
   function fecharMenu() {
     header.classList.remove("menu-aberto");
     overlay.classList.remove("ativo");
+    botao.classList.remove("aberto");
   }
 
   botao.addEventListener("click", () => {

@@ -1,6 +1,6 @@
-import hashlib
 from exeptions import FuncionarioError
 from repositories import FuncionarioRepository
+from werkzeug.security import generate_password_hash, check_password_hash
 
 repo_funcionario = FuncionarioRepository()
 
@@ -9,15 +9,11 @@ repo_funcionario = FuncionarioRepository()
 
 class Funcionario:
   def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
-    #Transformar a senha em hash para comparação com db
-    senha = senha.encode('utf-8')
-    senha = hashlib.sha256(senha)
-    senha = senha.hexdigest()
-
     #Se encontrado ele salva na variavel
-    funcionario_encontrado = repo_funcionario.buscar_funcionario(nome.capitalize())
+    funcionario_encontrado = repo_funcionario.buscar_funcionario(nome)
+
     #Se nao encontrado nao passa no if, verifico se a senha esta correta
-    if not funcionario_encontrado or senha != funcionario_encontrado.senha:
+    if not funcionario_encontrado or not check_password_hash(funcionario_encontrado.senha,senha):
       raise FuncionarioError("Credenciais invalidas")
 
     #Se tudo ok retorno funcionario_encontrado
@@ -39,9 +35,16 @@ class Funcionario:
 
     cargo = input("Digite seu cargo [dono] // [profissional]: ")
     funcao = input("Digite sua funcao: ")
-    senha = input("Digite sua senha: ").encode('utf-8')
-    hashSenha = hashlib.sha256(senha)
-    senhaHex = hashSenha.hexdigest()
+    senha = input("Digite sua senha: ")
+    senhaHex = generate_password_hash(senha)
 
     repo_funcionario.cadastrar_funcionarios(nome,cargo.lower(),funcao,senhaHex)
     print(f"Funcionario {nome} adicionado!")
+
+  def excluir_funcionarios(self,nome:str):
+    funcionario_encontrado = repo_funcionario.buscar_funcionario(nome)
+
+    if not funcionario_encontrado:
+      raise FuncionarioError("Funcionario nao encontrado")
+
+    repo_funcionario.excluir_funcionairos(funcionario_encontrado)

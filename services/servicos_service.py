@@ -1,3 +1,4 @@
+from exeptions import ServicoError
 from repositories import ServicoRepository
 
 repo_servico = ServicoRepository()
@@ -15,7 +16,7 @@ class ServicosService:
 
     #Se nao tiver servicos cadastrados
     if not servicos:
-      raise("Sem servicos cadastrados")
+      raise ServicoError("Sem servicos cadastrados")
 
     #Passo por todos se bater com o nome digitado retorno a lista com os servicos selecionados
     for servico in servicos:

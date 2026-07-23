@@ -1,3 +1,4 @@
+import calendar
 from datetime import datetime
 from exeptions import AgendamentoError
 from repositories import AgendamentoRepository
@@ -36,6 +37,8 @@ class AgendamentosService:
 
     #Selecionar horario
     horario_escolhido = self.selecionar_horario_web(id_funcionario_logado,data,hora)
+
+    self.validar_horario_nao_passado(data,horario_escolhido)
 
     self.validar_data_hora(id_funcionario_logado,data,horario_escolhido)
 
@@ -120,6 +123,23 @@ class AgendamentosService:
 
     #Se tiver tudo certo retorno a data
     return dataUsuario
+
+  def diasComAgendamentoWeb(self,id_funcionario_logado:int,mes:int,ano:int) -> list:
+    primeiro_dia = datetime(ano,mes,1).date()
+    ultimo_dia_numero = calendar.monthrange(ano,mes)[1]
+    ultimo_dia = datetime(ano,mes,ultimo_dia_numero).date()
+
+    agendamentos = repo_agendamento.trazer_agendamentos_do_mes(id_funcionario_logado,primeiro_dia,ultimo_dia)
+
+    dias = sorted({agendamento.data.day for agendamento in agendamentos})
+    return dias
+
+  def validar_horario_nao_passado(self,data:datetime,horario_escolhido) -> None:
+    agora = datetime.now()
+
+    #Se a data escolhida for hoje, o horario tambem precisa ser validado
+    if data.date() == agora.date() and horario_escolhido <= agora.time():
+      raise AgendamentoError("Esse horario ja passou")
 
   def excluirAgendamentoWeb(self,funcionario_id:int, data:str, hora:str) -> bool:
     # Busca o ID do agendamento para poder remover as dependências primeiro (tabela agendamentos_servicos)

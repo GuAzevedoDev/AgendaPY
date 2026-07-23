@@ -37,3 +37,15 @@ export async function pesquisarClientes(termo) {
   });
   return await resposta.json();
 }
+
+export async function cadastrarCliente(nome, numero) {
+  const resposta = await fetch("/clientes/cadastrar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nome: nome,
+      numero: numero,
+    }),
+  });
+  return await resposta.json();
+}

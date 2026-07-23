@@ -1,5 +1,6 @@
 import * as dom from "../ui/dom.js";
 import * as calendarioUI from "../ui/calendario_ui.js";
+import * as agendaApi from "../api/agenda_api.js";
 import { carregarAgendaDoDia } from "./agenda_controller.js";
 
 export function iniciarCalendario() {
@@ -34,6 +35,25 @@ export function recarregarCalendario() {
   );
   
   configurarDiasListeners();
+  carregarMarcadoresAgendamento();
+}
+
+export async function carregarMarcadoresAgendamento() {
+  try {
+    const resposta = await agendaApi.buscarDiasComAgendamento(
+      dom.datas.mes,
+      dom.datas.ano,
+      window.id_funcionario,
+    );
+    if (resposta.sucesso) {
+      calendarioUI.marcar_dias_com_agendamento(
+        calendarioUI.obter_dias(),
+        resposta.dias,
+      );
+    }
+  } catch (err) {
+    console.error("Erro ao carregar dias com agendamento:", err);
+  }
 }
 
 function configurarDiasListeners() {

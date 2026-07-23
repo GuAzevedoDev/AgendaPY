@@ -75,6 +75,24 @@ def calendario():
 
   
 
+@agendamento_bp.route("/diasComAgendamento", methods=["POST"])
+@login_required
+def dias_com_agendamento():
+    dados = request.json or {}
+    idFuncionario = dados.get("idFuncionario")
+    mes = dados.get("mes")
+    ano = dados.get("ano")
+
+    if not idFuncionario or not mes or not ano:
+        return jsonify({"sucesso": False, "mensagem": "Dados incompletos"}), 400
+
+    try:
+        dias = agendamento_service.diasComAgendamentoWeb(int(idFuncionario), int(mes), int(ano))
+        return jsonify({"sucesso": True, "dias": dias}), 200
+    except AgendaPy as e:
+        return jsonify({"sucesso": False, "mensagem": str(e)}), 400
+
+
 @agendamento_bp.route('/buscaServico', methods=["GET", "POST"])
 @login_required   
 def buscarServico():

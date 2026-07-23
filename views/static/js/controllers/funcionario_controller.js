@@ -2,6 +2,7 @@ import * as funcionarioUi from "../ui/funcionario_ui.js";
 import * as clienteUi from "../ui/cliente_ui.js";
 import * as clienteApi from "../api/cliente_api.js";
 import * as dom from "../ui/dom.js";
+import { carregarMarcadoresAgendamento } from "./calendario_controller.js";
 
 export function iniciarFuncionarios() {
   const funcionarios = document.querySelectorAll(".funcionario");
@@ -22,6 +23,8 @@ export function iniciarFuncionarios() {
       if (diaAtivo) {
         diaAtivo.click();
       }
+
+      carregarMarcadoresAgendamento();
     });
   });
   if (!dom.inputNome) return;

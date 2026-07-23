@@ -2,6 +2,10 @@
    PAGINA AGENDA — MOBILE
 ══════════════════════════════════════════════════════════════ */
 
+.btn-ver-disponiveis {
+  display: none;
+}
+
 @media (max-width: 900px) {
   #home .main {
     display: block;
@@ -45,22 +49,50 @@
     width: auto;
   }
 
-  /* Profissionais em lista horizontal */
+  /* Profissionais em chips horizontais, fixos no topo ao rolar */
   .main-profissional {
-    margin-bottom: 24px;
+    position: sticky;
+    top: 68px;
+    z-index: 400;
+    background: var(--cor-1);
+    margin: -8px -16px 16px;
+    padding: 8px 16px 12px;
+  }
+
+  .main-profissional h2 {
+    margin-bottom: 8px;
+    font-size: 0.8rem;
   }
 
   .main-profissional ul {
     display: flex;
     overflow-x: auto;
-    gap: 14px;
+    gap: 10px;
     padding-bottom: 8px;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
   }
 
   .main-profissional ul li {
     flex: 0 0 auto;
-    padding: 10px 16px;
+    padding: 6px 14px 6px 6px;
+    gap: 8px;
+    border-radius: 999px;
+    scroll-snap-align: start;
+  }
+
+  .main-profissional ul li img {
+    max-width: 26px;
+    border-radius: 50%;
+  }
+
+  .main-profissional ul li span {
+    display: none;
+  }
+
+  .main-profissional ul li h3 {
+    font-size: 0.8rem;
+    white-space: nowrap;
   }
 
   /* Calendario compacto tipo semana */
@@ -148,6 +180,25 @@
   .botaoAgenda {
     width: 100%;
     height: 44px;
+  }
+
+  /* Por padrao, so mostra os horarios ja agendados; livres ficam ocultos ate expandir */
+  .agenda-horarios:not(.expandido) .horarioTudo:not(.ocupado):not(.confirmado) {
+    display: none;
+  }
+
+  .btn-ver-disponiveis {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    border: 1px dashed rgba(188, 122, 97, 0.4);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--cor-p1);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
   }
 
   /* FAB novo agendamento */

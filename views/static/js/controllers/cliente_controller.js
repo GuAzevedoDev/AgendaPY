@@ -1,11 +1,16 @@
 import * as dom from "../ui/dom.js";
 import * as clienteApi from "../api/cliente_api.js";
 import * as clienteUi from "../ui/cliente_ui.js";
+import { fechaModal } from "../ui/modal_ui.js";
+
+const ehMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
 export async function iniciarClientes() {
   await mostrarClientes();
   mostraHistoricoCliente();
   configurarPesquisa();
+  configurarNovoCliente();
+  selecionarClienteDesktop();
 }
 
 export async function mostrarClientes() {
@@ -21,13 +26,28 @@ export async function mostraHistoricoCliente() {
       clienteUi.inserirHistoricoCima(item.dataset.nome, item.dataset.numero);
       clienteUi.limparHistorico();
       let dadosCliente = await clienteApi.pegaDadosCliente(item.dataset.id);
-      if (dadosCliente) {
-        dadosCliente.forEach((dado) => {
-          clienteUi.inserirHistorico(dado, dadosCliente.length);
-        });
-      }
+      dadosCliente = dadosCliente || [];
+      clienteUi.atualizarMetricas(
+        dadosCliente.length,
+        dadosCliente[0]?.agendamento_data,
+      );
+      dadosCliente.forEach((dado) => {
+        clienteUi.inserirHistorico(dado);
+      });
     });
   });
+}
+
+// Mantem sempre um cliente selecionado no desktop; no mobile a lista fica livre
+function selecionarClienteDesktop(itemAlvo) {
+  if (ehMobile()) return;
+
+  const alvo = itemAlvo || dom.clientesLista.querySelector(".cliente-item");
+  if (alvo) {
+    alvo.click();
+  } else {
+    clienteUi.limparDetalhesCliente();
+  }
 }
 
 export function configurarPesquisa() {
@@ -38,6 +58,7 @@ export function configurarPesquisa() {
     let clientes = await clienteApi.pesquisarClientes(termo);
     clienteUi.mostrarClientes(clientes, dom.clientesLista);
     mostraHistoricoCliente();
+    selecionarClienteDesktop();
   };
 
   dom.inputPesquisaCliente.addEventListener("input", realizarPesquisa);
@@ -48,4 +69,50 @@ export function configurarPesquisa() {
       realizarPesquisa();
     });
   }
+}
+
+export function configurarNovoCliente() {
+  const botaoCadastrar = document.querySelector("#btnCadastrarCliente");
+  const form = document.querySelector("#formNovoCliente");
+  const inputNome = document.querySelector(".nomeNovoCliente");
+  const inputNumero = document.querySelector(".numeroNovoCliente");
+
+  if (!botaoCadastrar || !form || !inputNome || !inputNumero) return;
+
+  botaoCadastrar.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    const avisoModal = document.querySelector(".modal-cliente .aviso-modal");
+    if (avisoModal) avisoModal.innerHTML = "";
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    try {
+      const dados = await clienteApi.cadastrarCliente(
+        inputNome.value.trim(),
+        inputNumero.value.trim(),
+      );
+
+      if (dados["sucesso"] === true) {
+        form.reset();
+        fechaModal("cliente");
+        await mostrarClientes();
+        mostraHistoricoCliente();
+
+        const novoItem = dados.cliente
+          ? dom.clientesLista.querySelector(
+              `.cliente-item[data-id="${dados.cliente.id}"]`,
+            )
+          : null;
+        selecionarClienteDesktop(novoItem);
+      } else if (avisoModal && dados["mensagem"]) {
+        avisoModal.innerHTML = dados["mensagem"];
+      }
+    } catch (err) {
+      console.error("Erro ao cadastrar cliente:", err);
+    }
+  });
 }

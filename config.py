@@ -13,7 +13,7 @@ class Config:
   TEMPLATE_FOLDER = "views/templates"
   STATIC_FOLDER = "views/static"
 
-  SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, "banco.db")
+  SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
   DEBUG = True

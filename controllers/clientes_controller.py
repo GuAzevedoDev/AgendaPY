@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session,jsonify,request
 from auth import login_required
 from services import Cliente
+from exeptions import AgendaPy
 
 cliente_service = Cliente()
 
@@ -38,3 +39,28 @@ def pesquisar_clientes():
     termo = dados.get("termo", "")
     clientes = cliente_service.pesquisar_clientes_web(termo)
     return jsonify(clientes)
+
+@clientes_bp.route("/cadastrar", methods=['POST'])
+@login_required
+def cadastrar_cliente():
+    dados = request.json or {}
+    nome = dados.get("nome", "").strip()
+    numero = dados.get("numero", "").strip()
+
+    if not nome or not numero:
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Preencha todos os campos"
+            }), 400
+
+    try:
+        cliente_id = cliente_service.cadastrar_cliente_web(nome, numero)
+        return jsonify({
+            "sucesso": True,
+            "cliente": {"id": cliente_id, "nome": nome, "numero": numero}
+            }), 201
+    except AgendaPy as e:
+        return jsonify({
+            "sucesso": False,
+            "mensagem": str(e)
+            }), 400

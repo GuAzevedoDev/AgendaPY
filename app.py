@@ -1,9 +1,10 @@
 from flask import Flask
-from config import DevelopmentConfig
+from config import DevelopmentConfig,ProductionConfig
 from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp
 from models import db
+from flask_migrate import Migrate
 
-def create_app(config = DevelopmentConfig):
+def create_app(config = ProductionConfig):
     app = Flask(__name__,
         template_folder=config.TEMPLATE_FOLDER,
         static_folder=config.STATIC_FOLDER,)
@@ -19,8 +20,7 @@ def create_app(config = DevelopmentConfig):
     app.register_blueprint(clientes_bp)
 
     #Passo o contexto (necessario)
-    with app.app_context():
-        db.create_all()
+    migrate = Migrate(app, db)
         
     return app
 app = create_app()
@@ -28,6 +28,6 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
 
 

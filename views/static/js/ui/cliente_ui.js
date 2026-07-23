@@ -130,7 +130,12 @@ export function inserirHistoricoCima(nome, numero) {
   }
 }
 
-export function inserirHistorico(historico, totalAgendamentos) {
+export function atualizarMetricas(totalAgendamentos, ultimoAtendimento) {
+  dom.metricaTotalAgendamentos.innerHTML = totalAgendamentos;
+  dom.metricaUltimoAgendamento.innerHTML = ultimoAtendimento || "-";
+}
+
+export function inserirHistorico(historico) {
   let dados = {
     agendamento_data: historico["agendamento_data"],
     agendamento_horario: historico["agendamento_horario"],
@@ -139,7 +144,6 @@ export function inserirHistorico(historico, totalAgendamentos) {
     cliente_numero: historico["cliente_numero"],
     servicos: historico["servicos"],
   };
-  dom.metricaTotalAgendamentos.innerHTML = totalAgendamentos;
   dom.listaUltimosAgendamentos.innerHTML += `<div class="agendamento-historico-card">
               <div class="agendamento-tempo">
                 <span class="cor-2 data">${dados.agendamento_data}</span>
@@ -157,4 +161,15 @@ export function limparHistorico() {
     ".agendamentos-historico-lista",
   );
   listaHistoricoAgendamentos.innerHTML = "";
+}
+
+export function limparDetalhesCliente() {
+  dom.nomeCliente.innerHTML = "Selecione um cliente";
+  dom.numeroCliente.innerHTML = "";
+  let inicial = document.querySelector(
+    ".cliente-detalhes-header .cliente-inicial",
+  );
+  if (inicial) inicial.innerText = "-";
+  atualizarMetricas(0, null);
+  limparHistorico();
 }

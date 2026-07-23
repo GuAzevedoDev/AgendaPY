@@ -35,14 +35,25 @@ class AgendamentoRepository:
     db.session.commit()
 
   def excluir_servicos_agendamentos(self,agendamento_id:int):
-    agendamentos_servicos = ServicosAgendamentos.query.filter_by(agendamento_id = agendamento_id).first()
+    #Um agendamento pode ter varios servicos vinculados, entao precisa apagar todos
+    agendamentos_servicos = ServicosAgendamentos.query.filter_by(agendamento_id = agendamento_id).all()
 
-    db.session.delete(agendamentos_servicos)
+    for agendamento_servico in agendamentos_servicos:
+      db.session.delete(agendamento_servico)
 
     db.session.commit()
 
   def trazer_horarios_dias(self,data:str,funcionario_id:int):
     agendamentos = Agendamentos.query.filter_by(funcionario_id = funcionario_id,data = data).all()
-     
+
+    return agendamentos
+
+  def trazer_agendamentos_do_mes(self,funcionario_id:int,primeiro_dia,ultimo_dia) -> list:
+    agendamentos = Agendamentos.query.filter(
+      Agendamentos.funcionario_id == funcionario_id,
+      Agendamentos.data >= primeiro_dia,
+      Agendamentos.data <= ultimo_dia,
+    ).all()
+
     return agendamentos
 

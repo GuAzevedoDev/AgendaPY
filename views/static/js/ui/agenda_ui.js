@@ -14,17 +14,31 @@ export function mostrar_agenda_horarios(dados, agendaDiv, dataDiaAtivo) {
   });
 }
 
+function horarioJaPassou(dataDiaAtivo, horaTexto) {
+  const [dia, mes, ano] = dataDiaAtivo.split("/").map(Number);
+  const [hora, minuto] = horaTexto.split(":").map(Number);
+  const dataHorario = new Date(ano, mes - 1, dia, hora, minuto);
+  return dataHorario < new Date();
+}
+
 function criar_card_livre(horario, agendaDiv, dataDiaAtivo) {
   const agenda = {
     status: horario.status,
     horario: horario.hora,
     dia: horario.dia,
   };
-  agendaDiv.innerHTML += `<div class="horarioTudo">
+
+  const passou = horarioJaPassou(dataDiaAtivo, agenda.horario);
+
+  const acao = passou
+    ? `<span class="horario-indisponivel">Indisponível</span>`
+    : `<button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button>`;
+
+  agendaDiv.innerHTML += `<div class="horarioTudo${passou ? " passado" : ""}">
       <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">${agenda.horario}</div>
       <div class="status" >
         <span>Horário livre</span>
-        <button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button>
+        ${acao}
       </div>
     </div>`;
 }

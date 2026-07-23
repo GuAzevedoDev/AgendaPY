@@ -31,6 +31,27 @@
     cursor: pointer;
   }
 
+  /* Animacao "tesoura": as 3 linhas rotacionam e se cruzam formando um X */
+  .btn-menu-mobile svg path {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .btn-menu-mobile.aberto svg path:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .btn-menu-mobile.aberto svg path:nth-child(2) {
+    opacity: 0;
+  }
+
+  .btn-menu-mobile.aberto svg path:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
   .overlay-menu-mobile {
     display: block;
     position: fixed;

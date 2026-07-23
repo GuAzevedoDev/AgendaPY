@@ -18,3 +18,13 @@
 .texto-menor {
   font-size: var(--texto-menor);
 }
+
+/* Escala tipografica reduzida no mobile, mantendo a mesma hierarquia */
+@media (max-width: 900px) {
+  :root {
+    --titulo: 1.375rem;
+    --sub-titulo: 1.25rem;
+    --texto: 1.125rem;
+    --texto-menor: 1rem;
+  }
+}
