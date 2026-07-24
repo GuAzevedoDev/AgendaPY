@@ -12,3 +12,6 @@ __pycache__/
 
 #Banco de dados
 *.db
+
+#Certificados TLS (chave privada, nunca commitar)
+certs/
