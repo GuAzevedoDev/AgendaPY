@@ -69,13 +69,15 @@
   }
 
   #home,
-  #clientes-page {
+  #clientes-page,
+  #anamnese-page {
     display: block;
     height: auto;
   }
 
   #home .main-bg,
-  #clientes-page .main-bg {
+  #clientes-page .main-bg,
+  #anamnese-page .main-bg {
     padding: 80px 16px 40px;
   }
 

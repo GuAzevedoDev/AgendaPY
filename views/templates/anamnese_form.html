@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{%block titulo%}Ficha de Anamnese{%endblock%}
+{%block id%}anamnese-form-page{%endblock%}
+{%block script_tag%}
+<script type="module" defer src="../static/js/anamnese_form.js"></script>{%endblock%}
+
+{%block conteudo%}
+<main class="anamnese-form-bg">
+  <div class="anamnese-form-card">
+    <div class="anamnese-form-topo">
+      <h1 class="cor-p1 titulo">Ficha de Anamnese</h1>
+      <span class="texto-menor cor-3">Leva poucos minutos — pode responder no seu ritmo.</span>
+    </div>
+
+    <div class="anamnese-progresso">
+      <div class="anamnese-progresso-barra">
+        <div class="anamnese-progresso-preenchido"></div>
+      </div>
+      <span class="anamnese-progresso-texto texto-menor cor-3"></span>
+    </div>
+
+    <form id="formAnamnesePublica" novalidate>
+      <div class="anamnese-etapas"></div>
+    </form>
+
+    <div class="anamnese-form-nav">
+      <button type="button" class="btn-secundario anamnese-btn-voltar" hidden>Voltar</button>
+      <button type="button" class="btn anamnese-btn-avancar" form="formAnamnesePublica">Próximo</button>
+    </div>
+
+    <div class="anamnese-sucesso" hidden>
+      <h2 class="cor-p1">Ficha enviada! ✓</h2>
+      <p class="cor-3">Obrigado por responder. A equipe já recebeu suas informações.</p>
+    </div>
+
+    <span class="anamnese-aviso"></span>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.6.0/cleave.min.js"></script>
+{%endblock%}

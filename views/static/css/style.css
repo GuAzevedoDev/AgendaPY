@@ -7,6 +7,7 @@
 @import './componentes/botoes.css';
 @import './componentes/tipografia.css';
 @import './componentes/modal-container.css';
+@import './componentes/campos-anamnese.css';
 
 /* importacoes paginas */
 @import './paginas/login.css';
@@ -16,6 +17,8 @@
 @import './home/agenda.css';
 @import './home/scrollbar.css';
 @import './paginas/clientes.css';
+@import './paginas/anamnese.css';
+@import './paginas/anamnese-form.css';
 
 /* importacoes mobile */
 @import './mobile/mobile-menu.css';

@@ -6,6 +6,7 @@ from .agendamentos import Agendamentos
 from .funcionarios import Funcionarios
 from .servicos import Servicos
 from .servicos_agendamentos import ServicosAgendamentos
+from .anamnese import Anamnese
 
-__all__ = ['db','Clientes','Agendamentos','Funcionarios','Servicos','ServicosAgendamentos']
+__all__ = ['db','Clientes','Agendamentos','Funcionarios','Servicos','ServicosAgendamentos','Anamnese']
 

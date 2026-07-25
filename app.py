@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 # Rotas que renderizam HTML — todo o resto responde em JSON.
-HTML_ROUTES = {"/", "/clientes/", "/login"}
+HTML_ROUTES = {"/", "/clientes/", "/login", "/anamnese/", "/anamnese/responder"}
 
 
 def create_app(config = ProductionConfig):
@@ -29,8 +29,8 @@ def create_app(config = ProductionConfig):
     csrf.init_app(app)
     limiter.init_app(app)
 
-    # Nginx fica na frente do Gunicorn: sem isso, request.remote_addr (usado
-    # pelo Flask-Limiter) e request.is_secure sempre veriam o Nginx, não o
+    # O proxy reverso fica na frente do Gunicorn: sem isso, request.remote_addr (usado
+    # pelo Flask-Limiter) e request.is_secure sempre veriam o proxy, não o
     # cliente real, e o rate limit ficaria compartilhado entre todo mundo.
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
@@ -38,11 +38,12 @@ def create_app(config = ProductionConfig):
     db.init_app(app)
 
     #Blueprints (importados aqui dentro para evitar import circular com controllers/auth_controller.py, que importa o limiter)
-    from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp
+    from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp,anamnese_bp
     app.register_blueprint(agendamento_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(clientes_bp)
+    app.register_blueprint(anamnese_bp)
 
     #Passo o contexto (necessario)
     Migrate(app, db)

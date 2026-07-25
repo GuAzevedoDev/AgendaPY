@@ -13,3 +13,6 @@ class FuncionarioError(AgendaPy):
 
 class ServicoError(AgendaPy):
   pass
+
+class AnamneseError(AgendaPy):
+  pass

@@ -36,40 +36,19 @@ services:
     #Le SECRET_KEY, DATABASE_URL etc. direto do .env
     env_file: .env
     environment:
-      #Sem isso o gunicorn escuta so em 127.0.0.1 (dentro do proprio container) e o nginx nunca alcanca
+      #Sem isso o gunicorn escuta so em 127.0.0.1 (dentro do proprio container) e o proxy reverso nunca alcanca
       - GUNICORN_BIND=0.0.0.0:8000
     #So sobe depois do banco estar de fato pronto pra aceitar conexao
     depends_on:
       db:
         condition: service_healthy
-    #Confere se o Flask esta respondendo antes do nginx comecar a mandar trafego pra ca
+    #Confere se o Flask esta respondendo antes do proxy reverso comecar a mandar trafego pra ca
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-
-  web:
-    image: nginx:1.27-alpine
-    restart: unless-stopped
-    #So inicia depois que a app estiver de pe e respondendo (healthcheck acima)
-    depends_on:
-      app:
-        condition: service_healthy
-    volumes:
-    #Template processado por envsubst (variaveis do environment:) e gera o conf.d real
-    - ./templates:/etc/nginx/templates
-    #Certificados TLS (ex.: gerados pelo certbot) — pasta local que voce popula fora do compose
-    - ./certs:/etc/letsencrypt:ro
-    #Arquivos estaticos do Flask, servidos direto pelo nginx (bate com o alias no template)
-    - ./views/static:/var/www/static:ro
-    ports:
-    #Portas padrao HTTP/HTTPS, nao 8080 — e o que o server_name/listen do template espera
-    - "80:80"
-    - "443:443"
-    environment:
-    - NGINX_HOST=foobar.com
 
   adminer:
     #Interface web para gerenciar o db

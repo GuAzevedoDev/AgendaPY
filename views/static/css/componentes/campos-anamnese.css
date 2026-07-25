@@ -1,0 +1,133 @@
+/* Campos da ficha de anamnese — usados tanto no formulário público em
+   etapas quanto no modal de edição do dashboard (ver anamnese_campos.js) */
+
+.anamnese-secao {
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.anamnese-secao legend {
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-p1);
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.campo-anamnese {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-anamnese > span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--cor-2);
+}
+
+.campo-anamnese input[type="text"],
+.campo-anamnese input[type="number"],
+.campo-anamnese textarea {
+  border: 1px solid rgba(158, 154, 156, 0.35);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.campo-anamnese textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.campo-anamnese input:focus,
+.campo-anamnese textarea:focus {
+  border-color: var(--cor-p1);
+  box-shadow: 0 0 0 3px rgba(188, 122, 97, 0.12);
+}
+
+.opcoes-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.opcao-radio,
+.opcao-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(158, 154, 156, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+.opcao-radio:has(input:checked),
+.opcao-checkbox:has(input:checked) {
+  border-color: var(--cor-p1);
+  background: #fdf6f3;
+}
+
+.opcao-radio input,
+.opcao-checkbox input {
+  width: auto;
+  accent-color: var(--cor-p1);
+}
+
+.opcao-radio span,
+.opcao-checkbox span {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .opcao-radio,
+  .opcao-checkbox {
+    min-width: 100%;
+  }
+}
+
+.opcao-confirmacao {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid rgba(158, 154, 156, 0.3);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.opcao-confirmacao:has(input:checked) {
+  border-color: var(--cor-p1);
+  background: #fdf6f3;
+}
+
+.opcao-confirmacao input {
+  width: auto;
+  margin-top: 3px;
+  accent-color: var(--cor-p1);
+  flex-shrink: 0;
+}
+
+.opcao-confirmacao span {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}

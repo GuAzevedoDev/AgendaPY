@@ -1,0 +1,182 @@
+#anamnese-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+}
+
+#anamnese-page .main-bg {
+  grid-column: 2;
+  padding: 20px 60px;
+  padding-top: 40px;
+}
+
+#anamnese-page .main {
+  display: flex;
+  flex-direction: column;
+}
+
+#anamnese-page .mostra {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.sub-titulo-anamnese {
+  display: block;
+  font-size: var(--texto-menor);
+  font-weight: 400;
+  color: var(--cor-3);
+  margin-top: 5px;
+}
+
+.sub-titulo-anamnese .contador-fichas {
+  display: inline;
+}
+
+.filtro-anamnese {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.filtro-anamnese .busca-ficha {
+  width: 240px;
+  padding: 12px 16px;
+  border: 1px solid rgba(158, 154, 156, 0.3);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  outline: none;
+  background: var(--cor-1);
+  transition: 0.3s;
+}
+
+.filtro-anamnese .busca-ficha:focus {
+  border-color: var(--cor-p1);
+  box-shadow: 0 4px 12px rgba(188, 122, 97, 0.12);
+}
+
+/* Tabela de fichas */
+.tabela-fichas-wrapper {
+  border: 1px solid #fee8df;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(188, 122, 97, 0.1);
+  background: var(--cor-1);
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.tabela-fichas {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-fichas thead {
+  background: #faf6f4;
+}
+
+.tabela-fichas th {
+  text-align: left;
+  padding: 16px 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-3);
+}
+
+.tabela-fichas td {
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  color: var(--cor-2);
+  border-top: 1px solid rgba(158, 154, 156, 0.15);
+}
+
+.status-badge.pendente {
+  background: #fdf6f3;
+  border: 1px solid rgba(188, 122, 97, 0.25);
+  color: var(--cor-p1);
+}
+
+.btn-ver-ficha {
+  border: 1px solid rgba(188, 122, 97, 0.4);
+  background: transparent;
+  color: var(--cor-p1);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-ver-ficha:hover {
+  background: var(--cor-p1);
+  color: var(--cor-1);
+}
+
+.fichas-vazio {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--cor-3);
+  border: 1px dashed rgba(158, 154, 156, 0.3);
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+/* Modal de visualizacao/edicao da ficha */
+.modal-anamnese {
+  width: min(720px, 92vw);
+  height: min(720px, 88vh);
+  grid-template-columns: 1fr;
+}
+
+.modal-anamnese .main-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.anamnese-cliente-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.anamnese-secoes {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  #anamnese-page {
+    grid-template-columns: 1fr;
+  }
+
+  #anamnese-page .main-bg {
+    padding: 20px;
+  }
+
+  .header-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .filtro-anamnese {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filtro-anamnese .busca-ficha {
+    width: 100%;
+  }
+
+  .tabela-fichas-wrapper {
+    overflow-x: auto;
+  }
+
+  .tabela-fichas {
+    min-width: 600px;
+  }
+}

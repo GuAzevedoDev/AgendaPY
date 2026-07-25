@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{%block titulo%}Clientes{%endblock%}
-{%block id%}clientes-page{%endblock%}
+{%block titulo%}Anamnese{%endblock%}
+{%block id%}anamnese-page{%endblock%}
 {%block script_tag%}
 <script type="module" defer src="../static/js/main.js"></script>{%endblock%}
 
 {%block conteudo%}
-<header class="header-bg pagina-clientes">
+<header class="header-bg pagina-anamnese">
   <div class="header">
     <menu>
       <li>
@@ -17,7 +17,7 @@
           <span>Agenda</span>
         </a>
       </li>
-      <li class="ativo">
+      <li>
         <a href="{{ url_for('clientes.clientes') }}">
           <svg width="20" height="23" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.75 9.75C12.4424 9.75 14.625 7.56738 14.625 4.875C14.625 2.18262 12.4424 0 9.75 0C7.05762 0 4.875 2.18262 4.875 4.875C4.875 7.56738 7.05762 9.75 9.75 9.75Z" />
@@ -26,7 +26,7 @@
           <span>Clientes</span>
         </a>
       </li>
-      <li>
+      <li class="ativo">
         <a href="{{ url_for('anamnese.anamnese') }}">
           <svg width="20" height="22" viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg">
             <rect x="1" y="2" width="18" height="19" rx="2" />
@@ -60,80 +60,49 @@
   <div class="main">
     <div class="header-main">
       <div class="mostra">
-        <h2 class="cor-2 titulo">Clientes</h2>
+        <h2 class="cor-2 titulo">Fichas recebidas</h2>
+        <span class="sub-titulo-anamnese"><span class="contador-fichas">0</span> fichas</span>
       </div>
-      <button class="btn" onclick="abreModal('cliente')">+ Novo cliente</button>
-    </div>
-
-    <div class="search-container">
-      <div class="search-wrapper">
-        <input type="text" placeholder="Pesquisar cliente..." class="search-input">
-        <button class="search-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      <div class="filtro-anamnese">
+        <input type="text" placeholder="Pesquisar por nome..." class="busca-ficha">
+        <div class="drop-down-filtro" data-filtro="tudo">
+          <span>Todo período</span>
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.4012 9.24534L13.0391 16.5446L5.74036 9.18242C5.53834 8.97832 5.20892 8.97728 5.00508 9.1793C4.80124 9.38132 4.79994 9.71074 5.00196 9.91432L12.5924 17.5708C12.6873 17.6665 12.8095 17.7172 12.9335 17.7239C12.9697 17.726 13.0058 17.7237 13.0414 17.7185C13.0555 17.7206 13.069 17.7239 13.083 17.7242C13.2245 17.7317 13.3688 17.6821 13.4769 17.5744L21.1331 9.98348C21.3372 9.78146 21.3385 9.4523 21.1363 9.2482C20.934 9.0441 20.6048 9.04306 20.4012 9.24534Z" />
           </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="clientes-grid">
-      <!-- Coluna esquerda (Lista de clientes) -->
-      <div class="clientes-lista-card">
-        <h2 class="cor-2 card-titulo">Clientes</h2>
-        <div class="clientes-lista-wrapper">
-          <ul class="clientes-lista">
-
+          <ul class="opcoes-filtro">
+            <li data-opcao="tudo">Todo período</li>
+            <li data-opcao="semana">Esta semana</li>
+            <li data-opcao="mes">Este mês</li>
           </ul>
         </div>
       </div>
+    </div>
 
-      <!-- Coluna direita (Detalhes do cliente) -->
-      <div class="cliente-detalhes-secao">
-        <button type="button" class="btn-voltar-cliente" aria-label="Voltar">
-          <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 9H1M1 9L9 17M1 9L9 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-        <!-- Card Detalhes Basicos -->
-        <div class="cliente-detalhes-card">
-          <div class="cliente-detalhes-header">
-            <div class="cliente-inicial grande">A</div>
-            <div>
-              <h2 class="cor-2">Ana Azevedo</h2>
-              <span class="cor-3">(31) 99999-9999</span>
-            </div>
-          </div>
-          <div class="cliente-metricas">
-            <div class="metrica-item">
-              <span class="cor-3 metrica-label">Total de Agendamentos</span>
-              <span class="cor-p1 metrica-valor">12</span>
-            </div>
-            <div class="metrica-item">
-              <span class="cor-3 metrica-label">Último Atendimento</span>
-              <span class="cor-2 metrica-valor">18/07/2026</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Secao ultimos agendamentos -->
-        <div class="ultimos-agendamentos">
-          <h3 class="cor-2 secao-titulo">Últimos agendamentos</h3>
-
-          <div class="agendamentos-historico-lista">
-
-
-          </div>
-        </div>
-      </div>
+    <div class="tabela-fichas-wrapper">
+      <table class="tabela-fichas">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>nome</th>
+            <th>numero</th>
+            <th>data</th>
+            <th>status</th>
+            <th>acoes</th>
+          </tr>
+        </thead>
+        <tbody class="corpo-tabela-fichas">
+        </tbody>
+      </table>
+      <div class="fichas-vazio" hidden>Nenhuma ficha recebida ainda.</div>
     </div>
   </div>
 </main>
 
-<dialog class="modal-cliente modal-container">
+<dialog class="modal-anamnese modal-container">
   <div class="header-modal">
-    <h1 class="texto">Novo cliente</h1>
-    <button onclick="fechaModal('cliente')">
+    <h1 class="texto">Ficha de anamnese</h1>
+    <button onclick="fechaModal('anamnese')">
       <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <path opacity="0.5" d="M27.5775 15C27.5775 21.9035 21.9652 27.5 15.0422 27.5C8.11909 27.5 2.50684 21.9035 2.50684 15C2.50684 8.09644 8.11909 2.5 15.0422 2.5C21.9652 2.5 27.5775 8.09644 27.5775 15Z" fill="#D3D3D3" />
         <path d="M11.2436 11.2121C11.6108 10.846 12.206 10.846 12.5732 11.2121L15.0422 13.6742L17.5113 11.2121C17.8785 10.846 18.4737 10.846 18.8408 11.2121C19.208 11.5782 19.208 12.1718 18.8408 12.538L16.3719 15L18.8408 17.462C19.208 17.8281 19.208 18.4217 18.8408 18.7879C18.4737 19.154 17.8784 19.154 17.5112 18.7879L15.0422 16.3259L12.5733 18.7879C12.2061 19.154 11.6108 19.154 11.2436 18.7879C10.8765 18.4217 10.8765 17.8282 11.2436 17.4621L13.7127 15L11.2436 12.5379C10.8765 12.1718 10.8765 11.5782 11.2436 11.2121Z" fill="#B8B1AE" />
@@ -142,20 +111,21 @@
   </div>
 
   <div class="main-modal">
-    <form action="" id="formNovoCliente">
-      <ol>
-        <li>
-          <h2>1. Dados do cliente</h2>
-          <input type="text" placeholder="Nome" name="nomeNovoCliente" class="nomeNovoCliente" required>
-          <input type="text" placeholder="Numero" name="numeroNovoCliente" class="numeroNovoCliente" required>
-        </li>
-      </ol>
+    <div class="anamnese-cliente-info">
+      <div class="cliente-inicial grande anamnese-inicial"></div>
+      <div>
+        <h2 class="cor-2 anamnese-nome"></h2>
+        <span class="cor-3 anamnese-numero"></span>
+      </div>
+    </div>
+    <form id="formEditarAnamnese">
+      <div class="anamnese-secoes"></div>
     </form>
     <span class="aviso-modal"></span>
   </div>
 
   <div class="footer-modal">
-    <button id="btnCadastrarCliente" class="btn" form="formNovoCliente">Cadastrar cliente</button>
+    <button id="btnSalvarAnamnese" class="btn" form="formEditarAnamnese">Salvar alterações</button>
   </div>
 </dialog>
 {%endblock%}
