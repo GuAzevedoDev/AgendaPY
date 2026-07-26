@@ -2,32 +2,16 @@
    SCROLLBAR
 ══════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--cor-p1);
-}
-
-::-webkit-scrollbar {
   width: 5px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #bcbcbc;
   border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: var(--cor-p1);
 }

@@ -15,3 +15,6 @@ __pycache__/
 
 #Certificados TLS (chave privada, nunca commitar)
 certs/
+
+#Dependencias node (clean-css-cli)
+node_modules/
