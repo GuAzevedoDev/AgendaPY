@@ -38,6 +38,8 @@ services:
     environment:
       #Sem isso o gunicorn escuta so em 127.0.0.1 (dentro do proprio container) e o proxy reverso nunca alcanca
       - GUNICORN_BIND=0.0.0.0:8000
+      #Sem isso o container roda em UTC e datetime.now() fica 3h a frente do horario real
+      - TZ=America/Sao_Paulo
     #So sobe depois do banco estar de fato pronto pra aceitar conexao
     depends_on:
       db:
