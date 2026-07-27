@@ -32,7 +32,7 @@ def excluir_funcionario():
     funcionario.excluir_funcionarios(nome)
     print(f"Funcionario '{nome}' excluido!")
 
-def mostrar_servicos() -> list:
+def mostrar_servicos():
     #Conexao segura com db
     servicosEncontrados = servico.mostrarServicosWeb()
   
@@ -40,15 +40,15 @@ def mostrar_servicos() -> list:
     for servico in servicosEncontrados:
         print(servico)
 
-def excluir_servico() -> list:
+def excluir_servico():
     #Conexao segura com db
     print("Qual nome do servico?")
     nome_servico = input()
-    try:      
+    try:
         servico.excluirServicoWeb(nome_servico)
+        print(f"Servico {nome_servico} excluido")
     except Exception as e:
         print(e)
-    print(f"Servico {nome_servico} excluido")
 
 OPCOES = {
     "1": ("Cadastrar funcionario", funcionario.cadastrarFuncionarios),

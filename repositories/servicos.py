@@ -16,8 +16,10 @@ class ServicoRepository:
     return servicos
 
   def excluir_servico(self,nome):
-    servico = Servicos.query.filter_by(nome = nome)
+    servico = Servicos.query.filter_by(nome = nome).first()
     if not servico:
       raise Exception("Nao existe esse servico")
-    
+
     db.session.delete(servico)
+    db.session.commit()
+    return servico
