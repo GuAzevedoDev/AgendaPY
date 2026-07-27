@@ -18,7 +18,7 @@ class Cliente:
     return cliente_encontrado_id
 
   def cadastrar_cliente_web(self,nome:str,numero:str) -> int:
-    cliente = repo_cliente.cadastrar_cliente(nome,numero)
+    cliente = repo_cliente.cadastrar_cliente(nome,numero or "")
     cliente_id = cliente.id
     if not cliente_id:
       raise ClienteError("Nao foi possivel cadastrar o cliente")

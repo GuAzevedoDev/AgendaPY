@@ -23,7 +23,7 @@ def agendar():
     observacaoAgendamento = dados.get("observacao")
 
     #Validacao do formulario de agendamento
-    if not nomeCliente or not numeroCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
+    if not nomeCliente or not nomesServicos or not dataAgendamento or not horaAgendamento:
         return jsonify({
             "sucesso": False,
             "mensagem": "Preencha todos os campos"
