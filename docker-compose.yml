@@ -55,6 +55,7 @@ services:
       - "traefik.http.routers.agenda.entrypoints=websecure"
       - "traefik.http.routers.agenda.tls.certresolver=letsencrypt"
       - "traefik.http.services.agenda.loadbalancer.server.port=8000"
+      - "traefik.docker.network=agenda_default"
   adminer:
     #Interface web para gerenciar o db
     image: adminer
