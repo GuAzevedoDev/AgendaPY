@@ -37,8 +37,8 @@ def mostrar_servicos():
     servicosEncontrados = servico.mostrarServicosWeb()
   
     #Se nao exitir retorno lista vazia
-    for servico in servicosEncontrados:
-        print(servico)
+    for item in servicosEncontrados:
+        print(item)
 
 def excluir_servico():
     #Conexao segura com db
