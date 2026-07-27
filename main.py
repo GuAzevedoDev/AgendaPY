@@ -34,12 +34,31 @@ def excluir_funcionario():
     funcionario.excluir_funcionarios(nome)
     print(f"Funcionario '{nome}' excluido!")
 
+def mostrar_servicos() -> list:
+    #Conexao segura com db
+    servicosEncontrados = servico.mostrar_servicos()
+  
+    #Se nao exitir retorno lista vazia
+    for servico in servicosEncontrados:
+        print(servico)
+
+def excluir_servico() -> list:
+    #Conexao segura com db
+    print("Qual nome do servico?")
+    nome_servico = input()
+    try:      
+        servico.excluir_servico(nome_servico)
+    except Exception as e:
+        print(e)
+    print(f"Servico {nome_servico} excluido")
 
 OPCOES = {
     "1": ("Cadastrar funcionario", funcionario.cadastrarFuncionarios),
     "2": ("Cadastrar servico", cadastrar_servico),
     "3": ("Cadastrar cliente", cadastrar_cliente),
     "4": ("Excluir funcionario", excluir_funcionario),
+    "5":("Mostrar servicos", mostrar_servicos),
+    "6":("Excluir servico", excluir_servico)
 }
 
 

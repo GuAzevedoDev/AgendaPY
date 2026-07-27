@@ -23,5 +23,9 @@ class ClienteRepository:
   
   def buscar_cliente_id(self,id) -> tuple:
     cliente = Clientes.query.filter_by(id = id).first()
-    
+
     return cliente
+
+  def excluir_cliente(self,cliente) -> None:
+    db.session.delete(cliente)
+    db.session.commit()

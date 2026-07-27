@@ -197,6 +197,25 @@
   margin-bottom: 4px;
 }
 
+.btn-excluir-cliente {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  border: none;
+  border-radius: 10px;
+  background: var(--cor-p2);
+  color: var(--cor-p1);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-excluir-cliente:hover {
+  background: #fee8df;
+}
+
 .cliente-metricas {
   display: grid;
   grid-template-columns: 1fr 1fr;

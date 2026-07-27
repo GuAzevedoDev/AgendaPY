@@ -70,3 +70,18 @@ def cadastrar_cliente():
             "sucesso": False,
             "mensagem": str(e)
             }), 400
+
+@clientes_bp.route("/excluir", methods=['POST'])
+@login_required
+def excluir_cliente():
+    dados = request.get_json(silent=True) or {}
+    cliente_id = dados.get("id")
+
+    if not cliente_id:
+        return jsonify({"sucesso": False, "mensagem": "Cliente nao informado"}), 400
+
+    try:
+        cliente_service.excluir_cliente_web(cliente_id)
+        return jsonify({"sucesso": True, "mensagem": "Cliente excluido com sucesso"}), 200
+    except AgendaPy as e:
+        return jsonify({"sucesso": False, "mensagem": str(e)}), 400

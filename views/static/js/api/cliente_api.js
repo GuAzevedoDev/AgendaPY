@@ -51,3 +51,14 @@ export async function cadastrarCliente(nome, numero) {
   });
   return await resposta.json();
 }
+
+export async function excluirCliente(id) {
+  const resposta = await fetch("/clientes/excluir", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+    body: JSON.stringify({
+      id: id,
+    }),
+  });
+  return await resposta.json();
+}

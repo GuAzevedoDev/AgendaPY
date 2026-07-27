@@ -5,11 +5,14 @@ import { fechaModal } from "../ui/modal_ui.js";
 
 const ehMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
+let clienteSelecionadoId = null;
+
 export async function iniciarClientes() {
   await mostrarClientes();
   mostraHistoricoCliente();
   configurarPesquisa();
   configurarNovoCliente();
+  configurarExcluirCliente();
   selecionarClienteDesktop();
 }
 
@@ -22,6 +25,7 @@ export async function mostraHistoricoCliente() {
   let clientesItens = document.querySelectorAll(".cliente-item");
   clientesItens.forEach((item) => {
     item.addEventListener("click", async () => {
+      clienteSelecionadoId = item.dataset.id;
       clienteUi.marcaClicado(item, clientesItens);
       clienteUi.inserirHistoricoCima(item.dataset.nome, item.dataset.numero);
       clienteUi.limparHistorico();
@@ -46,8 +50,35 @@ function selecionarClienteDesktop(itemAlvo) {
   if (alvo) {
     alvo.click();
   } else {
+    clienteSelecionadoId = null;
     clienteUi.limparDetalhesCliente();
   }
+}
+
+export function configurarExcluirCliente() {
+  const botaoExcluir = document.querySelector(".btn-excluir-cliente");
+  if (!botaoExcluir) return;
+
+  botaoExcluir.addEventListener("click", async () => {
+    if (!clienteSelecionadoId) return;
+
+    const nome = dom.nomeCliente.textContent;
+    if (!confirm(`Deseja realmente excluir o cliente ${nome}?`)) return;
+
+    try {
+      const dados = await clienteApi.excluirCliente(clienteSelecionadoId);
+      if (dados.sucesso === true) {
+        clienteSelecionadoId = null;
+        await mostrarClientes();
+        mostraHistoricoCliente();
+        selecionarClienteDesktop();
+      } else {
+        alert(dados.mensagem || "Nao foi possivel excluir o cliente");
+      }
+    } catch (err) {
+      console.error("Erro ao excluir cliente:", err);
+    }
+  });
 }
 
 export function configurarPesquisa() {

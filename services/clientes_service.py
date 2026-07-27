@@ -102,3 +102,14 @@ class Cliente:
 
       todos_agendamentos.append(dados_agendamento)
     return todos_agendamentos
+
+  def excluir_cliente_web(self,cliente_id:int) -> None:
+    cliente_id = int(cliente_id)
+    cliente = repo_cliente.buscar_cliente_id(cliente_id)
+    if not cliente:
+      raise ClienteError("Cliente nao encontrado")
+
+    if cliente.agendamentos or cliente.anamnese:
+      raise ClienteError("Cliente possui agendamentos ou anamnese vinculados e nao pode ser excluido")
+
+    repo_cliente.excluir_cliente(cliente)

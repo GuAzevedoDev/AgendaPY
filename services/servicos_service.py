@@ -52,3 +52,6 @@ class ServicosService:
       nomes_servicos.append((servico.id,servico.nome))
 
     return nomes_servicos
+
+
+

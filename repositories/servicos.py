@@ -14,3 +14,10 @@ class ServicoRepository:
   def busca_pesquisa_servicos(self,servico:str) -> list:
     servicos = Servicos.query.filter(Servicos.nome.ilike(f"%{servico}%")).all()
     return servicos
+
+  def excluir_servico(self,nome):
+    servico = Servicos.query.filter_by(nome = nome)
+    if not servico:
+      raise Exception("Nao existe esse servico")
+    
+    db.session.delete(servico)
