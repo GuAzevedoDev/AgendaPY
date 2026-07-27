@@ -24,3 +24,7 @@ class AnamneseRepository:
   def listar_todas(self) -> list:
     anamneses = Anamnese.query.join(Anamnese.cliente).order_by(Anamnese.data_de_atualizacao.desc()).all()
     return anamneses
+
+  def excluir(self,anamnese:Anamnese) -> None:
+    db.session.delete(anamnese)
+    db.session.commit()

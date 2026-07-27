@@ -62,3 +62,10 @@ class Anamnese:
       raise AnamneseError("Ficha nao encontrada")
 
     repo_anamnese.criar_ou_atualizar(anamnese.cliente_id,respostas)
+
+  def excluir_ficha_web(self,anamnese_id:int) -> None:
+    anamnese = repo_anamnese.buscar_por_id(anamnese_id)
+    if not anamnese:
+      raise AnamneseError("Ficha nao encontrada")
+
+    repo_anamnese.excluir(anamnese)

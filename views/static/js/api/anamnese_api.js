@@ -25,6 +25,15 @@ export async function atualizarFicha(id, respostas) {
   return await resposta.json();
 }
 
+export async function excluirFicha(id) {
+  const resposta = await fetch("/anamnese/excluir", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+    body: JSON.stringify({ id }),
+  });
+  return await resposta.json();
+}
+
 export async function enviarFicha(nome, numero, respostas) {
   const resposta = await fetch("/anamnese/enviar", {
     method: "POST",

@@ -113,6 +113,23 @@
   color: var(--cor-1);
 }
 
+.btn-excluir-ficha {
+  border: 1px solid rgba(200, 60, 60, 0.4);
+  background: transparent;
+  color: #c83c3c;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: 6px;
+}
+
+.btn-excluir-ficha:hover {
+  background: #c83c3c;
+  color: var(--cor-1);
+}
+
 .fichas-vazio {
   padding: 60px 20px;
   text-align: center;

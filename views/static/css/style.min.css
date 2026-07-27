@@ -272,6 +272,8 @@ input[type=radio]{accent-color:var(--cor-p1);width:16px;height:16px}
 .status-badge.pendente{background:#fdf6f3;border:1px solid rgba(188,122,97,.25);color:var(--cor-p1)}
 .btn-ver-ficha{border:1px solid rgba(188,122,97,.4);background:0 0;color:var(--cor-p1);padding:6px 14px;border-radius:8px;font-size:.85rem;cursor:pointer;transition:.2s}
 .btn-ver-ficha:hover{background:var(--cor-p1);color:var(--cor-1)}
+.btn-excluir-ficha{border:1px solid rgba(200,60,60,.4);background:0 0;color:#c83c3c;padding:6px 14px;border-radius:8px;font-size:.85rem;cursor:pointer;transition:.2s;margin-left:6px}
+.btn-excluir-ficha:hover{background:#c83c3c;color:var(--cor-1)}
 .fichas-vazio{padding:60px 20px;text-align:center;color:var(--cor-3);border:1px dashed rgba(158,154,156,.3);border-radius:10px;margin-top:30px}
 .modal-anamnese{width:min(720px,92vw);height:min(720px,88vh);grid-template-columns:1fr}
 .modal-anamnese .main-modal{display:flex;flex-direction:column;gap:24px}
@@ -291,6 +293,7 @@ input[type=radio]{accent-color:var(--cor-p1);width:16px;height:16px}
 .anamnese-form-bg{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:40px 16px;background:#fdf6f3}
 .anamnese-form-card{width:100%;max-width:560px;background:var(--cor-1);border-radius:16px;box-shadow:0 8px 30px rgba(188,122,97,.12);padding:28px 24px 100px;display:flex;flex-direction:column;gap:24px;position:relative}
 .anamnese-form-topo{display:flex;flex-direction:column;gap:6px;text-align:center}
+.anamnese-form-topo[hidden]{display:none}
 .anamnese-progresso{display:flex;flex-direction:column;gap:8px}
 .anamnese-progresso[hidden]{display:none}
 .anamnese-progresso-barra{height:6px;border-radius:999px;background:var(--cor-p2);overflow:hidden}

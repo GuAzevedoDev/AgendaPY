@@ -14,6 +14,7 @@ export function renderizarTabela(fichas, corpoTabela) {
         <td>${renderizarStatusAvaliacao(ficha.avaliacao_concluida)}</td>
         <td>
           <button type="button" class="btn-ver-ficha" data-id="${ficha.id}">Ver / editar</button>
+          <button type="button" class="btn-excluir-ficha" data-id="${ficha.id}">Excluir</button>
         </td>
       </tr>`,
     )

@@ -95,3 +95,18 @@ def atualizar_ficha():
         return jsonify({"sucesso": True}), 200
     except AgendaPy as e:
         return jsonify({"sucesso": False, "mensagem": str(e)}), 400
+
+@anamnese_bp.route("/excluir", methods=['POST'])
+@login_required
+def excluir_ficha():
+    dados = request.get_json(silent=True) or {}
+    anamnese_id = dados.get("id")
+
+    if not anamnese_id:
+        return jsonify({"sucesso": False, "mensagem": "Ficha nao informada"}), 400
+
+    try:
+        anamnese_service.excluir_ficha_web(anamnese_id)
+        return jsonify({"sucesso": True}), 200
+    except AgendaPy as e:
+        return jsonify({"sucesso": False, "mensagem": str(e)}), 400

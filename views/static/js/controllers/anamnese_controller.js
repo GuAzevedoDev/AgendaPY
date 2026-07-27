@@ -83,6 +83,19 @@ function configurarFiltroPeriodo() {
 
 function configurarAbrirFicha() {
   corpoTabela.addEventListener("click", async (e) => {
+    const botaoExcluir = e.target.closest(".btn-excluir-ficha");
+    if (botaoExcluir) {
+      if (!confirm("Deseja realmente excluir esta ficha de anamnese?")) return;
+
+      const resultado = await anamneseApi.excluirFicha(botaoExcluir.dataset.id);
+      if (resultado.sucesso) {
+        await carregarFichas();
+      } else {
+        alert("Erro ao excluir ficha: " + (resultado.mensagem || "Erro desconhecido"));
+      }
+      return;
+    }
+
     const botao = e.target.closest(".btn-ver-ficha");
     if (!botao) return;
 
