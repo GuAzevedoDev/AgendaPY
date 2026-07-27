@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, render_template, session, jsonify, request
 from auth import login_required
 from services import Anamnese
@@ -6,6 +7,9 @@ from exeptions import AgendaPy
 anamnese_service = Anamnese()
 
 anamnese_bp = Blueprint("anamnese", __name__, url_prefix="/anamnese")
+
+NOME_REGEX = re.compile(r"^[A-Za-zÀ-ÖØ-öø-ÿ' \-]{1,100}$")
+NUMERO_REGEX = re.compile(r"^[0-9()\-+ ]{1,20}$")
 
 
 # --- Rotas publicas: o cliente preenche sem precisar logar ---
@@ -25,6 +29,12 @@ def enviar_ficha():
         return jsonify({
             "sucesso": False,
             "mensagem": "Preencha todos os campos obrigatorios"
+            }), 400
+
+    if not NOME_REGEX.match(nome) or not NUMERO_REGEX.match(numero):
+        return jsonify({
+            "sucesso": False,
+            "mensagem": "Nome ou numero em formato invalido"
             }), 400
 
     try:

@@ -1,5 +1,6 @@
 import * as dom from "./dom.js";
 import * as cliente_api from "../api/cliente_api.js";
+import { escapeHtml } from "../utils/html.js";
 
 let indiceSelecionado = -1;
 
@@ -36,10 +37,10 @@ export function coloca_nome_lista(clientes, listaNomes) {
       (cliente) => `
         <li
           class="nome-lista"
-          data-nome="${cliente[1]}"
-          data-numero="${cliente[2]}"
+          data-nome="${escapeHtml(cliente[1])}"
+          data-numero="${escapeHtml(cliente[2])}"
           tabindex="-1">
-          ${cliente[1]}
+          ${escapeHtml(cliente[1])}
         </li>
       `,
     )
@@ -101,11 +102,11 @@ export function mostrarClientes(clientes, listaClientes) {
       nome: cliente["nome"],
       numero: cliente["numero"],
     };
-    listaClientes.innerHTML += `<li class="cliente-item" data-id = "${dados.id}" data-nome = "${dados.nome}" data-numero = "${dados.numero}">
-              <div class="cliente-inicial">${dados.nome[0].toUpperCase()}</div>
+    listaClientes.innerHTML += `<li class="cliente-item" data-id = "${dados.id}" data-nome = "${escapeHtml(dados.nome)}" data-numero = "${escapeHtml(dados.numero)}">
+              <div class="cliente-inicial">${escapeHtml(dados.nome[0].toUpperCase())}</div>
               <div class="cliente-info">
-                <h3>${dados.nome}</h3>
-                <span class="cor-3">${dados.numero}</span>
+                <h3>${escapeHtml(dados.nome)}</h3>
+                <span class="cor-3">${escapeHtml(dados.numero)}</span>
               </div>
             </li>`;
   });
@@ -120,8 +121,8 @@ export function marcaClicado(clienteClicado, clientesItens) {
 }
 
 export function inserirHistoricoCima(nome, numero) {
-  dom.nomeCliente.innerHTML = nome;
-  dom.numeroCliente.innerHTML = numero;
+  dom.nomeCliente.textContent = nome;
+  dom.numeroCliente.textContent = numero;
   let inicial = document.querySelector(
     ".cliente-detalhes-header .cliente-inicial",
   );

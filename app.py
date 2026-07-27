@@ -62,6 +62,7 @@ def create_app(config = ProductionConfig):
         return jsonify({"sucesso": False, "mensagem": "Erro interno do servidor"}), 500
 
     @app.route("/health")
+    @limiter.exempt
     def health():
         return jsonify({"status": "ok"}), 200
 

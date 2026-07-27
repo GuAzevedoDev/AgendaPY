@@ -1,5 +1,6 @@
 import { SECOES_ANAMNESE } from "../data/anamnese_perguntas.js";
 import { renderizarSecao, lerRespostasSecao, ativarDependencias } from "./anamnese_campos.js";
+import { escapeHtml } from "../utils/html.js";
 
 export function renderizarTabela(fichas, corpoTabela) {
   corpoTabela.innerHTML = fichas
@@ -7,8 +8,8 @@ export function renderizarTabela(fichas, corpoTabela) {
       (ficha) => `
       <tr data-id="${ficha.id}">
         <td>${ficha.id}</td>
-        <td>${ficha.nome}</td>
-        <td>${ficha.numero}</td>
+        <td>${escapeHtml(ficha.nome)}</td>
+        <td>${escapeHtml(ficha.numero)}</td>
         <td>${ficha.data}</td>
         <td>${renderizarStatusAvaliacao(ficha.avaliacao_concluida)}</td>
         <td>
