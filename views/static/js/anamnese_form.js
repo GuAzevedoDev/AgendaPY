@@ -11,6 +11,7 @@ const form = document.querySelector("#formAnamnesePublica");
 const aviso = document.querySelector(".anamnese-aviso");
 const cardFormulario = document.querySelector(".anamnese-form-card");
 const telaSucesso = document.querySelector(".anamnese-sucesso");
+const topoFormulario = document.querySelector(".anamnese-form-topo");
 
 const totalEtapas = SECOES_CLIENTE.length + 1;
 let etapaAtual = 0;
@@ -87,6 +88,7 @@ async function enviar() {
 
     if (resultado.sucesso) {
       form.hidden = true;
+      topoFormulario.hidden = true;
       document.querySelector(".anamnese-form-nav").hidden = true;
       document.querySelector(".anamnese-progresso").hidden = true;
       telaSucesso.hidden = false;

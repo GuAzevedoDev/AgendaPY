@@ -6,7 +6,7 @@ function campoTexto(pergunta, valorAtual) {
   return `
     <label class="campo-anamnese">
       <span>${pergunta.label}</span>
-      <input type="text" name="${pergunta.id}" value="${valorAtual || ""}">
+      <input type="text" name="${pergunta.id}" value="${valorAtual || ""}" ${pergunta.obrigatorio ? "required" : ""}>
     </label>`;
 }
 
@@ -31,7 +31,7 @@ function campoRadio(pergunta, valorAtual) {
     .map(
       (opcao) => `
       <label class="opcao-radio">
-        <input type="radio" name="${pergunta.id}" value="${opcao}" ${valorAtual === opcao ? "checked" : ""}>
+        <input type="radio" name="${pergunta.id}" value="${opcao}" ${valorAtual === opcao ? "checked" : ""} ${pergunta.obrigatorio ? "required" : ""}>
         <span>${opcao}</span>
       </label>`,
     )
@@ -125,9 +125,13 @@ export function ativarDependencias(container, secao) {
       const marcado = container.querySelector(`input[name="${pergunta.dependeDe}"]:checked`);
       const mostrar = !!marcado && marcado.value === "Sim";
       wrapper.hidden = !mostrar;
-      if (!mostrar) {
-        const campo = wrapper.querySelector("input, textarea");
-        if (campo) campo.value = "";
+
+      const campo = wrapper.querySelector("input, textarea");
+      if (campo) {
+        // Campo escondido nao pode ficar "required": o navegador continua validando
+        // inputs ocultos e trava o avanco sem exibir nenhum aviso ao usuario.
+        campo.required = mostrar && !!pergunta.obrigatorio;
+        if (!mostrar) campo.value = "";
       }
     };
 
