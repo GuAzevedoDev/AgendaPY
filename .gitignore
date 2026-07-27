@@ -2,6 +2,7 @@
 .env
 
 #Ambiente virtual com muitas pastas e arquivos
+venv/
 .venv/
 
 #Config local do Claude Code

@@ -5,5 +5,8 @@ __pycache__/
 .gitignore
 .env
 .claude/
-templates/
 *.md
+node_modules/
+package.json
+package-lock.json
+scripts/
