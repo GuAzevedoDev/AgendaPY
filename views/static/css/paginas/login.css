@@ -6,6 +6,10 @@
   background: #fdf8f4;
 }
 
+#login .btn-menu-mobile {
+  display: none;
+}
+
 .main-login {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -98,6 +102,18 @@
   font-size: 1rem;
 }
 
-.direita-main-login form a:hover{
+.direita-main-login form a:hover {
   color: var(--cor-p1);
+}
+
+@media (max-width: 1300px) {
+  #login .imagem-main {
+    display: none;
+  }
+  .main-login {
+    grid-template-columns: 1fr;
+  }
+  .direita-main-login {
+    width: 100%;
+  }
 }
