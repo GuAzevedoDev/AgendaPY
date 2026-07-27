@@ -1,6 +1,6 @@
 import re
 from flask import Blueprint, render_template, session, jsonify, request
-from auth import login_required
+from auth import login_required, funcionario_required
 from services import Anamnese
 from exeptions import AgendaPy
 
@@ -48,6 +48,7 @@ def enviar_ficha():
 
 @anamnese_bp.route("/")
 @login_required
+@funcionario_required(1)
 def anamnese():
     sessaoFun = {
         "funcionario_id": session.get("funcionario_id"),
@@ -59,12 +60,14 @@ def anamnese():
 
 @anamnese_bp.route("/mostrar", methods=['GET', 'POST'])
 @login_required
+@funcionario_required(1)
 def mostrar_fichas():
     fichas = anamnese_service.listar_fichas_web()
     return jsonify(fichas)
 
 @anamnese_bp.route("/detalhes", methods=['POST'])
 @login_required
+@funcionario_required(1)
 def detalhes_ficha():
     dados = request.get_json(silent=True) or {}
     anamnese_id = dados.get("id")
@@ -79,6 +82,7 @@ def detalhes_ficha():
 
 @anamnese_bp.route("/atualizar", methods=['POST'])
 @login_required
+@funcionario_required(1)
 def atualizar_ficha():
     dados = request.get_json(silent=True) or {}
     anamnese_id = dados.get("id")
@@ -98,6 +102,7 @@ def atualizar_ficha():
 
 @anamnese_bp.route("/excluir", methods=['POST'])
 @login_required
+@funcionario_required(1)
 def excluir_ficha():
     dados = request.get_json(silent=True) or {}
     anamnese_id = dados.get("id")
