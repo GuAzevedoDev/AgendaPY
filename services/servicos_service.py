@@ -53,5 +53,8 @@ class ServicosService:
 
     return nomes_servicos
 
-
+  def excluirServicoWeb(self,nome_servico:str) -> list:
+    servico_excluido = repo_servico.excluir_servico(nome_servico)
+  
+    return servico_excluido
 

@@ -20,14 +20,12 @@ def cadastrar_servico():
     servico.cadastrarServicosWeb(nome, duracao)
     print(f"Servico '{nome}' cadastrado!")
 
-
 def cadastrar_cliente():
     nome = input("Nome do cliente: ").strip()
     numero = input("Numero do cliente: ").strip()
 
     cliente.cadastrar_cliente_web(nome, numero)
     print(f"Cliente '{nome}' cadastrado!")
-
 
 def excluir_funcionario():
     nome = input("Nome do funcionario a excluir: ").strip()
@@ -36,7 +34,7 @@ def excluir_funcionario():
 
 def mostrar_servicos() -> list:
     #Conexao segura com db
-    servicosEncontrados = servico.mostrar_servicos()
+    servicosEncontrados = servico.mostrarServicosWeb()
   
     #Se nao exitir retorno lista vazia
     for servico in servicosEncontrados:
@@ -47,7 +45,7 @@ def excluir_servico() -> list:
     print("Qual nome do servico?")
     nome_servico = input()
     try:      
-        servico.excluir_servico(nome_servico)
+        servico.excluirServicoWeb(nome_servico)
     except Exception as e:
         print(e)
     print(f"Servico {nome_servico} excluido")
