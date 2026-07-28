@@ -1,5 +1,5 @@
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 from exeptions import AgendamentoError
 from repositories import AgendamentoRepository
 from .clientes_service import Cliente
@@ -19,14 +19,13 @@ class AgendamentosService:
     horaI:int = 7
     horaF:int = 23
 
-    #Inicio no horarioI e finalizo na horaF
-    for i in range(horaI,horaF + 1):
-      horarios.append(datetime.strptime(f"{horaI}:00","%H:%M").time())
+    #Inicio no horarioI e finalizo na horaF, de 15 em 15 minutos
+    atual = datetime.strptime(f"{horaI}:00","%H:%M")
+    fim = datetime.strptime(f"{horaF}:00","%H:%M")
 
-      #Quando for igual a horaF nao coloca o :30 na lista
-      if horaF != i:
-        horarios.append(datetime.strptime(f"{horaI}:30","%H:%M").time())
-      horaI = horaI + 1
+    while atual <= fim:
+      horarios.append(atual.time())
+      atual += timedelta(minutes=15)
 
       #Retorno os horarios
     return horarios
