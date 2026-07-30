@@ -10,6 +10,9 @@ repo_funcionario = FuncionarioRepository()
 class Funcionario:
   def loginFuncionarioWeb(self,nome:str,senha:str) -> tuple:
     #Se encontrado ele salva na variavel
+    #Tirar espaços vazios
+    nome = nome.strip()
+    senha = senha.strip()
     funcionario_encontrado = repo_funcionario.buscar_funcionario(nome)
 
     #Se nao encontrado nao passa no if, verifico se a senha esta correta
