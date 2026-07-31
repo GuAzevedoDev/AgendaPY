@@ -168,6 +168,7 @@
   .horarioTudo.ocupado .status,
   .horarioTudo.confirmado .status {
     grid-column: 1;
+    align-items: center;
   }
 
   .horarioTudo button,
