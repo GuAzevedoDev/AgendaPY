@@ -130,8 +130,43 @@ class AgendamentosService:
 
     agendamentos = repo_agendamento.trazer_agendamentos_do_mes(id_funcionario_logado,primeiro_dia,ultimo_dia)
 
-    dias = sorted({agendamento.data.day for agendamento in agendamentos})
-    return dias
+    dias_nao_confirmados = set()
+    dias_confirmados = set()
+
+    for agendamento in agendamentos:
+      if agendamento.status == "ocupado":
+        dias_nao_confirmados.add(agendamento.data.day)
+      elif agendamento.status == "confirmado":
+        dias_confirmados.add(agendamento.data.day)
+
+    #Um dia so fica "confirmado" (bolinha verde) se TODOS os agendamentos dele estiverem confirmados
+    dias_confirmados -= dias_nao_confirmados
+
+    return {"dias_nao_confirmados":sorted(dias_nao_confirmados),"dias_confirmados":sorted(dias_confirmados)}
+
+
+  def valorFaturadoWeb(self,id_funcionario:int,mes:int,ano:int) -> int:
+    primeiro_dia = datetime(ano,mes,1).date()
+    ultimo_dia_numero = calendar.monthrange(ano,mes)[1]
+    ultimo_dia = datetime(ano,mes,ultimo_dia_numero).date()
+
+    valor_total = repo_agendamento.somar_valor_pago_do_mes(id_funcionario,primeiro_dia,ultimo_dia)
+    valor_total_pagar = 0
+    valor_total_liquido = valor_total
+
+    if id_funcionario == 4:
+      valor_total_pagar = valor_total * 0.20
+      valor_total_liquido = valor_total - valor_total_pagar
+
+    elif id_funcionario == 3:
+      valor_quimica = repo_agendamento.somar_valor_pago_por_servicos(id_funcionario,primeiro_dia,ultimo_dia,[17,16,21,19])
+
+      valor_nao_quimica = valor_total - valor_quimica
+
+      valor_total_pagar = (valor_quimica * 0.60) + (valor_nao_quimica * 0.50)
+
+      valor_total_liquido = valor_total - valor_total_pagar
+    return {"valor_total":valor_total,"valor_total_receber":valor_total_liquido,"valor_total_pagar":valor_total_pagar}
 
   def validar_horario_nao_passado(self,data:datetime,horario_escolhido) -> None:
     agora = datetime.now()

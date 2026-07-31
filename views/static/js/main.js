@@ -5,6 +5,7 @@ import * as clienteController from "./controllers/cliente_controller.js";
 import * as servicoController from "./controllers/servico_controller.js";
 import * as funcionarioController from "./controllers/funcionario_controller.js";
 import * as anamneseController from "./controllers/anamnese_controller.js";
+import * as financeiroController from "./controllers/financeiro_controller.js";
 import * as mobileMenu from "./mobile/mobile_menu.js";
 import * as mobileAgenda from "./mobile/mobile_agenda.js";
 import * as mobileClientes from "./mobile/mobile_clientes.js";
@@ -29,4 +30,8 @@ if (document.querySelector(".pagina-clientes")) {
 
 if (document.querySelector(".pagina-anamnese")) {
   anamneseController.iniciarAnamnese();
+}
+
+if (document.querySelector(".pagina-financeiro")) {
+  financeiroController.iniciarFinanceiro();
 }

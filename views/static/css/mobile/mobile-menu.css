@@ -70,14 +70,16 @@
 
   #home,
   #clientes-page,
-  #anamnese-page {
+  #anamnese-page,
+  #financeiro-page {
     display: block;
     height: auto;
   }
 
   #home .main-bg,
   #clientes-page .main-bg,
-  #anamnese-page .main-bg {
+  #anamnese-page .main-bg,
+  #financeiro-page .main-bg {
     padding: 80px 16px 40px;
   }
 

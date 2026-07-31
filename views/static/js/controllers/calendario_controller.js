@@ -48,7 +48,8 @@ export async function carregarMarcadoresAgendamento() {
     if (resposta.sucesso) {
       calendarioUI.marcar_dias_com_agendamento(
         calendarioUI.obter_dias(),
-        resposta.dias,
+        resposta.diasNaoConfirmados,
+        resposta.diasConfirmados,
       );
     }
   } catch (err) {

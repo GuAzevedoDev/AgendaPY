@@ -57,3 +57,39 @@ class AgendamentoRepository:
 
     return agendamentos
 
+  def somar_valor_pago_do_mes(self,funcionario_id:int,primeiro_dia,ultimo_dia) -> int:
+    total = db.session.query(db.func.coalesce(db.func.sum(Agendamentos.valor_pago),0)).filter(
+      Agendamentos.funcionario_id == funcionario_id,
+      Agendamentos.status == 'confirmado',
+      Agendamentos.data >= primeiro_dia,
+      Agendamentos.data <= ultimo_dia,
+    ).scalar()
+
+    return total
+
+  def somar_valor_pago_por_servicos(
+    self,
+    funcionario_id: int,
+    primeiro_dia,
+    ultimo_dia,
+    servicos_ids: list[int],
+):
+    # 1º: pega os IDs dos agendamentos que têm pelo menos um dos serviços buscados
+    subquery = db.session.query(Agendamentos.id).join(
+        ServicosAgendamentos, ServicosAgendamentos.agendamento_id == Agendamentos.id
+    ).filter(
+        Agendamentos.funcionario_id == funcionario_id,
+        Agendamentos.status == 'confirmado',
+        Agendamentos.data >= primeiro_dia,
+        Agendamentos.data <= ultimo_dia,
+        ServicosAgendamentos.servico_id.in_(servicos_ids),
+    ).distinct().subquery()
+
+    # 2º: soma o valor_pago desses agendamentos, cada um contado uma única vez
+    total = db.session.query(
+        db.func.coalesce(db.func.sum(Agendamentos.valor_pago), 0)
+    ).filter(
+        Agendamentos.id.in_(subquery)
+    ).scalar()
+
+    return total

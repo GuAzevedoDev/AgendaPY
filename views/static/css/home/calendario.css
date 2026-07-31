@@ -73,6 +73,23 @@
   background: var(--cor-1);
 }
 
+/* Marcador dos dias em que TODOS os agendamentos ja estao confirmados */
+.dia.confirmado::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2e7d32;
+}
+
+.dia.ativo.confirmado::after {
+  background: var(--cor-1);
+}
+
 .drop-down-filtro {
   position: relative;
   display: flex;

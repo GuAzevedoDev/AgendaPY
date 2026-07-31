@@ -63,10 +63,12 @@ export function obter_dias() {
   return document.querySelectorAll(".dia");
 }
 
-export function marcar_dias_com_agendamento(dias, diasComAgendamento) {
-  const diasSet = new Set((diasComAgendamento || []).map(String));
+export function marcar_dias_com_agendamento(dias, diasNaoConfirmados, diasConfirmados) {
+  const naoConfirmadosSet = new Set((diasNaoConfirmados || []).map(String));
+  const confirmadosSet = new Set((diasConfirmados || []).map(String));
   dias.forEach((dia) => {
-    dia.classList.toggle("tem-agendamento", diasSet.has(dia.dataset.dia));
+    dia.classList.toggle("tem-agendamento", naoConfirmadosSet.has(dia.dataset.dia));
+    dia.classList.toggle("confirmado", confirmadosSet.has(dia.dataset.dia));
   });
 }
 

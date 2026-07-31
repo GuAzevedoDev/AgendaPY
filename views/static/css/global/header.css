@@ -16,6 +16,19 @@
   justify-content: space-between;
 }
 
+.header-topo {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header-logo {
+  width: 200px;
+  height: 70px;
+  object-fit: cover;
+  align-self: center;
+}
+
 .header menu {
   display: flex;
   flex-direction: column;

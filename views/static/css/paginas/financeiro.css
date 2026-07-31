@@ -1,0 +1,199 @@
+#financeiro-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+}
+
+#financeiro-page .main-bg {
+  grid-column: 2;
+  padding: 20px 60px;
+  padding-top: 40px;
+}
+
+#financeiro-page .main {
+  display: flex;
+  flex-direction: column;
+}
+
+.financeiro-acoes {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.financeiro-filtro-mes {
+  min-width: 150px;
+  justify-content: space-between;
+}
+
+.financeiro-filtro-ano {
+  min-width: 100px;
+  justify-content: space-between;
+}
+
+.financeiro-filtro-mes .financeiro-mes-nome {
+  text-transform: capitalize;
+}
+
+.financeiro-opcoes-mes,
+.financeiro-opcoes-ano {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.btn-atualizar-financeiro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-atualizar-financeiro.carregando svg {
+  animation: financeiro-girar 0.8s linear infinite;
+}
+
+.btn-atualizar-financeiro:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@keyframes financeiro-girar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Resumo do total faturado */
+.financeiro-resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #fee8df;
+  border-radius: 10px;
+  padding: 24px 30px;
+  margin: 30px 0;
+  box-shadow: 0 4px 20px rgba(188, 122, 97, 0.15);
+  background: var(--cor-1);
+  width: fit-content;
+  min-width: 280px;
+}
+
+.financeiro-resumo-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.financeiro-total-valor {
+  font-size: var(--titulo);
+  font-weight: 600;
+}
+
+/* Grid de funcionarios */
+.financeiro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.financeiro-vazio {
+  grid-column: 1 / -1;
+}
+
+.funcionario-financeiro-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid #fee8df;
+  border-radius: 10px;
+  padding: 22px;
+  background: var(--cor-1);
+  box-shadow: 0 2px 10px rgba(188, 122, 97, 0.08);
+  transition: 0.2s;
+}
+
+.funcionario-financeiro-card.carregando {
+  opacity: 0.7;
+}
+
+.funcionario-financeiro-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.funcionario-financeiro-info h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.funcionario-financeiro-info span {
+  font-size: 0.85rem;
+}
+
+.funcionario-financeiro-valores {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #fee8df;
+  padding-top: 16px;
+}
+
+.funcionario-financeiro-valor-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.funcionario-financeiro-valor-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.funcionario-financeiro-valor-total,
+.funcionario-financeiro-valor-pagar,
+.funcionario-financeiro-valor-receber {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.funcionario-financeiro-card.erro .funcionario-financeiro-valor-total,
+.funcionario-financeiro-card.erro .funcionario-financeiro-valor-pagar,
+.funcionario-financeiro-card.erro .funcionario-financeiro-valor-receber {
+  color: #c0392b;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  #financeiro-page {
+    grid-template-columns: 1fr;
+  }
+
+  #financeiro-page .main-bg {
+    padding: 20px;
+  }
+
+  .header-main {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .financeiro-acoes {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .financeiro-resumo {
+    width: 100%;
+  }
+
+  .financeiro-grid {
+    grid-template-columns: 1fr;
+  }
+}

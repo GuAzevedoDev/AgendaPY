@@ -89,8 +89,35 @@ def dias_com_agendamento():
         return jsonify({"sucesso": False, "mensagem": "Dados incompletos"}), 400
 
     try:
-        dias = agendamento_service.diasComAgendamentoWeb(int(idFuncionario), int(mes), int(ano))
-        return jsonify({"sucesso": True, "dias": dias}), 200
+        resultado = agendamento_service.diasComAgendamentoWeb(int(idFuncionario), int(mes), int(ano))
+        return jsonify({
+            "sucesso": True,
+            "diasConfirmados": resultado["dias_confirmados"],
+            "diasNaoConfirmados": resultado["dias_nao_confirmados"],
+            }), 200
+    except AgendaPy as e:
+        return jsonify({"sucesso": False, "mensagem": str(e)}), 400
+
+
+@agendamento_bp.route("/valorAgendamento", methods=["POST"])
+@login_required
+def valor_agendamento():
+    dados = request.get_json(silent=True) or {}
+    idFuncionario = dados.get("idFuncionario")
+    mes = dados.get("mes")
+    ano = dados.get("ano")
+
+    if not idFuncionario or not mes or not ano:
+        return jsonify({"sucesso": False, "mensagem": "Dados incompletos"}), 400
+
+    try:
+        resultado = agendamento_service.valorFaturadoWeb(int(idFuncionario), int(mes), int(ano))
+        return jsonify({
+            "sucesso": True,
+            "valorTotal": resultado["valor_total"],
+            "valorPagar": resultado["valor_total_pagar"],
+            "valorReceber": resultado["valor_total_receber"],
+            }), 200
     except AgendaPy as e:
         return jsonify({"sucesso": False, "mensagem": str(e)}), 400
 

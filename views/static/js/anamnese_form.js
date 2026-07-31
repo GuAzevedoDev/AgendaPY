@@ -2,6 +2,18 @@ import { SECOES_CLIENTE } from "./data/anamnese_perguntas.js";
 import { renderizarSecao, lerRespostasSecao, ativarDependencias } from "./ui/anamnese_campos.js";
 import { enviarFicha } from "./api/anamnese_api.js";
 
+const fundoCarregamento = document.querySelector(".anamnese-loading-fundo");
+const logoCarregamento = document.querySelector(".anamnese-loading-logo");
+
+if (fundoCarregamento && logoCarregamento) {
+  setTimeout(() => {
+    fundoCarregamento.classList.add("saindo");
+    logoCarregamento.classList.add("no-canto");
+  }, 900);
+
+  fundoCarregamento.addEventListener("transitionend", () => fundoCarregamento.remove(), { once: true });
+}
+
 const containerEtapas = document.querySelector(".anamnese-etapas");
 const barraPreenchida = document.querySelector(".anamnese-progresso-preenchido");
 const progressoTexto = document.querySelector(".anamnese-progresso-texto");

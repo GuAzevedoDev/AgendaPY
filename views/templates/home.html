@@ -7,7 +7,9 @@
 {%block conteudo%}
 <header class="header-bg pagina-agenda">
   <div class="header">
-    <menu>
+    <div class="header-topo">
+      <img class="header-logo" src="{{ url_for('static', filename='imagens/logo.svg') }}" alt="Logo">
+      <menu>
       <li class="ativo">
         <a href="{{ url_for('home.home') }}">
           <svg width="24" height="26" viewBox="0 0 24 26" xmlns="http://www.w3.org/2000/svg">
@@ -39,8 +41,17 @@
             <span>Anamnese</span>
           </a>
         </li>
-      {%endif%}  
+      {%endif%}
+      <li>
+        <a href="{{ url_for('financeiro.financeiro') }}">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 1V21M15.5 4.75H8.75C7.7835 4.75 6.85656 5.13437 6.17394 5.81699C5.49132 6.49962 5.10696 7.42656 5.10696 8.39307C5.10696 9.35957 5.49132 10.2865 6.17394 10.9691C6.85656 11.6518 7.7835 12.0361 8.75 12.0361H13.25C14.2165 12.0361 15.1434 12.4205 15.8261 13.1031C16.5087 13.7857 16.893 14.7127 16.893 15.6792C16.893 16.6457 16.5087 17.5726 15.8261 18.2552C15.1434 18.9379 14.2165 19.3222 13.25 19.3222H5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Financeiro</span>
+        </a>
+      </li>
     </menu>
+    </div>
     <div class="usuario-header">
       <div>
         <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">

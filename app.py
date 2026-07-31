@@ -13,7 +13,7 @@ logging.basicConfig(
 )
 
 # Rotas que renderizam HTML — todo o resto responde em JSON.
-HTML_ROUTES = {"/", "/clientes/", "/login", "/anamnese/", "/anamnese/responder"}
+HTML_ROUTES = {"/", "/clientes/", "/login", "/anamnese/", "/anamnese/responder", "/financeiro/"}
 
 
 def create_app(config = ProductionConfig):
@@ -38,12 +38,13 @@ def create_app(config = ProductionConfig):
     db.init_app(app)
 
     #Blueprints (importados aqui dentro para evitar import circular com controllers/auth_controller.py, que importa o limiter)
-    from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp,anamnese_bp
+    from controllers import agendamento_bp,auth_bp,home_bp,clientes_bp,anamnese_bp,financeiro_bp
     app.register_blueprint(agendamento_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(clientes_bp)
     app.register_blueprint(anamnese_bp)
+    app.register_blueprint(financeiro_bp)
 
     #Passo o contexto (necessario)
     Migrate(app, db)
