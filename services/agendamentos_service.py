@@ -114,8 +114,8 @@ class AgendamentosService:
     dataUsuario:str = datetime.strptime(data, "%d/%m/%Y")
 
     #Se aconteceu antes retorna None
-    if dataUsuario.date() < dataAtual.date():
-      raise AgendamentoError("Essa data esta no passado")
+    # if dataUsuario.date() < dataAtual.date():
+    #   raise AgendamentoError("Essa data esta no passado")
 
 
     #Se tiver tudo certo retorno a data
