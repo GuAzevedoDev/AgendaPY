@@ -36,13 +36,17 @@ function criar_card_livre(horario, agendaDiv, dataDiaAtivo) {
     ? `<span class="horario-indisponivel">Indisponível</span>`
     : `<button class ="botaoAgenda" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">+</button>`;
 
-  agendaDiv.innerHTML += `<div class="horarioTudo${passou ? " passado" : ""}">
+  if (passou) {
+    agendaDiv.innerHTML += ``;
+  } else {
+    agendaDiv.innerHTML += `<div class="horarioTudo${passou ? " passado" : ""}">
       <div class="horario" data-hora="${agenda.horario}" data-status = "${agenda.status}" data-data = "${dataDiaAtivo}">${agenda.horario}</div>
       <div class="status" >
         <span>Horário livre</span>
         ${acao}
       </div>
     </div>`;
+  }
 }
 
 function criar_card_ocupado(horario, agendaDiv, dataDiaAtivo) {

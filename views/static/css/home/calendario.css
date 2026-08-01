@@ -155,3 +155,9 @@
   background: #fdf6f3;
   color: var(--cor-p1);
 }
+
+@media(max-width: 620px) {
+  .drop-down-filtro span{
+    font-size: 0.8rem;
+  }
+}

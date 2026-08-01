@@ -29,7 +29,7 @@ class ConfigTesteLocal(DevelopmentConfig):
 
 
 from app import create_app
-from models import db, Funcionarios
+from models import db, Funcionarios,Servicos
 from werkzeug.security import generate_password_hash
 
 app = create_app(ConfigTesteLocal)
@@ -43,8 +43,15 @@ with app.app_context():
             funcao="esteticista",
             senha=generate_password_hash("123456"),
         ))
-        db.session.commit()
         print("Funcionario de teste criado: usuario 'mali', senha '123456'")
+        db.session.commit()
+    if not Servicos.query.filter_by(nome="Mão").first():
+        db.session.add(Servicos(
+            nome="Mão",
+            duracao_min=90,
+        ))
+        db.session.commit()
+        
 
 print(f"Banco local: {DB_PATH}")
 print("Rodando em http://127.0.0.1:5055")
