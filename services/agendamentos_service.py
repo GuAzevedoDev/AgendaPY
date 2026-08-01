@@ -206,6 +206,7 @@ class AgendamentosService:
     data = self.converter_data(data)
     hora = self.converter_hora(hora)
 
+    valor = valor.replace(",","")
     status = "confirmado"
     formas_de_pag = ["pix",'debito','dinheiro','credito']
     valor_formatado = float(valor)
