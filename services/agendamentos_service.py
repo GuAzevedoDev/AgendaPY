@@ -142,7 +142,6 @@ class AgendamentosService:
 
     return {"dias_nao_confirmados":sorted(dias_nao_confirmados),"dias_confirmados":sorted(dias_confirmados)}
 
-
   def valorFaturadoWeb(self,id_funcionario:int,mes:int,ano:int) -> int:
     primeiro_dia = datetime(ano,mes,1).date()
     ultimo_dia_numero = calendar.monthrange(ano,mes)[1]
@@ -204,7 +203,7 @@ class AgendamentosService:
     data = self.converter_data(data)
     hora = self.converter_hora(hora)
 
-    valor = valor.replace(",","")
+    valor = valor.replace(",",".")
     status = "confirmado"
     formas_de_pag = ["pix",'debito','dinheiro','credito']
     valor_formatado = float(valor)
