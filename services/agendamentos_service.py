@@ -37,8 +37,6 @@ class AgendamentosService:
     #Selecionar horario
     horario_escolhido = self.selecionar_horario_web(id_funcionario_logado,data,hora)
 
-    self.validar_horario_nao_passado(data,horario_escolhido)
-
     self.validar_data_hora(id_funcionario_logado,data,horario_escolhido)
 
     #Selecione o nome do cliente
