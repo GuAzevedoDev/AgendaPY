@@ -7,13 +7,13 @@ export function iniciarCalendario() {
   // Bind functions to window so they are globally accessible from inline HTML
   window.somaSubtrai = somaSubtrai;
   window.hoje = hoje;
-
+  
   recarregarCalendario();
 }
 
 export function recarregarCalendario() {
   dom.divDias.innerHTML = "";
-  
+
   const ultimoDia = new Date(dom.datas.ano, dom.datas.mes, 0).getDate();
   const primeiroDia = new Date(dom.datas.ano, dom.datas.mes - 1, 1).getDay();
 
@@ -22,7 +22,7 @@ export function recarregarCalendario() {
     primeiroDia,
     ultimoDia,
     dom.datas.mes,
-    dom.datas.ano
+    dom.datas.ano,
   );
 
   calendarioUI.atualiza_cabecalho_calendario(
@@ -31,9 +31,9 @@ export function recarregarCalendario() {
     dom.anoCalendario,
     dom.meses,
     dom.datas.mes,
-    dom.datas.ano
+    dom.datas.ano,
   );
-  
+
   configurarDiasListeners();
   carregarMarcadoresAgendamento();
 }
@@ -59,10 +59,12 @@ export async function carregarMarcadoresAgendamento() {
 
 function configurarDiasListeners() {
   const dias = calendarioUI.obter_dias();
-  
-  const isMesAtual = (dom.datas.mesAtual === dom.datas.mes && dom.datas.anoAtual === dom.datas.ano);
+
+  const isMesAtual =
+    dom.datas.mesAtual === dom.datas.mes &&
+    dom.datas.anoAtual === dom.datas.ano;
   const diaAlvo = isMesAtual ? String(dom.datas.diaAtual) : "1";
-  
+
   let diaAtivoElement = null;
   dias.forEach((dia) => {
     if (dia.dataset.dia === diaAlvo) {
@@ -82,9 +84,9 @@ function configurarDiasListeners() {
         diaSelecionado,
         dom.meses[dom.datas.mes - 1],
         dom.anoCima,
-        dom.datas.mes
+        dom.datas.mes,
       );
-      
+
       // Load the agenda for the clicked day
       await carregarAgendaDoDia(dia.dataset.data);
     });
@@ -105,7 +107,7 @@ export function somaSubtrai(sinal) {
   } else {
     dom.datas.mes += sinal;
   }
-  
+
   recarregarCalendario();
 }
 

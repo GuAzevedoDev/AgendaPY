@@ -67,7 +67,7 @@ export let diasAtivos = document.querySelectorAll(".dia");
 export const data = new Date();
 export let datas = {
   //Uso a data atual e pego o dia
-  diaAtual: String(data.getDate()).padStart(2, "0"),
+  diaAtual: String(data.getDate()),
 
   //Esse nao altero no calendario(Usado para condicoes)
   mesAtual: data.getMonth() + 1,
